@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cho&Co | Data & Business Intelligence</title>
+<link rel="icon" type="image/png" sizes="128x128" href="test.png"/>
+<meta name="description" content="Cho&Co transforms messy business data into clean, actionable insights. We offer data cleaning, interactive analytics dashboards, and custom reporting for South African businesses. Book a free demo today.">
+
+<!-- AI SEO: Schema Markup for Organization + Services -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "name": "Cho&Co",
+  "description": "Cho&Co is a South African data analytics firm specialising in data cleaning, analytics dashboards, and customised business reporting.",
+  "url": "https://www.choandco.co.za",
+  "telephone": "+27710602976",
+  "email": "choandcopty@gmail.com",
+  "address": {
+    "@type": "PostalAddress",
+    "addressCountry": "ZA"
+  },
+  "areaServed": "South Africa",
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "Data Services",
+    "itemListElement": [
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Data Cleaning" } },
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Analytics Dashboards" } },
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Customised Reporting" } }
+    ]
+  }
+}
+</script>
+
+<!-- AI SEO: FAQ Schema -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is data cleaning and why does my business need it?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Data cleaning is the process of detecting and correcting corrupt, inaccurate, or duplicate records in your dataset. Businesses need clean data because messy data leads to flawed analysis, poor decisions, and missed revenue opportunities. Cho&Co removes duplicates, standardises formats, and validates accuracy so your data is ready for reliable analysis."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How quickly can Cho&Co deliver an analytics dashboard?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Cho&Co offers rapid turnaround on data projects. Most analytics dashboards are delivered within 5–10 business days depending on data complexity. We provide real-time, interactive dashboards with custom KPI tracking tailored to your business."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How much does data analysis cost in South Africa?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Cho&Co provides affordable, transparent pricing customised to each project. We offer flexible packages for businesses of all sizes. Contact us or book a free demo to receive a tailored quote based on your specific data needs."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What file formats does Cho&Co accept?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Cho&Co works with CSV, Excel (.xlsx, .xls), and most standard business data formats. We assess your current data structure and adapt our process to work with what you already have."
+      }
+    }
+  ]
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- NAV -->
+<nav aria-label="Main navigation">
+  <div class="nav-inner">
+    <a href="#hero" class="logo"><img src="test.png" alt="ChoandCo Logo" style="height: 125px; width: auto;"></a>
+    <ul class="nav-links">
+      <li><a href="#services">Services</a></li>
+      <li><a href="#process">Process</a></li>
+      <li><a href="#why">Why Us</a></li>
+      <li><a href="#showcase">Our Work</a></li>
+      <li><a href="#faq">FAQ</a></li>
+      <li><a href="contact.html" class="nav-cta">Book a Demo</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HAMBURGER -->
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+  </div>
+
+<!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="#services">Services</a>
+    <a href="#process">Process</a>
+    <a href="#why">Why Us</a>
+    <a href="#showcase">Our Work</a>
+    <a href="#faq">FAQ</a>
+    <a href="contact.html" class="mobile-cta">Book a Free Demo</a>
+  </div>
+</header>
+
+<!-- HERO -->
+<section id="hero" style="padding-top: clamp(4rem,10vw,8rem);">
+  <div class="reveal">
+    <h1>Transform raw data into<br><em>smart decisions</em></h1>
+    <p class="hero-sub">
+      Cho&amp;Co transforms messy, inconsistent business data into clean insights your team can act on efficiently, accurately, and affordably.
+    </p>
+    <div class="hero-actions">
+      <a href="contact.html" class="btn-primary">Book a Free Demo</a>
+      <a href="#showcase" class="btn-ghost">View our work →</a>
+    </div>
+  </div>
+
+  <div class="hero-visual reveal reveal-delay-2">
+    <div class="hero-stat-grid">
+      <div class="hero-stat">
+        <div class="hero-stat-num">3×</div>
+        <div class="hero-stat-label">Faster decisions</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">98%</div>
+        <div class="hero-stat-label">Data accuracy</div>
+      </div>
+    </div>
+    <div class="hero-bar-row">
+      <div class="bar-item">
+        <div class="bar-label-row"><span>Revenue visibility</span><span>+87%</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:87%"></div></div>
+      </div>
+      <div class="bar-item">
+        <div class="bar-label-row"><span>Reporting efficiency</span><span>+74%</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:74%;animation-delay:0.2s"></div></div>
+      </div>
+      <div class="bar-item">
+        <div class="bar-label-row"><span>Cost savings identified</span><span>+61%</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:61%;animation-delay:0.4s"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST BAR -->
+<div class="trust-bar">
+  <div class="trust-inner">
+    <span class="trust-label">What we deliver</span>
+    <div class="trust-items">
+      <span class="trust-item"><span class="trust-dot"></span>Data Cleaning & Validation</span>
+      <span class="trust-item"><span class="trust-dot"></span>Analytics Dashboards</span>
+      <span class="trust-item"><span class="trust-dot"></span>Custom Reporting</span>
+      <span class="trust-item"><span class="trust-dot"></span>Fast Turnaround</span>
+      <span class="trust-item"><span class="trust-dot"></span>Transparent Pricing</span>
+    </div>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="section-inner">
+    <p class="section-label reveal">Our services</p>
+    <h2 class="reveal reveal-delay-1">Three ways we <em>unlock</em><br>your data's value</h2>
+    <p class="section-sub reveal reveal-delay-2">Comprehensive data solutions built for businesses - from raw CSV files to boardroom-ready dashboards.</p>
+
+    <div class="services-grid">
+      <div class="service-card reveal">
+        <div class="service-num">01</div>
+        <h3>Data Cleaning</h3>
+        <p class="service-desc">Transform messy, inconsistent data into clean, structured information ready for reliable analysis and confident decision-making.</p>
+        <ul class="service-features">
+          <li>Remove duplicates and inconsistencies</li>
+          <li>Standardise formats and data structures</li>
+          <li>Validate and verify data accuracy</li>
+          <li>Works with CSV, Excel, and most formats</li>
+        </ul>
+      </div>
+      <div class="service-card reveal reveal-delay-1">
+        <div class="service-num">02</div>
+        <h3>Analytics Dashboards</h3>
+        <p class="service-desc">Interactive, real-time dashboards that make complex data easy to understand and act upon for your entire team.</p>
+        <ul class="service-features">
+          <li>Real-time data visualisation</li>
+          <li>Custom KPI tracking</li>
+          <li>Drill-down filtering</li>
+          <li>Tableau and Power BI compatible</li>
+        </ul>
+      </div>
+      <div class="service-card reveal reveal-delay-2">
+        <div class="service-num">03</div>
+        <h3>Customised Reporting</h3>
+        <p class="service-desc">Reports tailored to your specific business questions and delivered when you need them, with clear, actionable recommendations.</p>
+        <ul class="service-features">
+          <li>Custom insights per business unit</li>
+          <li>Rapid turnaround</li>
+          <li>Actionable recommendations included</li>
+          <li>Ad-hoc and scheduled options</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section id="process">
+  <div class="section-inner">
+    <p class="section-label reveal" style="color: rgba(247,244,239,0.4);">How it works</p>
+    <h2 class="reveal reveal-delay-1">Our <em>four-step</em> process</h2>
+    <p class="section-sub reveal reveal-delay-2">From initial data assessment to actionable results, here's exactly what happens when you work with Cho&amp;Co.</p>
+
+    <div class="process-steps">
+      <div class="process-step reveal">
+        <div class="step-num">Step 01</div>
+        <div class="step-title">Data Assessment</div>
+        <p class="step-desc">We analyse your current data structure, identify quality issues, and map out the opportunity.</p>
+      </div>
+      <div class="process-step reveal reveal-delay-1">
+        <div class="step-num">Step 02</div>
+        <div class="step-title">Cleaning & Processing</div>
+        <p class="step-desc">Duplicate removal, format standardisation, and accuracy validation bring your data to a reliable baseline.</p>
+      </div>
+      <div class="process-step reveal reveal-delay-2">
+        <div class="step-num">Step 03</div>
+        <div class="step-title">Analysis & Visualisation</div>
+        <p class="step-desc">Advanced analytics and clear visual dashboards surface the patterns that matter to your business.</p>
+      </div>
+      <div class="process-step reveal reveal-delay-3">
+        <div class="step-num">Step 04</div>
+        <div class="step-title">Actionable Results</div>
+        <p class="step-desc">Insights delivered with clear recommendations you can act on immediately to drive real business decisions.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY CHO&CO -->
+<section id="why">
+  <div class="section-inner">
+    <div class="why-grid">
+      <div>
+        <p class="section-label reveal">Why Cho&Co</p>
+        <h2 class="reveal reveal-delay-1">Accurate, efficient,<br>and <em>affordable</em></h2>
+        <p class="section-sub reveal reveal-delay-2" style="margin-bottom: 2rem;">We unlock your data's value with customisable solutions that work with any business and deliver insights that drive real results.</p>
+
+        <div class="why-list">
+          <div class="why-item reveal">
+            <div class="why-icon">
+              <svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div class="why-text">
+              <h4>Fast turnaround</h4>
+              <p>Most projects delivered within 5–10 business days. We understand that in business, timing matters as much as insight.</p>
+            </div>
+          </div>
+          <div class="why-item reveal reveal-delay-1">
+            <div class="why-icon">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div class="why-text">
+              <h4>Reliable accuracy</h4>
+              <p>Every dataset undergoes rigorous validation. You get insights you can trust and not guesses dressed up as analysis.</p>
+            </div>
+          </div>
+          <div class="why-item reveal reveal-delay-2">
+            <div class="why-icon">
+              <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9" stroke-linecap="round"/></svg>
+            </div>
+            <div class="why-text">
+              <h4>Flexible and customisable</h4>
+              <p>No two businesses are the same. Our solutions adapt to your industry, tools, and specific data challenges.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="why-callout reveal reveal-delay-1">
+        <div class="why-callout-quote">"Messy data is a business risk, not just a technical problem."</div>
+        <p style="font-size:0.85rem; color:rgba(247,244,239,0.5); line-height:1.7; margin-bottom:1.5rem;">
+          Companies with poor data quality lose an estimated 10–25% of revenue annually to bad decisions rooted in inaccurate information. Cho&amp;Co exists to close that gap, businesses the data foundation they need to compete.
+        </p>
+        <div class="why-callout-stat">
+          <div class="why-stat">
+            <div class="why-stat-num">10–25%</div>
+            <div class="why-stat-label">Revenue lost to bad data annually</div>
+          </div>
+          <div class="why-stat">
+            <div class="why-stat-num">5–10</div>
+            <div class="why-stat-label">Days avg. project turnaround</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SHOWCASE -->
+<!-- SHOWCASE -->
+<section id="showcase">
+  <div class="section-inner">
+    <p class="section-label reveal">Our work</p>
+    <h2 class="reveal reveal-delay-1">Data <em>in action</em></h2>
+    <p class="section-sub reveal reveal-delay-2">Examples of how Cho&amp;Co transforms complex data into clear, decision-ready insights.</p>
+
+    <div class="showcase-card reveal" style="border: 1px solid var(--border); border-radius: var(--radius); padding: 2rem;">
+      <span class="showcase-tag">Dashboard</span>
+      <h4>King County House Sales</h4>
+      <p>An interactive Tableau dashboard analysing residential property sales data with real-time filtering by date, property size, and condition for instant market comparison.</p>
+
+      <div class="tableauPlaceholder" id="viz1753618374084" style="width:100%; height:750px;">
+        <noscript>
+          <a href="#">
+            <img alt="King County House Sales" src="https://public.tableau.com/static/images/Ki/KingCountyHouseSalesProject_17065373870200/KingCountyHouseSales/1_rss.png" style="width:100%; height:auto;"/>
+          </a>
+        </noscript>
+        <object class="tableauViz" style="width:100%; height:100%;">
+          <param name="host_url" value="https%3A%2F%2Fpublic.tableau.com%2F" />
+          <param name="embed_code_version" value="3" />
+          <param name="site_root" value="" />
+          <param name="name" value="KingCountyHouseSalesProject_17065373870200/KingCountyHouseSales" />
+          <param name="tabs" value="no" />
+          <param name="toolbar" value="yes" />
+          <param name="animate_transition" value="yes" />
+          <param name="display_static_image" value="yes" />
+          <param name="display_spinner" value="yes" />
+          <param name="display_overlay" value="yes" />
+          <param name="display_count" value="yes" />
+          <param name="language" value="en-US" />
+        </object>
+      </div>
+
+      <p style="font-size:0.75rem; color:var(--ink-faint); margin-top:1rem; text-align:center">Interactive Filtering · Real-Time Data · Professional Visualisation</p>
+    </div>
+  </div>
+</section>
+
+<script type="text/javascript" src="https://public.tableau.com/javascripts/api/viz_v1.js"></script>
+
+<!-- FAQ — AI SEO optimised -->
+<section id="faq">
+  <div class="section-inner">
+    <p class="section-label reveal">FAQs</p>
+    <h2 class="reveal reveal-delay-1">Frequently asked<br><em>questions</em></h2>
+    <p class="section-sub reveal reveal-delay-2">Everything you need to know before working with Cho&amp;Co.</p>
+
+    <div class="faq-list reveal">
+      <div class="faq-item">
+        <button class="faq-q" aria-expanded="false">
+          What is data cleaning and why does my business need it?
+          <svg class="faq-icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg>
+        </button>
+        <div class="faq-a">
+          Data cleaning is the process of detecting and correcting corrupt, inaccurate, duplicate, or improperly formatted records in a dataset. Businesses need clean data because flawed data leads to flawed decisions, missed trends, incorrect forecasts, and wasted spend. Cho&amp;Co removes duplicates, standardises formats, and validates accuracy so your data is ready for reliable, confident analysis.
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" aria-expanded="false">
+          How quickly can Cho&Co deliver an analytics dashboard?
+          <svg class="faq-icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg>
+        </button>
+        <div class="faq-a">
+          Most analytics dashboards are delivered within 5–10 business days depending on the complexity and volume of your data. We provide real-time, interactive dashboards with custom KPI tracking tailored specifically to your business goals and reporting requirements.
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" aria-expanded="false">
+          How much does data analysis cost for South African businesses?
+          <svg class="faq-icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg>
+        </button>
+        <div class="faq-a">
+          Cho&amp;Co offers affordable, transparent pricing customised per project. We work with businesses of all sizes, from startups to established enterprises. Contact us or book a free demo to receive a no-obligation quote based on your specific data needs and scope.
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" aria-expanded="false">
+          What file formats does Cho&Co accept?
+          <svg class="faq-icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg>
+        </button>
+        <div class="faq-a">
+          We work with CSV, Excel (.xlsx, .xls), and most standard business data formats. During the initial assessment phase, we analyse your current data structure and adapt our process to whatever format your business already uses, no technical expertise required from your side.
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" aria-expanded="false">
+          Do I need technical knowledge to work with Cho&Co?
+          <svg class="faq-icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg>
+        </button>
+        <div class="faq-a">
+          No technical knowledge is required. Cho&amp;Co handles all the technical complexity, including data wrangling, analysis, and visualisation. We deliver clear, easy-to-understand dashboards and reports that your whole team can use, regardless of technical background.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-inner">
+    <div class="contact-grid">
+      <div class="contact-info">
+        <div>
+          <p class="section-label reveal" style="color: rgba(247,244,239,0.4);">Get in touch</p>
+          <h2 class="reveal reveal-delay-1">Ready to <em>unlock</em><br>your data?</h2>
+        </div>
+        <p class="contact-sub reveal reveal-delay-2">Book a free demo and we'll walk you through exactly how Cho&amp;Co can help your business. A straightforward conversation about your data.</p>
+        <div class="contact-detail reveal reveal-delay-3">
+          <a href="mailto:choandcopty@gmail.com">
+            <svg style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.5" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/></svg>
+            choandcopty@gmail.com
+          </a>
+          <a href="tel:+27710602976">
+            <svg style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.5" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.18h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6.29 6.29l.91-.91a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            +27 71 060 2976
+          </a>
+          <span>
+            <svg style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+            Mon–Fri, 8am–5pm SAST
+          </span>
+        </div>
+      </div>
+
+      <form id="contact-form" class="contact-form reveal reveal-delay-1" onsubmit="handleSubmit(event)">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="name">Full name</label>
+            <input type="text" id="name" name="user_name" placeholder="Your name" required>
+          </div>
+          <div class="form-group">
+            <label for="email">Email address</label>
+            <input type="email" id="email" name="user_email" placeholder="you@email.com" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="company">Company</label>
+          <input type="text" id="company" name="company" placeholder="Your business name">
+        </div>
+        <div class="form-group">
+          <label for="service">Service of interest</label>
+          <select id="service" name="service" style="background:rgba(247,244,239,0.06);border:1px solid rgba(247,244,239,0.15);border-radius:4px;color:rgba(247,244,239,0.9);font-family:var(--sans);font-size:0.9rem;padding:0.7rem 0.9rem;width:100%;outline:none;-webkit-appearance:none;">
+            <option value="" style="background:#1a1814">Select a service</option>
+            <option value="cleaning" style="background:#1a1814">Data Cleaning</option>
+            <option value="dashboard" style="background:#1a1814">Analytics Dashboard</option>
+            <option value="reporting" style="background:#1a1814">Customised Reporting</option>
+            <option value="other" style="background:#1a1814">Not sure yet</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="message">Tell us about your data challenge</label>
+          <textarea id="message" name="message" placeholder="Describe your data, what you're trying to achieve, or any specific questions you have..."></textarea>
+        </div>
+
+        <label class="file-label">
+  Upload your data file (CSV or Excel)
+</label>
+
+<input
+  type="file"
+  name="data_file"
+  id="data_file"
+  accept=".csv,.xlsx,.xls"
+  class="file-input"
+/>
+
+<p class="file-hint">
+  Accepted formats: .csv, .xlsx, .xls
+</p>
+
+<p id="form-status" class="form-status"></p>
+
+        <button type="submit" class="form-btn" id="submit-btn">Send Message</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <a href="#hero" class="footer-logo"><img src="test2.png" alt="ChoandCo Logo" style="height: 125px; width: auto;"></a>
+    <nav class="footer-nav" aria-label="Footer navigation">
+      <a href="#services">Services</a>
+      <a href="#process">Process</a>
+      <a href="#faq">FAQ</a>
+      <a href="#showcase">Work</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <p class="footer-copy">© 2025 Cho&amp;Co. All rights reserved.</p>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+<script src="script.js"></script>
+<script type="text/javascript">
+  var divElement = document.getElementById('viz1753618374084');
+  var vizElement = divElement.getElementsByTagName('object')[0];
+  vizElement.style.width = '100%';
+  vizElement.style.height = '100%';
+
+  var scriptElement = document.createElement('script');
+  scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';
+  vizElement.parentNode.insertBefore(scriptElement, vizElement);
+</script>
+
+<script>
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobile-menu');
+
+  hamburger.addEventListener('click', () => {
+    mobileMenu.classList.toggle('active');
+  });
+
+  // Close menu when a link is clicked
+  document.querySelectorAll('.mobile-menu a').forEach(link => {
+    link.addEventListener('click', () => {
+      mobileMenu.classList.remove('active');
+    });
+  });
+</script>
+
+</body>
+</html>
