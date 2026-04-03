@@ -473,7 +473,7 @@
     flex-shrink: 0;
   }
 
-  .why-icon svg { width: 18px; height: 18px; stroke: var(--accent); fill: none; stroke-width: 1.5; }
+  .why-icon svg { width: 18px; height: 18px; stroke: #f39040; fill: none; stroke-width: 1.5; }
 
   .why-text h4 {
     font-family: var(--serif);
@@ -777,14 +777,14 @@
 
   .footer-logo span { color: var(--accent); }
 
-  .footer-nav { display: flex; gap: 1.5rem; }
+  .footer-nav { display: flex; gap: 1.5rem; background:#111009;}
   .footer-nav a {
     font-size: 0.8rem;
-    color: rgba(247,244,239,0.35);
     text-decoration: none;
     transition: color 0.15s;
+    color: #f39040;
   }
-  .footer-nav a:hover { color: rgba(247,244,239,0.7); }
+  .footer-nav a:hover { color: var(--accent) }
 
   .footer-copy { font-size: 0.75rem; color: rgba(247,244,239,0.25); }
 
