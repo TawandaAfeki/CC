@@ -749,7 +749,7 @@
     letter-spacing: 0.02em;
   }
 
-  .form-btn:hover { background: var(--accent-dark); }
+  .form-btn:hover { background: #f39040; }
 
   /* ── FOOTER ── */
   footer {
