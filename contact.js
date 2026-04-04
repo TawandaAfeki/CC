@@ -112,6 +112,8 @@ if (contactForm) {
     const templateParams = {
       user_name: contactForm.user_name.value,
       user_email: contactForm.user_email.value,
+      company: contactForm.company.value,
+      service: contactForm.company.service,
       message: contactForm.message.value,
       file_link: fileLink,
     };
