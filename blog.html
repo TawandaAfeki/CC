@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Insights | Cho&Co.</title>
+<link rel="icon" type="image/png" sizes="128x128" href="test.png"/>
+<meta name="description" content="Data thinking for growing businesses. Practical perspectives on turning business data into decisions that drive growth.">
+<link rel="canonical" href="https://www.choandco.co.za/blog.html">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Blog",
+  "name": "Cho&Co Insights",
+  "description": "Practical perspectives on turning business data into decisions that drive growth.",
+  "url": "https://www.choandco.co.za/blog.html",
+  "publisher": { "@type": "Organization", "name": "Cho&Co", "url": "https://www.choandco.co.za" }
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .blog-hero {
+    padding: clamp(4rem, 10vw, 8rem) clamp(1.5rem, 5vw, 3rem) clamp(2.5rem, 5vw, 4rem);
+    max-width: var(--max);
+    margin: 0 auto;
+  }
+
+  .blog-hero-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 2rem;
+    flex-wrap: wrap;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: clamp(2rem, 4vw, 3rem);
+  }
+
+  .blog-eyebrow {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #f39040;
+    font-weight: 500;
+    margin-bottom: 0.75rem;
+  }
+
+  .blog-hero h1 {
+    font-family: var(--serif);
+    font-size: clamp(2.2rem, 4vw, 3.2rem);
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    color: var(--ink);
+    margin-bottom: 0.75rem;
+  }
+
+  .blog-hero h1 em { font-style: italic; color: var(--accent); }
+
+  .blog-hero-sub {
+    font-size: 0.95rem;
+    color: var(--ink-muted);
+    max-width: 44ch;
+    line-height: 1.7;
+  }
+
+  .blog-hero-follow {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.5rem;
+    flex-shrink: 0;
+  }
+
+  .blog-hero-follow-label {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--ink-faint);
+  }
+
+  .linkedin-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: #0a66c2;
+    color: #fff;
+    text-decoration: none;
+    font-size: 0.82rem;
+    font-weight: 500;
+    padding: 0.55rem 1rem;
+    border-radius: var(--radius);
+    transition: background 0.15s;
+  }
+
+  .linkedin-btn:hover { background: #084f96; }
+  .linkedin-btn svg { width: 14px; height: 14px; fill: currentColor; flex-shrink: 0; }
+
+  /* ── POSTS ── */
+  .blog-posts-section {
+    padding: clamp(2.5rem, 5vw, 4rem) clamp(1.5rem, 5vw, 3rem) clamp(3rem, 6vw, 5rem);
+    max-width: var(--max);
+    margin: 0 auto;
+  }
+
+  .posts-month-label {
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--ink-faint);
+    font-weight: 500;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 1.5rem;
+  }
+
+  .blog-posts-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+
+  /* ── POST CARD ── */
+  .post-card {
+    display: flex;
+    flex-direction: column;
+    background: var(--paper-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition: transform 0.2s cubic-bezier(0.22,1,0.36,1);
+  }
+
+  .post-card:hover { transform: translateY(-3px); }
+
+  .post-card-img-wrap {
+    width: 100%;
+    aspect-ratio: 4/5;
+    overflow: hidden;
+    background: var(--paper-warm);
+    position: relative;
+  }
+
+  .post-card-img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s cubic-bezier(0.22,1,0.36,1);
+  }
+
+  .post-card:hover .post-card-img-wrap img { transform: scale(1.03); }
+
+  /* fallback placeholder */
+  .post-card-placeholder {
+    z-indes: 1;
+  }
+
+  .post-card-body {
+    padding: 1.1rem 1.1rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    flex: 1;
+  }
+
+  .post-card-tag {
+    font-size: 0.63rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  .post-card-title {
+    font-family: var(--serif);
+    font-size: 0.98rem;
+    color: var(--ink);
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+  }
+
+  .post-card-date {
+    font-size: 0.7rem;
+    color: var(--ink-faint);
+    margin-top: 0.25rem;
+  }
+
+  .post-card-footer {
+    padding: 1rem 1.1rem 1.1rem;
+  }
+
+  .view-post-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--ink);
+    text-decoration: none;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius);
+    padding: 0.5rem 0;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+    width: 100%;
+    letter-spacing: 0.02em;
+  }
+
+  .view-post-btn:hover {
+    background: var(--ink);
+    color: var(--paper);
+    border-color: var(--ink);
+  }
+
+  .view-post-btn svg {
+    width: 12px;
+    height: 12px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+  }
+
+  /* ── CTA STRIP ── */
+  .blog-cta-strip {
+    background: var(--ink);
+    padding: clamp(2.5rem, 5vw, 4rem) clamp(1.5rem, 5vw, 3rem);
+  }
+
+  .blog-cta-strip-inner {
+    max-width: var(--max);
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .blog-cta-strip h2 {
+    font-family: var(--serif);
+    font-size: clamp(1.4rem, 2.5vw, 1.9rem);
+    color: var(--paper);
+    letter-spacing: -0.02em;
+    margin-bottom: 0.4rem;
+  }
+
+  .blog-cta-strip h2 em { font-style: italic; color: #f39040; }
+  .blog-cta-strip p { font-size: 0.875rem; color: rgba(247,244,239,0.5); line-height: 1.6; max-width: 44ch; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 1000px) {
+    .blog-posts-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 600px) {
+    .blog-posts-grid { grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .blog-hero-follow { align-items: flex-start; }
+    .blog-cta-strip-inner { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav aria-label="Main navigation">
+  <div class="nav-inner">
+    <a href="index.html" class="logo"><img src="test.png" alt="ChoandCo Logo" style="height: 125px; width: auto;"></a>
+    <ul class="nav-links">
+      <li><a href="index.html#services">Services</a></li>
+      <li><a href="index.html#process">Process</a></li>
+      <li><a href="index.html#why">Why Us</a></li>
+      <li><a href="index.html#showcase">Our Work</a></li>
+      <li><a href="index.html#faq">FAQ</a></li>
+      <li><a href="index.html#contact">Contact Us</a></li>
+      <li><a href="contact.html" class="nav-cta">Book a Demo</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="blog-hero">
+  <div class="blog-hero-inner">
+    <div>
+      <p class="blog-eyebrow">Cho&amp;Co Insights</p>
+      <h1>Data thinking for<br><em>growing businesses</em></h1>
+      <p class="blog-hero-sub">Practical perspectives on turning business data into better decisions. Follow us on LinkedIn for weekly insights.</p>
+    </div>
+    <div class="blog-hero-follow">
+      <span class="blog-hero-follow-label">Follow for more</span>
+      <a href="https://www.linkedin.com/login?session_redirect=https%3A%2F%2Fwww%2Elinkedin%2Ecom%2Fcompany%2Fcho-and-co&fromSignIn=true&trk=top-card_top-card-secondary-button-top-card-secondary-cta" target="_blank" rel="noopener" class="linkedin-btn">
+        <svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+        Follow on LinkedIn
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- POSTS -->
+<div class="blog-posts-section">
+
+  <!-- ═══ MARCH 2026 ═══ -->
+  <p class="posts-month-label">March 2026</p>
+  <div class="blog-posts-grid">
+
+    <!-- Post 1
+         HOW TO ADD YOUR IMAGE:
+         1. Save your LinkedIn post image to your project folder
+         2. Replace "blog-post1.png" with your actual filename
+         3. Update the href on the "View post" button with the direct LinkedIn post URL
+    -->
+    <div class="post-card">
+      <div class="post-card-img-wrap">
+        <img src="post1.png" alt="Introducing Cho&Co — helping businesses turn complex data into clear business insight" >
+        <div class="post-card-placeholder">01</div>
+      </div>
+      <div class="post-card-body">
+        <span class="post-card-tag">Introducing Cho&amp;Co</span>
+        <p class="post-card-title">Having data and understanding it are two very different things</p>
+        <p class="post-card-date">March 2026</p>
+      </div>
+      <div class="post-card-footer">
+        <a href="https://www.linkedin.com/posts/cho-and-co_introducing-cho-co-many-organisations-activity-7439604202919636992-2xmG?utm_source=li_share&utm_content=feedcontent&utm_medium=g_dt_web&utm_campaign=copy" target="_blank" rel="noopener" class="view-post-btn">
+          Read More
+          <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- Post 2 -->
+    <div class="post-card">
+      <div class="post-card-img-wrap">
+        <img src="post2.png" alt="Why instinct alone isn't enough — your business data holds the answers" onerror="this.style.display='none'">
+        <div class="post-card-placeholder">02</div>
+      </div>
+      <div class="post-card-body">
+        <span class="post-card-tag">Decision Making</span>
+        <p class="post-card-title">Why instinct alone isn't enough to run a modern business</p>
+        <p class="post-card-date">March 2026</p>
+      </div>
+      <div class="post-card-footer">
+        <a href="https://www.linkedin.com/posts/cho-and-co_many-sme-founders-rely-heavily-on-instinct-activity-7440321958837133312-4L1a?utm_source=li_share&utm_content=feedcontent&utm_medium=g_dt_web&utm_campaign=copy" target="_blank" rel="noopener" class="view-post-btn">
+          Read More
+          <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- Post 3 -->
+    <div class="post-card">
+      <div class="post-card-img-wrap">
+        <img src="post3.png" alt="Hidden profit leaks most growing businesses don't know they have" onerror="this.style.display='none'">
+        <div class="post-card-placeholder">03</div>
+      </div>
+      <div class="post-card-body">
+        <span class="post-card-tag">Profitability</span>
+        <p class="post-card-title">The hidden profit leaks most growing businesses don't know they have</p>
+        <p class="post-card-date">March 2026</p>
+      </div>
+      <div class="post-card-footer">
+        <a href="https://www.linkedin.com/posts/cho-and-co_many-growing-businesses-unknowingly-have-activity-7442140852275142656-Do1M?utm_source=li_share&utm_content=feedcontent&utm_medium=g_dt_web&utm_campaign=copy" target="_blank" rel="noopener" class="view-post-btn">
+          Read More
+          <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- Post 4 -->
+    <div class="post-card">
+      <div class="post-card-img-wrap">
+        <img src="post4.png" alt="The cost of guessing — why assumption-based decisions hold businesses back" onerror="this.style.display='none'">
+        <div class="post-card-placeholder">04</div>
+      </div>
+      <div class="post-card-body">
+        <span class="post-card-tag">Strategy</span>
+        <p class="post-card-title">The cost of guessing: why assumption-based decisions are holding your business back</p>
+        <p class="post-card-date">March 2026</p>
+      </div>
+      <div class="post-card-footer">
+        <a href="https://www.linkedin.com/posts/cho-and-co_the-cost-of-guessing-in-business-decisions-activity-7442858598847680512-K5xN?utm_source=li_share&utm_content=feedcontent&utm_medium=g_dt_web&utm_campaign=copy" target="_blank" rel="noopener" class="view-post-btn">
+          Read More
+          <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+    </div>
+
+  </div><!-- end March grid -->
+
+  <!--
+  ═══ HOW TO ADD NEXT MONTH'S POSTS ═══
+  Copy the block below, uncomment it, update the month label,
+  and fill in your 4 new posts following the same pattern above.
+
+  <p class="posts-month-label">April 2026</p>
+  <div class="blog-posts-grid">
+    <div class="post-card"> ... </div>
+    <div class="post-card"> ... </div>
+    <div class="post-card"> ... </div>
+    <div class="post-card"> ... </div>
+  </div>
+  -->
+
+</div><!-- end blog-posts-section -->
+
+<!-- CTA STRIP -->
+<div class="blog-cta-strip">
+  <div class="blog-cta-strip-inner">
+    <div>
+      <h2>Ready to stop guessing and start <em>knowing</em>?</h2>
+      <p>If your business is sitting on data but struggling to translate it into clear insight, that's exactly what we do.</p>
+    </div>
+    <a href="contact.html" class="btn-primary">Book a Free Demo</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <a href="index.html" class="footer-logo"><img src="test2.png" alt="ChoandCo Logo" style="height: 125px; width: auto;"></a>
+    <nav class="footer-nav" aria-label="Footer navigation">
+      <a href="index.html#services">Services</a>
+      <a href="index.html#process">Process</a>
+      <a href="index.html#faq">FAQ</a>
+      <a href="blog.html">Insights</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <p class="footer-copy">© 2026 Cho&amp;Co. All rights reserved. · Last updated April 2026</p>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
