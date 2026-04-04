@@ -271,6 +271,70 @@
     .blog-hero-follow { align-items: flex-start; }
     .blog-cta-strip-inner { flex-direction: column; align-items: flex-start; }
   }
+
+  /* MOBILE MENU */
+.mobile-menu {
+  display: none;
+  position: fixed;
+  top: 70px;
+  right: 1rem;
+  width: 220px;
+  background: #1a1814;
+  border-radius: 8px;
+  padding: 0.5rem 0;
+  z-index: 999;
+
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.mobile-menu.active {
+  display: block;
+}
+
+
+.mobile-menu a {
+  display: block;
+  padding: 0.9rem 1.2rem;
+  text-decoration: none;
+  color: rgba(247,244,239,0.85);
+  font-size: 0.9rem;
+  border-bottom: 1px solid rgba(247,244,239,0.08);
+}
+
+.mobile-menu a:last-child {
+  border-bottom: none;
+}
+
+.mobile-menu a:hover {
+  background: rgba(247,244,239,0.05);
+}
+
+.mobile-cta {
+  background: #0f9d8c;
+  color: white !important;
+  text-align: center;
+  font-weight: 600;
+  margin: 0.5rem;
+  border-radius: 6px;
+}
+
+/* MOBILE BREAKPOINT */
+@media (max-width: 768px) {
+
+  .nav-links {
+    display: none;
+  }
+
+  .hamburger {
+    display: flex;
+  }
+
+  .mobile-menu.active {
+    display: flex;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -462,5 +526,21 @@
 </footer>
 
 <script src="script.js"></script>
+
+<script>
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobile-menu');
+
+  hamburger.addEventListener('click', () => {
+    mobileMenu.classList.toggle('active');
+  });
+
+  // Close menu when a link is clicked
+  document.querySelectorAll('.mobile-menu a').forEach(link => {
+    link.addEventListener('click', () => {
+      mobileMenu.classList.remove('active');
+    });
+  });
+</script>
 </body>
 </html>
