@@ -116,12 +116,12 @@ if (contactForm) {
 
     Promise.all([
       emailjs.send(
-        "service_lsyfdad",
+        "service_ivfwz6v",
         "template_20x0lee",
         templateParams
       ),
       emailjs.send(
-        "service_lsyfdad",
+        "service_ivfwz6v",
         "template_bicxoer",
         templateParams
       )
