@@ -111,7 +111,7 @@ if (contactForm) {
       user_name: contactForm.user_name.value,
       user_email: contactForm.user_email.value,
       company: contactForm.company.value,
-      service: contactForm.company.service,
+      service: contactForm.company.value,
       message: contactForm.message.value,
       file_link: fileLink,
     };
