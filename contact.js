@@ -13,7 +13,7 @@ function closeModal() {
   const overlay = document.getElementById('modal-overlay');
   overlay.classList.remove('visible');
   document.body.style.overflow = '';
-  window.location.href = '../index.html';
+  window.location.href = 'index.html';
 }
 
 function handleModalSubmit(e) {
