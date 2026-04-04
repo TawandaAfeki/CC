@@ -1137,3 +1137,16 @@
   .file-hint{
     color: #f39040
   }
+
+@media (max-width: 768px) {
+  .trust-items {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.2rem;
+  }
+
+  .trust-item {
+    text-align: center;
+    padding: 0.8rem;
+  }
+}
