@@ -113,7 +113,7 @@ if (contactForm) {
       user_name: contactForm.user_name.value,
       user_email: contactForm.user_email.value,
       company: contactForm.company.value,
-      service: contactForm.service.value,
+      service: document.getElementById("service").value,
       message: contactForm.message.value,
       file_link: fileLink,
     };
