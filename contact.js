@@ -135,10 +135,6 @@ if (contactForm) {
   formStatus.style.color = "#22c55e";
   contactForm.reset();
 
-  // ✅ Show success UI
-  document.getElementById('modal-form-fields').classList.add('hide');
-  document.getElementById('modal-success').classList.add('show');
-
   // ✅ Fire Google Ads conversion HERE
   gtag('event', 'conversion', {
     'send_to': 'AW-18010785984/Y9QfCKTCoZUcEMCRm4xD'
