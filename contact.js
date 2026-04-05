@@ -137,7 +137,9 @@ if (contactForm) {
 
   // ✅ Fire Google Ads conversion HERE
   gtag('event', 'conversion', {
-    'send_to': 'AW-18010785984/Y9QfCKTCoZUcEMCRm4xD'
+  'send_to': 'AW-18010785984/qS-iCOuVjJYcEMCRm4xD',
+  'value': 10.0,
+  'currency': 'ZAR'
   });
 })
       .catch((error) => {
