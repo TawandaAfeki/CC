@@ -943,3 +943,23 @@
   line-height: 2;
 }
 .refs-text a { color: inherit; text-decoration: underline; }
+
+.footer-refs {
+  border-top: 1px solid rgba(247,244,239,0.1);
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  width: 100%;
+}
+.footer-refs p {
+  font-size: 0.7rem;
+  color: rgba(247,244,239,0.3);
+  line-height: 1.8;
+  margin: 0;
+}
+.footer-refs a {
+  color: rgba(247,244,239,0.3);
+  text-decoration: underline;
+}
+.footer-refs a:hover {
+  color: rgba(247,244,239,0.6);
+}
