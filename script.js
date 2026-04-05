@@ -138,6 +138,10 @@ if (contactForm) {
         formStatus.textContent =
           error.text || "Something went wrong. Please try again.";
         formStatus.style.color = "#ef4444";
+
+        // ✅ Fire Google Ads conversion HERE
+  gtag('event', 'conversion', {
+    'send_to': 'AW-18010785984/Y9QfCKTCoZUcEMCRm4xD'
       });
   });
 }
