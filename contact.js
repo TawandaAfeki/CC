@@ -16,7 +16,16 @@ function closeModal() {
   window.location.href = 'index.html';
 }
 
-
+function handleModalSubmit(e) {
+  e.preventDefault();
+  const btn = document.getElementById('modal-submit-btn');
+  btn.textContent = 'Sending…';
+  btn.disabled = true;
+  setTimeout(() => {
+    document.getElementById('modal-form-fields').classList.add('hide');
+    document.getElementById('modal-success').classList.add('show');
+  }, 1000);
+}
 
 document.getElementById('modal-overlay').addEventListener('click', function(e) {
   if (e.target === this) closeModal();
