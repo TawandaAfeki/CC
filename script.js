@@ -133,7 +133,7 @@ if (contactForm) {
         formStatus.style.color = "#22c55e";
         contactForm.reset();
       }) 
-  } .catch((error) => {
+   .catch((error) => {
         console.error("EmailJS error:", error);
         formStatus.textContent =
           error.text || "Something went wrong. Please try again.";
@@ -145,7 +145,9 @@ if (contactForm) {
       'value': 10.0,
       'currency': 'ZAR'
       });   
-}); 
+});
+
+  });
 }
 
 function toggleMenu() {
