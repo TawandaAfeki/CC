@@ -132,8 +132,8 @@ if (contactForm) {
         formStatus.textContent = "Message sent successfully";
         formStatus.style.color = "#22c55e";
         contactForm.reset();
-      })
-      .catch((error) => {
+      }) 
+  } .catch((error) => {
         console.error("EmailJS error:", error);
         formStatus.textContent =
           error.text || "Something went wrong. Please try again.";
@@ -147,7 +147,6 @@ if (contactForm) {
       });   
 }); 
 }
-                               }
 
 function toggleMenu() {
   const menu = document.getElementById("mobile-menu");
