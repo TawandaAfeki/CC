@@ -16,16 +16,7 @@ function closeModal() {
   window.location.href = 'index.html';
 }
 
-function handleModalSubmit(e) {
-  e.preventDefault();
-  const btn = document.getElementById('modal-submit-btn');
-  btn.textContent = 'Sending…';
-  btn.disabled = true;
-  setTimeout(() => {
-    document.getElementById('modal-form-fields').classList.add('hide');
-    document.getElementById('modal-success').classList.add('show');
-  }, 1000);
-}
+
 
 document.getElementById('modal-overlay').addEventListener('click', function(e) {
   if (e.target === this) closeModal();
@@ -131,10 +122,19 @@ if (contactForm) {
       )
     ])
       .then(() => {
-        formStatus.textContent = "Message sent successfully";
-        formStatus.style.color = "#22c55e";
-        contactForm.reset();
-      })
+  formStatus.textContent = "Message sent successfully";
+  formStatus.style.color = "#22c55e";
+  contactForm.reset();
+
+  // ✅ Show success UI
+  document.getElementById('modal-form-fields').classList.add('hide');
+  document.getElementById('modal-success').classList.add('show');
+
+  // ✅ Fire Google Ads conversion HERE
+  gtag('event', 'conversion', {
+    'send_to': 'AW-18010785984/Y9QfCKTCoZUcEMCRm4xD'
+  });
+})
       .catch((error) => {
         console.error("EmailJS error:", error);
         formStatus.textContent =
