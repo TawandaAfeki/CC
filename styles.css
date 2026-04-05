@@ -926,3 +926,20 @@
     padding: 0.8rem;
   }
 }
+
+.ref-link {
+  color: var(--accent);
+  font-size: 0.65rem;
+  text-decoration: none;
+  vertical-align: super;
+  margin-left: 1px;
+}
+.ref-link:hover { text-decoration: underline; }
+
+#references { padding: 1.5rem 0; border-top: 1px solid rgba(26,24,20,0.1); }
+.refs-text {
+  font-size: 0.72rem;
+  color: rgba(26,24,20,0.4);
+  line-height: 2;
+}
+.refs-text a { color: inherit; text-decoration: underline; }
