@@ -140,12 +140,12 @@ if (contactForm) {
         formStatus.style.color = "#ef4444";
 
         // ✅ Fire Google Ads conversion HERE
-  gtag('event', 'conversion', {
-      'send_to': 'AW-18010785984/vWOcCLS7jJYcEMCRm4xD',
-      'value': 10.0,
-      'currency': 'ZAR'
-      });
-  });
+ // gtag('event', 'conversion', {
+   //   'send_to': 'AW-18010785984/vWOcCLS7jJYcEMCRm4xD',
+     // 'value': 10.0,
+      //'currency': 'ZAR'
+      //});
+  // });
 }
 
 function toggleMenu() {
