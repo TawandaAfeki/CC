@@ -145,7 +145,6 @@ if (contactForm) {
       'value': 10.0,
       'currency': 'ZAR'
       });
-   });
 }
 
 function toggleMenu() {
