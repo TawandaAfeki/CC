@@ -383,6 +383,152 @@
   }
 }
 
+/* ── FLIP CARDS ── */
+.blog-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+.flip-card {
+  height: 420px;
+  perspective: 1200px;
+}
+
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.65s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+}
+
+.flip-card:hover .flip-card-inner {
+  transform: rotateY(180deg);
+}
+
+/* Front & Back shared */
+.flip-card-front,
+.flip-card-back {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+/* Front */
+.flip-card-front {
+  background: var(--paper-warm, #ede9e2);
+  display: flex;
+  flex-direction: column;
+}
+
+.flip-card-front img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  display: block;
+}
+
+.flip-card-front-body {
+  padding: 1.25rem 1.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  flex: 1;
+}
+
+.flip-hint {
+  margin-top: auto;
+  font-size: 0.72rem;
+  color: var(--accent, #c4531a);
+  font-family: var(--sans);
+  letter-spacing: 0.04em;
+  opacity: 0.7;
+}
+
+/* Back */
+.flip-card-back {
+  background: var(--ink, #1a1814);
+  transform: rotateY(180deg);
+  display: flex;
+  align-items: stretch;
+}
+
+.flip-card-back-body {
+  padding: 2rem 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  color: var(--paper, #f7f4ef);
+}
+
+.flip-card-back .post-card-tag {
+  color: var(--accent, #c4531a);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.flip-card-title {
+  font-family: var(--serif, 'DM Serif Display', serif);
+  font-size: 1rem;
+  line-height: 1.4;
+  color: var(--ink, #1a1814);
+  margin: 0;
+}
+
+.flip-card-back .flip-card-title {
+  color: var(--paper, #f7f4ef);
+  font-size: 0.95rem;
+}
+
+.flip-excerpt {
+  font-size: 0.82rem;
+  line-height: 1.7;
+  color: rgba(247, 244, 239, 0.65);
+  font-family: var(--sans);
+  margin: 0;
+  flex: 1;
+}
+
+.flip-read-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.78rem;
+  font-family: var(--sans);
+  color: var(--accent, #c4531a);
+  text-decoration: none;
+  margin-top: auto;
+  transition: opacity 0.2s;
+}
+
+.flip-read-btn svg {
+  width: 13px;
+  height: 13px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.8;
+}
+
+.flip-read-btn:hover {
+  opacity: 0.75;
+}
+
+/* Mobile — tap to flip instead of hover */
+@media (hover: none) {
+  .flip-card-inner {
+    transition: transform 0.65s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .flip-card.flipped .flip-card-inner {
+    transform: rotateY(180deg);
+  }
+}
+
 </style>
 </head>
 <body>
@@ -448,88 +594,111 @@
   <p class="posts-month-label">March 2026</p>
   <div class="blog-posts-grid">
 
-    <!-- Post 1
-         HOW TO ADD YOUR IMAGE:
-         1. Save your LinkedIn post image to your project folder
-         2. Replace "blog-post1.png" with your actual filename
-         3. Update the href on the "View post" button with the direct LinkedIn post URL
-    -->
-    <div class="post-card">
-      <div class="post-card-img-wrap">
-        <img src="post1.png" alt="Introducing Cho&Co — helping businesses turn complex data into clear business insight" >
-        <div class="post-card-placeholder">01</div>
-      </div>
-      <div class="post-card-body">
+    <!-- Post 1 -->
+<div class="flip-card">
+  <div class="flip-card-inner">
+    <!-- Front -->
+    <div class="flip-card-front">
+      <img src="post1.png" alt="Introducing Cho&Co — helping businesses turn complex data into clear business insight">
+      <div class="flip-card-front-body">
         <span class="post-card-tag">Introducing Cho&amp;Co</span>
-        <p class="post-card-title">Having data and understanding it are two very different things</p>
+        <p class="flip-card-title">Having data and understanding it are two very different things</p>
         <p class="post-card-date">March 2026</p>
+        <div class="flip-hint">Hover to read →</div>
       </div>
-      <div class="post-card-footer">
-        <a href="https://www.linkedin.com/posts/cho-and-co_introducing-cho-co-many-organisations-activity-7439604202919636992-2xmG?utm_source=li_share&utm_content=feedcontent&utm_medium=g_dt_web&utm_campaign=copy" target="_blank" rel="noopener" class="view-post-btn">
-          Read More
+    </div>
+    <!-- Back -->
+    <div class="flip-card-back">
+      <div class="flip-card-back-body">
+        <span class="post-card-tag">Introducing Cho&amp;Co</span>
+        <p class="flip-card-title">Having data and understanding it are two very different things</p>
+        <p class="flip-excerpt">Many organisations collect large amounts of data every day. But having data and understanding it are two very different things. Cho&amp;Co was created to help businesses turn complex data into clear insights that support better decisions.</p>
+        <a href="https://www.linkedin.com/posts/cho-and-co_introducing-cho-co-many-organisations-activity-7439604202919636992-2xmG" target="_blank" rel="noopener" class="flip-read-btn">
+          Read on LinkedIn
           <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
       </div>
     </div>
+  </div>
+</div>
 
-    <!-- Post 2 -->
-    <div class="post-card">
-      <div class="post-card-img-wrap">
-        <img src="post2.png" alt="Why instinct alone isn't enough — your business data holds the answers" onerror="this.style.display='none'">
-        <div class="post-card-placeholder">02</div>
-      </div>
-      <div class="post-card-body">
+<!-- Post 2 -->
+<div class="flip-card">
+  <div class="flip-card-inner">
+    <div class="flip-card-front">
+      <img src="post2.png" alt="Why instinct alone isn't enough — your business data holds the answers">
+      <div class="flip-card-front-body">
         <span class="post-card-tag">Decision Making</span>
-        <p class="post-card-title">Why instinct alone isn't enough to run a modern business</p>
+        <p class="flip-card-title">Why instinct alone isn't enough to run a modern business</p>
         <p class="post-card-date">March 2026</p>
+        <div class="flip-hint">Hover to read →</div>
       </div>
-      <div class="post-card-footer">
-        <a href="https://www.linkedin.com/posts/cho-and-co_many-sme-founders-rely-heavily-on-instinct-activity-7440321958837133312-4L1a?utm_source=li_share&utm_content=feedcontent&utm_medium=g_dt_web&utm_campaign=copy" target="_blank" rel="noopener" class="view-post-btn">
-          Read More
+    </div>
+    <div class="flip-card-back">
+      <div class="flip-card-back-body">
+        <span class="post-card-tag">Decision Making</span>
+        <p class="flip-card-title">Why instinct alone isn't enough to run a modern business</p>
+        <p class="flip-excerpt">Many SME founders rely on instinct — and instinct is valuable. But instinct becomes far more powerful when supported by clear data. "I feel like our marketing isn't working." Very often, the answers are already inside the business data.</p>
+        <a href="https://www.linkedin.com/posts/cho-and-co_many-sme-founders-rely-heavily-on-instinct-activity-7440321958837133312-4L1a" target="_blank" rel="noopener" class="flip-read-btn">
+          Read on LinkedIn
           <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
       </div>
     </div>
+  </div>
+</div>
 
-    <!-- Post 3 -->
-    <div class="post-card">
-      <div class="post-card-img-wrap">
-        <img src="post3.png" alt="Hidden profit leaks most growing businesses don't know they have" onerror="this.style.display='none'">
-        <div class="post-card-placeholder">03</div>
-      </div>
-      <div class="post-card-body">
+<!-- Post 3 -->
+<div class="flip-card">
+  <div class="flip-card-inner">
+    <div class="flip-card-front">
+      <img src="post3.png" alt="Hidden profit leaks most growing businesses don't know they have">
+      <div class="flip-card-front-body">
         <span class="post-card-tag">Profitability</span>
-        <p class="post-card-title">The hidden profit leaks most growing businesses don't know they have</p>
+        <p class="flip-card-title">The hidden profit leaks most growing businesses don't know they have</p>
         <p class="post-card-date">March 2026</p>
+        <div class="flip-hint">Hover to read →</div>
       </div>
-      <div class="post-card-footer">
-        <a href="https://www.linkedin.com/posts/cho-and-co_many-growing-businesses-unknowingly-have-activity-7442140852275142656-Do1M?utm_source=li_share&utm_content=feedcontent&utm_medium=g_dt_web&utm_campaign=copy" target="_blank" rel="noopener" class="view-post-btn">
-          Read More
+    </div>
+    <div class="flip-card-back">
+      <div class="flip-card-back-body">
+        <span class="post-card-tag">Profitability</span>
+        <p class="flip-card-title">The hidden profit leaks most growing businesses don't know they have</p>
+        <p class="flip-excerpt">Many growing businesses unknowingly have profit leaks — not because they are poorly run, but because the patterns are hidden inside their data. Smaller clients may generate higher margins. Marketing spend may create visibility but not revenue.</p>
+        <a href="https://www.linkedin.com/posts/cho-and-co_many-growing-businesses-unknowingly-have-activity-7442140852275142656-Do1M" target="_blank" rel="noopener" class="flip-read-btn">
+          Read on LinkedIn
           <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
       </div>
     </div>
+  </div>
+</div>
 
-    <!-- Post 4 -->
-    <div class="post-card">
-      <div class="post-card-img-wrap">
-        <img src="post4.png" alt="The cost of guessing — why assumption-based decisions hold businesses back" onerror="this.style.display='none'">
-        <div class="post-card-placeholder">04</div>
-      </div>
-      <div class="post-card-body">
+<!-- Post 4 -->
+<div class="flip-card">
+  <div class="flip-card-inner">
+    <div class="flip-card-front">
+      <img src="post4.png" alt="The cost of guessing — why assumption-based decisions hold businesses back">
+      <div class="flip-card-front-body">
         <span class="post-card-tag">Strategy</span>
-        <p class="post-card-title">The cost of guessing: why assumption-based decisions are holding your business back</p>
+        <p class="flip-card-title">The cost of guessing: why assumption-based decisions are holding your business back</p>
         <p class="post-card-date">March 2026</p>
+        <div class="flip-hint">Hover to read →</div>
       </div>
-      <div class="post-card-footer">
-        <a href="https://www.linkedin.com/posts/cho-and-co_the-cost-of-guessing-in-business-decisions-activity-7442858598847680512-K5xN?utm_source=li_share&utm_content=feedcontent&utm_medium=g_dt_web&utm_campaign=copy" target="_blank" rel="noopener" class="view-post-btn">
-          Read More
+    </div>
+    <div class="flip-card-back">
+      <div class="flip-card-back-body">
+        <span class="post-card-tag">Strategy</span>
+        <p class="flip-card-title">The cost of guessing: why assumption-based decisions are holding your business back</p>
+        <p class="flip-excerpt">One of the most expensive habits in business is guessing. Every decision based on assumptions carries a hidden cost — wasted spend, missed opportunities, delayed growth. When businesses analyse their data, leaders stop guessing and start seeing patterns.</p>
+        <a href="https://www.linkedin.com/posts/cho-and-co_the-cost-of-guessing-in-business-decisions-activity-7442858598847680512-K5xN" target="_blank" rel="noopener" class="flip-read-btn">
+          Read on LinkedIn
           <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
       </div>
     </div>
-
-  </div><!-- end March grid -->
+  </div>
+</div>
 
   <!--
   ═══ HOW TO ADD NEXT MONTH'S POSTS ═══
@@ -590,5 +759,19 @@
     });
   });
 </script>
+
+<script>
+  // Mobile: tap to flip since hover doesn't exist on touch
+  document.querySelectorAll('.flip-card').forEach(card => {
+    card.addEventListener('click', function(e) {
+      if (window.matchMedia('(hover: none)').matches) {
+        // Don't flip if tapping the LinkedIn button
+        if (e.target.closest('.flip-read-btn')) return;
+        this.classList.toggle('flipped');
+      }
+    });
+  });
+</script>
+  
 </body>
 </html>
