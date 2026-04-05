@@ -144,8 +144,8 @@ if (contactForm) {
       'send_to': 'AW-18010785984/vWOcCLS7jJYcEMCRm4xD',
       'value': 10.0,
       'currency': 'ZAR'
-      });
-})
+      });   
+});
 
 function toggleMenu() {
   const menu = document.getElementById("mobile-menu");
