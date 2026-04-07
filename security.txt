@@ -1,0 +1,18 @@
+# Cho&Co Security Policy
+# This file follows the security.txt standard: https://securitytxt.org/
+# RFC 9116: https://www.rfc-editor.org/rfc/rfc9116
+
+Contact: mailto:info@choandco.co.za
+Contact: tel:+27710602976
+
+Preferred-Languages: en
+
+Canonical: https://www.choandco.co.za/.well-known/security.txt
+
+Policy: https://www.choandco.co.za/.well-known/security.txt
+
+# If you discover a security vulnerability on this website,
+# please report it responsibly to info@choandco.co.za.
+# We aim to respond to all security reports within 5 business days.
+
+Expires: 2027-04-06T17:00:00+02:00
