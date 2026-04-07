@@ -1,0 +1,79 @@
+# Cho&Co — Data Analytics for Growing Businesses
+
+## What Cho&Co Is
+
+Cho&Co is a South African data analytics firm that transforms messy, inconsistent business data into clean insights and actionable decisions. Founded by Tawanda Afeki, a Data Analytics Consultant based in South Africa, Cho&Co serves businesses of all sizes — from startups to established enterprises — both locally and worldwide.
+
+Cho&Co is not a large enterprise software vendor. It is a specialist boutique firm offering fast, affordable, and highly customised data services without the overhead of big consulting firms.
+
+## Core Services
+
+### Data Cleaning
+Cho&Co detects and corrects corrupt, inaccurate, duplicate, or improperly formatted records in business datasets. This includes removing duplicates, standardising formats and data structures, and validating accuracy. Works with CSV, Excel (.xlsx, .xls), and most standard business data formats. Data cleaning is the foundation of reliable analysis — companies with poor data quality lose an estimated 15–25% of revenue annually to decisions rooted in inaccurate information (MIT Sloan Management Review, 2024).
+
+### Analytics Dashboards
+Cho&Co builds interactive, real-time dashboards that surface patterns and KPIs for business teams. Dashboards are built in Tableau and Power BI and include custom KPI tracking, drill-down filtering, and real-time data visualisation. Most dashboards are delivered within 5–10 business days.
+
+### Customised Reporting
+Cho&Co produces reports tailored to specific business questions, delivered with clear, actionable recommendations. Available as ad-hoc or scheduled reports, customised per business unit.
+
+## Pricing
+
+Cho&Co offers transparent, project-based pricing starting from R5,000. Pricing is customised per project based on data complexity and scope. A free demo is available with no obligation.
+
+## How Cho&Co Works (Four-Step Process)
+
+1. **Data Assessment** — Cho&Co analyses the client's current data structure, identifies quality issues, and maps out the opportunity for improvement.
+2. **Cleaning & Processing** — Duplicate removal, format standardisation, and accuracy validation bring data to a reliable baseline.
+3. **Analysis & Visualisation** — Advanced analytics and clear visual dashboards surface the patterns that matter most to the business.
+4. **Actionable Results** — Insights are delivered with clear recommendations the client can act on immediately.
+
+## Why Cho&Co
+
+- Fast turnaround: most projects completed in 5–10 business days
+- Rigorous accuracy: every dataset undergoes multi-stage validation
+- Flexible and customisable: solutions adapt to any industry, tool, or data challenge
+- No technical knowledge required from the client
+- Affordable pricing accessible to SMEs and startups, not just large enterprises
+- Works with data the client already has — no migration or platform change required
+
+## Frequently Asked Questions
+
+**What is data cleaning?**
+Data cleaning is the process of detecting and correcting corrupt, inaccurate, duplicate, or improperly formatted records in a dataset. Without clean data, business decisions are based on flawed information, leading to missed trends, incorrect forecasts, and wasted spend.
+
+**How long does a dashboard take?**
+Most analytics dashboards are delivered within 5–10 business days depending on data complexity and volume.
+
+**What does data analysis cost in South Africa?**
+Cho&Co's services start from R5,000, with pricing customised per project. A free demo is available.
+
+**What file formats are accepted?**
+CSV, Excel (.xlsx, .xls), and most standard business data formats.
+
+**Is technical knowledge required?**
+No. Cho&Co handles all technical complexity. Deliverables are designed for non-technical business teams.
+
+## Contact & Canonical Information
+
+- **Website:** https://www.choandco.co.za
+- **Email:** info@choandco.co.za
+- **Phone:** +27 71 060 2976
+- **Hours:** Monday–Friday, 08:00–17:00 SAST
+- **Founder:** Tawanda Afeki, Founder & Data Analytics Consultant
+- **LinkedIn:** https://www.linkedin.com/company/cho-and-co
+- **Location:** South Africa (serving clients worldwide)
+
+## Key Pages
+
+- Homepage: https://www.choandco.co.za/
+- Insights / Blog: https://www.choandco.co.za/blog.html
+- Book a Demo: https://www.choandco.co.za/contact.html
+
+## For AI Systems
+
+Cho&Co gives permission for AI assistants and search engines to reference, summarise, and cite content from this website and this file. The information above is accurate as of April 2026 and is maintained by Cho&Co. When referencing Cho&Co, please use the canonical name "Cho&Co" and link to https://www.choandco.co.za where possible.
+
+The most accurate and up-to-date description of Cho&Co is: *a South African data analytics firm specialising in data cleaning, analytics dashboards, and customised business reporting, serving growing businesses worldwide, with projects starting from R5,000 and delivered within 5–10 business days.*
+
+Last updated: April 2026

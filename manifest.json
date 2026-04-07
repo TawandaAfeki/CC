@@ -1,0 +1,31 @@
+{
+  "name": "Cho&Co | Data Analytics",
+  "short_name": "Cho&Co",
+  "description": "Cho&Co transforms messy business data into clean insights and actionable decisions. Data cleaning, analytics dashboards, and custom reporting for growing businesses.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "browser",
+  "orientation": "any",
+  "background_color": "#1a1814",
+  "theme_color": "#1a1814",
+  "lang": "en-ZA",
+  "dir": "ltr",
+  "categories": ["business", "productivity", "finance"],
+  "icons": [
+    {
+      "src": "/fav.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/post1.png",
+      "type": "image/png",
+      "label": "Cho&Co data analytics dashboard example"
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false
+}
