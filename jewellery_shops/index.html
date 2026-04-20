@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cho&amp;Co. Analytics Portal</title>
+  <link rel="icon" type="image/png" sizes="128x128" href="../fav.webp"/>
+
+  <!-- FONTS -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --teal:#2A9D8F;--teal-dk:#1e7268;--teal-lt:#e6f5f3;
+  --orange:#E8622A;--orange-lt:#fdf0eb;
+  --coal:#3D4756;--coal-dk:#2b3340;--coal-lt:#f0f1f3;
+  --amber:#F5A623;--amber-lt:#fef6e6;
+  --paper:#f7f6f3;--paper2:#eceae4;
+  --ink:#2b3340;--ink2:#4a5568;--ink3:#718096;
+  --white:#fdfcfa;
+  --serif: 'DM Serif Display', Georgia, serif;
+    --sans: 'DM Sans', system-ui, sans-serif;
+}
+body{font-family:var(--sans);background:var(--paper);color:var(--ink)}
+
+/* hide radio inputs */
+input[name="tab"]{display:none}
+
+/* NAV */
+.nav{background:var(--coal);border-bottom:3px solid var(--teal);display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:52px;position:sticky;top:0;z-index:10}
+.nav-brand{display:flex;align-items:center;gap:10px}
+.lm{width:28px;height:28px;border-radius:50%;display:grid;grid-template-columns:1fr 1fr;gap:2px;overflow:hidden}
+.lm div:nth-child(1){background:var(--teal)}.lm div:nth-child(2){background:var(--orange)}
+.lm div:nth-child(3){background:var(--coal-dk)}.lm div:nth-child(4){background:var(--amber)}
+.brand-txt{font-family:var(--serif);font-size:17px;font-weight:700;color:var(--white)}
+.brand-txt span{color:var(--teal)}
+.brand-tag{font-size:9px;color:rgba(255,255,255,.3);letter-spacing:.12em;text-transform:uppercase;border-left:1px solid rgba(255,255,255,.12);padding-left:10px}
+.nav-tabs{display:flex;gap:2px}
+
+/* tab labels act as buttons */
+.tab-label{display:inline-block;padding:7px 16px;border-radius:4px;font-size:12px;color:rgba(255,255,255,.45);cursor:pointer;transition:all .18s;user-select:none}
+.tab-label:hover{color:var(--white);background:rgba(255,255,255,.07)}
+
+/* active tab label — driven by checked radio */
+#t-home:checked   ~ .shell .nav-tabs label[for="t-home"],
+#t-dash:checked   ~ .shell .nav-tabs label[for="t-dash"],
+#t-rep:checked    ~ .shell .nav-tabs label[for="t-rep"],
+#t-help:checked   ~ .shell .nav-tabs label[for="t-help"]{
+  color:var(--white);background:var(--teal)
+}
+
+.ndot{display:flex;align-items:center;gap:6px;font-size:10px;color:rgba(255,255,255,.3)}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--teal);box-shadow:0 0 0 2px rgba(42,157,143,.2)}
+
+/* all pages hidden by default */
+.page{display:none;min-height:calc(100vh - 52px)}
+
+/* show correct page based on checked radio */
+#t-home:checked ~ .shell .page-home,
+#t-dash:checked ~ .shell .page-dash,
+#t-rep:checked  ~ .shell .page-rep,
+#t-help:checked ~ .shell .page-help{display:block}
+
+/* HOME needs flex */
+#t-home:checked ~ .shell .page-home{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:var(--coal);position:relative;overflow:hidden;padding:40px 20px;text-align:center
+}
+
+/* HELP needs grid */
+#t-help:checked ~ .shell .page-help{
+  display:grid;grid-template-columns:240px 1fr
+}
+
+/* ── HOME STYLES ── */
+.bg-quad{position:absolute;inset:0;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;pointer-events:none}
+.bq1{background:var(--teal);opacity:.07}.bq2{background:var(--orange);opacity:.07}
+.bq3{background:var(--coal-dk);opacity:.14}.bq4{background:var(--amber);opacity:.07}
+.hero{position:relative;z-index:2;animation:fu .8s cubic-bezier(.16,1,.3,1) both}
+.hmark{width:80px;height:80px;border-radius:50%;display:grid;grid-template-columns:1fr 1fr;gap:3px;margin:0 auto 20px;overflow:hidden;border:2px solid rgba(255,255,255,.1)}
+.hmark div:nth-child(1){background:var(--teal)}.hmark div:nth-child(2){background:var(--orange)}
+.hmark div:nth-child(3){background:var(--coal-dk)}.hmark div:nth-child(4){background:var(--amber)}
+.hero-name{font-family:var(--serif);font-size:clamp(40px,6vw,72px);font-weight:400;color:var(--white);letter-spacing:-.03em;line-height:.95;margin-bottom:6px}
+.hero-name em{color:var(--teal);font-style:normal}
+.hero-sub{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:36px}
+.pillars{display:flex;border-radius:7px;overflow:hidden;margin-bottom:36px;max-width:480px}
+.pill{flex:1;padding:14px 10px}
+.pill:nth-child(1){background:var(--teal)}
+.pill:nth-child(2){background:var(--orange)}
+.pill:nth-child(3){background:var(--coal-dk)}
+.pill:nth-child(4){background:var(--amber)}
+.pn{font-family:var(--serif);font-size:20px;color:var(--white);display:block;line-height:1}
+.pill:nth-child(4) .pn{color:var(--coal)}
+.pl{font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-top:3px;display:block}
+.pill:nth-child(4) .pl{color:rgba(43,51,64,.55)}
+.hero-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.btn-t{padding:10px 24px;background:var(--teal);color:var(--white);border:none;border-radius:5px;font-size:12px;font-weight:500;cursor:pointer;font-family:var(--sans)}
+.btn-g{padding:10px 24px;background:transparent;border:1px solid rgba(255,255,255,.22);color:rgba(255,255,255,.75);border-radius:5px;font-size:12px;cursor:pointer;font-family:var(--sans)}
+.hfoot{position:absolute;bottom:14px;left:0;right:0;font-size:9px;color:rgba(255,255,255,.15);letter-spacing:.08em;text-transform:uppercase;text-align:center}
+
+/* ── SHARED ── */
+.rbar{height:3px}
+.rb1{background:linear-gradient(90deg,var(--teal),var(--orange),var(--amber))}
+.rb2{background:linear-gradient(90deg,var(--orange),var(--amber),var(--teal))}
+.rb3{background:linear-gradient(90deg,var(--amber),var(--teal),var(--orange))}
+.phdr{background:var(--white);border-bottom:1px solid var(--paper2);padding:16px 24px;display:flex;align-items:flex-end;justify-content:space-between}
+.phdr h1{font-family:var(--serif);font-size:20px;font-weight:400;color:var(--ink);letter-spacing:-.02em}
+.phdr p{font-size:11px;color:var(--ink3);margin-top:2px}
+.phdr-r{display:flex;gap:7px;align-items:center}
+.badge{padding:3px 9px;border-radius:3px;font-size:10px;letter-spacing:.05em;text-transform:uppercase;font-weight:500}
+.bl{background:var(--teal-lt);color:var(--teal-dk)}
+.bd{background:var(--coal-lt);color:var(--ink3)}
+.ba{background:var(--amber-lt);color:#9a6800}
+
+/* ── DASHBOARD ── */
+.ebox {
+  margin: 20px 24px;
+  border-top: 3px solid var(--teal);
+  border-radius: 8px;
+  overflow: hidden;
+  height: 800px;
+  display: block;
+}.einn{text-align:center;padding:40px 28px;max-width:440px}
+.eirow{display:flex;gap:6px;justify-content:center;margin-bottom:18px}
+.ei{width:11px;height:11px;border-radius:3px}
+.ei:nth-child(1){background:var(--teal)}.ei:nth-child(2){background:var(--orange)}
+.ei:nth-child(3){background:var(--coal)}.ei:nth-child(4){background:var(--amber)}
+.einn h3{font-family:var(--serif);font-size:19px;font-weight:400;color:var(--ink);margin-bottom:8px}
+.einn p{font-size:11px;color:var(--ink3);line-height:1.6;margin-bottom:18px}
+.codeblk{background:var(--coal-lt);border:1px solid var(--paper2);border-left:3px solid var(--teal);border-radius:6px;padding:11px 14px;font-size:11px;color:var(--ink2);font-family:monospace;text-align:left;line-height:1.8}
+.codeblk strong{color:var(--teal-dk)}
+
+/* ── REPORTING ── */
+.rgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;padding:20px 24px}
+.rcard{background:var(--white);border:1px solid var(--paper2);border-radius:8px;padding:18px;cursor:pointer;position:relative;overflow:hidden;transition:transform .15s,border-color .2s}
+.rcard::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;opacity:0;transition:opacity .2s}
+.rcard:hover{transform:translateY(-2px)}.rcard:hover::before{opacity:1}
+.rc-t{}.rc-t::before,.rc-t:hover{border-color:var(--teal)}.rc-t::before{background:var(--teal)}
+.rc-o::before{background:var(--orange)}.rc-o:hover{border-color:var(--orange)}
+.rc-c::before{background:var(--coal)}.rc-c:hover{border-color:var(--coal)}
+.rc-a::before{background:var(--amber)}.rc-a:hover{border-color:var(--amber)}
+.rtype{font-size:9px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:7px;font-weight:500}
+.rt-t{color:var(--teal-dk)}.rt-o{color:var(--orange)}.rt-c{color:var(--coal)}.rt-a{color:#9a6800}
+.rtitle{font-family:var(--serif);font-size:15px;font-weight:400;color:var(--ink);margin-bottom:6px;line-height:1.25}
+.rdesc{font-size:11px;color:var(--ink3);line-height:1.5;margin-bottom:14px}
+.rmeta{display:flex;align-items:center;justify-content:space-between;padding-top:10px;border-top:1px solid var(--paper2)}
+.rper{font-size:10px;color:var(--ink3)}
+.rst{font-size:9px;letter-spacing:.07em;text-transform:uppercase;padding:2px 7px;border-radius:3px;font-weight:500}
+.sr{background:var(--teal-lt);color:var(--teal-dk)}.sd{background:var(--amber-lt);color:#9a6800}.ss{background:var(--coal-lt);color:var(--ink3)}
+
+/* ── HELP ── */
+.hside{background:var(--coal);padding:24px 18px}
+.hs-brand{display:flex;gap:8px;align-items:center;margin-bottom:24px;padding-bottom:18px;border-bottom:1px solid rgba(255,255,255,.08)}
+.hsmark{width:22px;height:22px;border-radius:50%;display:grid;grid-template-columns:1fr 1fr;gap:2px;overflow:hidden}
+.hsmark div:nth-child(1){background:var(--teal)}.hsmark div:nth-child(2){background:var(--orange)}
+.hsmark div:nth-child(3){background:var(--coal-dk)}.hsmark div:nth-child(4){background:var(--amber)}
+.hs-nm{font-family:var(--serif);font-size:13px;color:var(--white)}
+.hs-lbl{font-size:8px;letter-spacing:.15em;text-transform:uppercase;color:var(--teal);margin-bottom:9px;font-weight:500}
+
+/* help sub-nav also uses radios */
+input[name="hsec"]{display:none}
+.hn{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:5px;cursor:pointer;color:rgba(255,255,255,.4);font-size:12px;margin-bottom:2px;transition:all .18s;user-select:none}
+.hn:hover{color:var(--white);background:rgba(255,255,255,.06)}
+#hs-contact:checked ~ .hside .hn[for="hs-contact"],
+#hs-hours:checked   ~ .hside .hn[for="hs-hours"],
+#hs-sla:checked     ~ .hside .hn[for="hs-sla"],
+#hs-faq:checked     ~ .hside .hn[for="hs-faq"],
+#hs-platform:checked ~ .hside .hn[for="hs-platform"]{color:var(--white);background:var(--teal)}
+.hndot{width:4px;height:4px;border-radius:50%;background:currentColor;flex-shrink:0}
+
+.hmain{padding:32px 36px;background:var(--paper);overflow-y:auto}
+.hsec{display:none}
+#hs-contact:checked  ~ .hmain .sec-contact,
+#hs-hours:checked    ~ .hmain .sec-hours,
+#hs-sla:checked      ~ .hmain .sec-sla,
+#hs-faq:checked      ~ .hmain .sec-faq,
+#hs-platform:checked ~ .hmain .sec-platform{display:block;animation:fu .3s ease both}
+
+.abar{display:inline-block;width:26px;height:3px;border-radius:2px;margin-bottom:8px}
+.at{background:var(--teal)}.ao{background:var(--orange)}.aa{background:var(--amber)}.ac{background:var(--coal)}
+.stitle{font-family:var(--serif);font-size:24px;font-weight:300;color:var(--ink);margin-bottom:5px;letter-spacing:-.02em}
+.ssub{font-size:11px;color:var(--ink3);margin-bottom:24px;padding-bottom:18px;border-bottom:1px solid var(--paper2);line-height:1.6}
+.ccg{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:24px}
+.cc{background:var(--white);border:1px solid var(--paper2);border-radius:7px;padding:15px;position:relative;overflow:hidden}
+.cc::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px}
+.cc-t::after{background:var(--teal)}.cc-o::after{background:var(--orange)}.cc-a::after{background:var(--amber)}.cc-c::after{background:var(--coal)}
+.cclbl{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:5px;font-weight:500}
+.ccval{font-size:12px;color:var(--ink)}.ccval a{color:var(--teal-dk);text-decoration:none}.ccval a:hover{text-decoration:underline}
+.ccnote{font-size:10px;color:var(--ink3);margin-top:3px}
+.htbl{width:100%;border-collapse:collapse;margin-bottom:22px}
+.htbl td{padding:9px 0;font-size:11px;border-bottom:1px solid var(--paper2);color:var(--ink2)}
+.htbl td:first-child{color:var(--ink3);width:140px}
+.htbl tr:last-child td{border-bottom:none}
+.srow{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;margin-bottom:22px}
+.sc{background:var(--white);border:1px solid var(--paper2);border-radius:7px;padding:14px;text-align:center}
+.sp{font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:500;margin-bottom:6px}
+.sp-cr{color:var(--orange)}.sp-hi{color:#9a6800}.sp-st{color:var(--teal-dk)}
+.st{font-family:var(--serif);font-size:22px;color:var(--ink);font-weight:300}
+.sd2{font-size:10px;color:var(--ink3);margin-top:3px;line-height:1.4}
+.fi{margin-bottom:2px}
+.fq{width:100%;text-align:left;padding:11px 0;border:none;background:transparent;cursor:pointer;font-size:12px;color:var(--ink);border-bottom:1px solid var(--paper2);font-family:var(--sans);display:flex;justify-content:space-between;align-items:center;gap:10px}
+.farr{font-size:10px;color:var(--teal);transition:transform .2s;flex-shrink:0}
+.fi.open .farr{transform:rotate(180deg)}
+.fa{font-size:11px;color:var(--ink3);line-height:1.6;max-height:0;overflow:hidden;transition:max-height .3s ease,padding .3s;padding:0}
+.fi.open .fa{max-height:160px;padding:9px 0 13px}
+@keyframes fu{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+</style>
+
+</head>
+<body>
+
+<!-- Radio inputs for tabs — OUTSIDE shell so CSS sibling selectors work -->
+<input type="radio" name="tab" id="t-home" checked>
+<input type="radio" name="tab" id="t-dash">
+<input type="radio" name="tab" id="t-rep">
+<input type="radio" name="tab" id="t-help">
+
+<div class="shell">
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="nav-brand">
+      <div class="modal-logo"><img src="../test2.webp" loading="lazy" alt="ChoandCo Logo" style="height: 125px; width: auto;"></a></div>
+      <span class="brand-tag">Analytics Portal</span>
+    </div>
+    <div class="nav-tabs">
+      <label for="t-home" class="tab-label">Home</label>
+      <label for="t-dash" class="tab-label">Dashboard</label>
+      <label for="t-rep" class="tab-label">Reporting</label>
+      <label for="t-help" class="tab-label">Help</label>
+    </div>
+    <div class="ndot"><span class="dot"></span><span>All systems operational</span></div>
+  </nav>
+
+  <!-- HOME -->
+  <div class="page page-home">
+    <div class="bg-quad"><div class="bq1"></div><div class="bq2"></div><div class="bq3"></div><div class="bq4"></div></div>
+    <div class="hero">
+      <div class="modal-logo"><img src="../fav.webp" loading="lazy" alt="ChoandCo Logo" style="height: 125px; width: auto;"></a></div>
+      <h1 class="hero-name">Cho<em>&amp;</em>Co.</h1>
+      <p class="hero-sub">Data Analytics &amp; Business Intelligence</p>
+
+      <div class="hero-btns">
+        <label for="t-dash" class="btn-t">Open Dashboard</label>
+        <label for="t-rep" class="btn-g">View Reports</label>
+      </div>
+    </div>
+    <div class="hfoot">choandco.co.za &nbsp;&middot;&nbsp; Powered by Cho&amp;Co BI Platform &nbsp;&middot;&nbsp; FY2024/25</div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div class="page page-dash">
+    <div class="rbar rb1"></div>
+    <div class="phdr">
+      <div><h1>Analytics Dashboard</h1><p>Live Data &middot; Refreshes Automatically</p></div>
+      <div class="phdr-r"><span class="badge bl">Live</span><span class="badge bd" id="cur-date"></span></div>
+    </div>
+    <div class="ebox">
+  <iframe
+    src="https://metabase-production-2504.up.railway.app/public/dashboard/74129d33-15c8-48e0-a783-d47bdafe5f37"
+    width="100%"
+    height="100%"
+    frameborder="0"
+    allowtransparency>
+  </iframe>
+</div>
+  </div>
+
+  <!-- REPORTING -->
+  <div class="page page-rep">
+    <div class="rbar rb2"></div>
+    <div class="phdr">
+      <div><h1>Reports</h1><p>Monthly performance metrics, revenue analysis, client tracking, and business KPI reporting</p></div>
+      <div class="phdr-r"><span class="badge ba">FY2024/25</span></div>
+    </div>
+    <div class="rgrid">
+      <div class="rcard rc-t" onclick="window.open('https://ahdctxgdszwncyuvwbtp.supabase.co/storage/v1/object/public/Reports/Jewellery_Shops_Demo_Report.pdf', '_blank')"><div class="rtype rt-t">Performance Report</div><div class="rtitle">Monthly Performance Report – March 2025</div><div class="rdesc">Revenue, transaction volumes, client count, and gross profit breakdown.</div><div class="rmeta"><span class="rper">Mar 2025</span><span class="rst sr">Ready</span></div></div>
+      <div class="rcard rc-o" ><div class="rtype rt-o">Client Report</div><div class="rtitle">Client Activity Report – Q4 FY2024/25</div><div class="rdesc">Client acquisition, retention, transaction frequency, and average transaction value.</div><div class="rmeta"><span class="rper">Jan–Mar 2025</span><span class="rst sr">Ready</span></div></div>
+      <div class="rcard rc-c" ><div class="rtype rt-c">KPI Summary</div><div class="rtitle">Annual KPI Summary – FY2024/25</div><div class="rdesc">Year-end scorecard: revenue, growth, client count, profitability, and key performance indicators.</div><div class="rmeta"><span class="rper">Apr 2024 – Mar 2025</span><span class="rst sd">Draft</span></div></div>
+      <div class="rcard rc-a" ><div class="rtype rt-a">Custom Report</div><div class="rtitle">Custom Performance Report – Template</div><div class="rdesc">Customisable report template tailored to your specific business metrics and reporting needs.</div><div class="rmeta"><span class="rper">Customisable</span><span class="rst sd">Template</span></div></div>
+      <div class="rcard rc-t" ><div class="rtype rt-t">Trend Analysis</div><div class="rtitle">Business Trend Analysis – FY2024/25</div><div class="rdesc">Year-on-year trends, seasonality analysis, and growth trajectory forecast.</div><div class="rmeta"><span class="rper">Mar 2025</span><span class="rst ss">Coming Soon</span></div></div>
+      <div class="rcard rc-o" ><div class="rtype rt-o">Profitability</div><div class="rtitle">Profitability Report – March 2025</div><div class="rdesc">Cost structure analysis, margin trends, and profitability improvement opportunities.</div><div class="rmeta"><span class="rper">Mar 2025</span><span class="rst ss">Coming Soon</span></div></div>
+    </div>
+    <div style="margin:0 24px 24px;border-radius:8px;overflow:hidden;border-top:3px solid var(--orange)">
+  <iframe
+    src="https://ahdctxgdszwncyuvwbtp.supabase.co/storage/v1/object/public/Reports/Jewellery_Shops_Demo_Report.pdf"
+    width="100%"
+    height="750px"
+    frameborder="0">
+  </iframe>
+</div>
+  </div>
+
+  <!-- HELP — contains its own radio inputs for sub-sections -->
+  <div class="page page-help">
+    <div class="rbar rb3" style="grid-column:1/-1"></div>
+
+    <input type="radio" name="hsec" id="hs-contact" checked>
+    <input type="radio" name="hsec" id="hs-hours">
+    <input type="radio" name="hsec" id="hs-sla">
+    <input type="radio" name="hsec" id="hs-faq">
+    <input type="radio" name="hsec" id="hs-platform">
+
+    <aside class="hside">
+      <div class="hs-brand">
+        <span class="hs-nm">Cho&amp;Co. Support</span>
+      </div>
+      <div class="hs-lbl">Support Centre</div>
+      <label for="hs-contact" class="hn"><span class="hndot"></span> Contact Us</label>
+      <label for="hs-hours"   class="hn"><span class="hndot"></span> Office Hours</label>
+      <label for="hs-sla"     class="hn"><span class="hndot"></span> Response Times</label>
+      <label for="hs-faq"     class="hn"><span class="hndot"></span> FAQ</label>
+      <label for="hs-platform" class="hn"><span class="hndot"></span> Platform Info</label>
+    </aside>
+
+    <main class="hmain">
+      <div class="hsec sec-contact">
+        <div class="abar at"></div>
+        <h2 class="stitle">Contact Us</h2>
+        <p class="ssub">Reach the Cho&amp;Co team through any of the channels below. We operate on SAST (UTC+2).</p>
+        <div class="ccg">
+          <div class="cc cc-t"><div class="cclbl">Website</div><div class="ccval"><a href="https://choandco.co.za" target="_blank">choandco.co.za</a></div><div class="ccnote">Main website &amp; service info</div></div>
+          <div class="cc cc-o"><div class="cclbl">Email &dash; General</div><div class="ccval"><a href="mailto:info@choandco.co.za">info@choandco.co.za</a></div><div class="ccnote">New enquiries &amp; general questions</div></div>
+          <div class="cc cc-t"><div class="cclbl">Email &dash; Support</div><div class="ccval"><a href="mailto:info@choandco.co.za">info@choandco.co.za</a></div><div class="ccnote">Dashboard issues, data queries, errors</div></div>
+          <div class="cc cc-a"><div class="cclbl">Phone</div><div class="ccval">+27 71 060 2976</div><div class="ccnote">Urgent issues during business hours</div></div>
+          <div class="cc cc-c"><div class="cclbl">Location</div><div class="ccval">Johannesburg, Gauteng</div><div class="ccnote">South Africa &middot; SAST (UTC+2)</div></div>
+          <div class="cc cc-o"><div class="cclbl">Account Manager</div><div class="ccval">Tawanda Afeki</div><div class="ccnote">Director &amp; BI Analyst</div></div>
+        </div>
+      </div>
+      <div class="hsec sec-hours">
+        <div class="abar ao"></div>
+        <h2 class="stitle">Office Hours</h2>
+        <p class="ssub">All times in SAST (UTC+2). Email support is monitored for critical issues outside these hours.</p>
+        <table class="htbl">
+          <tr><td>Monday &ndash; Thursday</td><td>08:00 &ndash; 17:00</td></tr>
+          <tr><td>Friday</td><td>08:00 &ndash; 16:00</td></tr>
+          <tr><td>Saturday</td><td>09:00 &ndash; 12:00</td></tr>
+          <tr><td>Sunday</td><td>Closed</td></tr>
+          <tr><td>Public Holidays</td><td>Closed &dash; emergency email monitored</td></tr>
+        </table>
+        <p style="font-size:11px;color:var(--ink3);line-height:1.7">For urgent issues outside hours email <strong style="color:var(--teal-dk)">info@choandco.co.za</strong> with subject <strong style="color:var(--teal-dk)">[URGENT]</strong>.</p>
+      </div>
+      <div class="hsec sec-sla">
+        <div class="abar aa"></div>
+        <h2 class="stitle">Response Times</h2>
+        <p class="ssub">Committed response times for support requests, measured during business hours.</p>
+        <div class="srow">
+          <div class="sc" style="border-top:3px solid var(--orange)"><div class="sp sp-cr">Critical</div><div class="st">2 hrs</div><div class="sd2">Dashboard down, data loss, security issue</div></div>
+          <div class="sc" style="border-top:3px solid var(--amber)"><div class="sp sp-hi">High</div><div class="st">4 hrs</div><div class="sd2">Report errors, incorrect data, access issues</div></div>
+          <div class="sc" style="border-top:3px solid var(--teal)"><div class="sp sp-st">Standard</div><div class="st">1 day</div><div class="sd2">General queries, new reports, changes</div></div>
+        </div>
+        <p style="font-size:11px;color:var(--ink3)">Weekend requests handled next business day unless marked [URGENT].</p>
+      </div>
+      <div class="hsec sec-faq">
+        <div class="abar ac"></div>
+        <h2 class="stitle">Frequently Asked Questions</h2>
+        <p class="ssub">Common questions about the Cho&amp;Co portal, dashboards, and reporting.</p>
+        <div class="fi"><button class="fq" onclick="tf(this)">How often does dashboard data refresh? <span class="farr">&#9660;</span></button><div class="fa">The dashboard connects live to Supabase and refreshes automatically within minutes of new data being uploaded. You can also manually refresh at any time.</div></div>
+        <div class="fi"><button class="fq" onclick="tf(this)">How do I request a custom report? <span class="farr">&#9660;</span></button><div class="fa">Email info@choandco.co.za with the report type, date range, and metrics needed. Standard reports delivered within 1 business day. Custom reports may take 2–3 business days.</div></div>
+        <div class="fi"><button class="fq" onclick="tf(this)">Can I customise the dashboard for my specific metrics? <span class="farr">&#9660;</span></button><div class="fa">Yes. We can add custom metrics, calculated fields, and industry-specific visualisations. Contact us to discuss your requirements.</div></div>
+        <div class="fi"><button class="fq" onclick="tf(this)">My data looks incorrect, what should I do? <span class="farr">&#9660;</span></button><div class="fa">Check your source data first. If the data is correct but the dashboard shows an error, email info@choandco.co.za with a screenshot. We investigate within 4 business hours.</div></div>
+        <div class="fi"><button class="fq" onclick="tf(this)">Who has access to my data? <span class="farr">&#9660;</span></button><div class="fa">Your data is stored in a dedicated Supabase database with row-level security. Only Cho&Co staff assigned to your account and users you authorise can access it.</div></div>
+        <div class="fi"><button class="fq" onclick="tf(this)">How do I submit new data for processing? <span class="farr">&#9660;</span></button><div class="fa">Send your data files (Excel, CSV, or system export) to info@choandco.co.za. We process, clean, and upload to your dashboard within 1 business day.</div></div>
+      </div>
+      <div class="hsec sec-platform">
+        <div class="abar at"></div>
+        <h2 class="stitle">Platform Information</h2>
+        <p class="ssub">Technical details about the Cho&amp;Co Analytics Platform and infrastructure.</p>
+        <div class="ccg">
+          <div class="cc cc-t"><div class="cclbl">Dashboard Platform</div><div class="ccval">Metabase </div><div class="ccnote">Hosted 24/7 on Railway cloud</div></div>
+          <div class="cc cc-o"><div class="cclbl">Database</div><div class="ccval">PostgreSQL</div><div class="ccnote">Encrypted at rest and in transit</div></div>
+          <div class="cc cc-t"><div class="cclbl">Data Security</div><div class="ccval">SSL / TLS Encrypted</div><div class="ccnote">Row-level security per client</div></div>
+          <div class="cc cc-a"><div class="cclbl">Uptime SLA</div><div class="ccval">99.5% guaranteed</div><div class="ccnote">Continuously monitored</div></div>
+          <div class="cc cc-c"><div class="cclbl">Data Backups</div><div class="ccval">Daily automated</div><div class="ccnote">7-day point-in-time recovery</div></div>
+          <div class="cc cc-o"><div class="cclbl">Portal Version</div><div class="ccval">v1.0 &dash; April 2025</div><div class="ccnote">Built &amp; maintained by Cho&amp;Co</div></div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script>
+document.getElementById('cur-date').textContent=new Date().toLocaleDateString('en-ZA',{day:'numeric',month:'long',year:'numeric'});
+function tf(btn){var i=btn.parentElement,w=i.classList.contains('open');document.querySelectorAll('.fi').forEach(function(x){x.classList.remove('open')});if(!w)i.classList.add('open')}
+</script>
+</body>
+</html>
