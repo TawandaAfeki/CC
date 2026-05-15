@@ -237,10 +237,7 @@ input[name="hsec"]{display:none}
 <!-- ══ PORTAL SHELL ══ -->
 <div id="portal-shell" style="display:none">
 
-  <div style="display:flex;align-items:center;gap:8px;margin-left:16px">
-    <span id="user-email" style="font-size:11px;color:rgba(255,255,255,.45)"></span>
-    <button onclick="()" style="padding:4px 12px;background:rgba(255,255,255,.1);color:white;border:1px solid rgba(255,255,255,.15);border-radius:3px;cursor:pointer;font-size:11px;font-family:var(--sans)">Sign out</button>
-  </div>
+  
   
   <input type="radio" name="tab" id="t-home" checked>
   <input type="radio" name="tab" id="t-dash">
@@ -249,25 +246,28 @@ input[name="hsec"]{display:none}
 
   <div class="portal-shell">
     <nav class="nav">
-      <div class="nav-brand">
-        <img src="https://raw.githubusercontent.com/TawandaAfeki/CC/main/test2.webp" loading="lazy" alt="ChoandCo Logo" style="height:38px;width:auto;">
-        <span class="brand-tag">Analytics Portal</span>
-      </div>
-      <div class="nav-tabs">
-        <label for="t-home" class="tab-label">Home</label>
-        <label for="t-dash" class="tab-label">Dashboard</label>
-        <label for="t-rep" class="tab-label">Reporting</label>
-        <label for="t-help" class="tab-label">Help</label>
-        <div class="ndot"><span class="dot"></span><span></span></div>
-      </div>
-    </nav>
+  <div class="nav-brand">
+    <img src="https://raw.githubusercontent.com/TawandaAfeki/CC/main/test2.webp" loading="lazy" alt="ChoandCo Logo" style="height:38px;width:auto;">
+    <span class="brand-tag">Analytics Portal</span>
+  </div>
+  <div class="nav-tabs">
+    <label for="t-home" class="tab-label">Home</label>
+    <label for="t-dash" class="tab-label">Dashboard</label>
+    <label for="t-rep" class="tab-label">Reporting</label>
+    <label for="t-help" class="tab-label">Help</label>
+  </div>
+  <div style="display:flex;align-items:center;gap:10px">
+    <span id="user-email" style="font-size:11px;color:rgba(255,255,255,.4)"></span>
+    <button onclick="()" style="padding:4px 12px;background:rgba(255,255,255,.1);color:white;border:1px solid rgba(255,255,255,.15);border-radius:3px;cursor:pointer;font-size:11px;font-family:var(--sans)">Sign out</button>
+  </div>
+</nav>
 
     <!-- HOME -->
     <div class="page page-home">
       <div class="bg-quad"><div class="bq1"></div><div class="bq2"></div><div class="bq3"></div><div class="bq4"></div></div>
       <div class="hero">
         <img src="https://raw.githubusercontent.com/TawandaAfeki/CC/main/fav.webp" loading="lazy" alt="ChoandCo Logo" style="height:100px;width:auto;margin:0 auto 20px;display:block;">
-        <h1 class="hero-name">Cho<em>&amp;</em>Co.</h1>
+        <h1 class="hero-name">Cho&amp;Co.</h1>
         <p class="hero-sub">Data Analytics &amp; Business Intelligence</p>
         <div class="hero-btns">
           <label for="t-dash" class="btn-t">Open Dashboard</label>
