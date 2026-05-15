@@ -472,7 +472,30 @@ window.addEventListener('load', async () => {
   if (session) showPortal(session.user);
 });
 
+window.addEventListener('load', async () => {
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) return;
 
+  // Check this user belongs to this portal
+  const { data: profile } = await sb.from('client_profiles')
+    .select('portal_slug')
+    .eq('id', session.user.id)
+    .single();
+
+  const currentPortal = window.location.hostname.split('.')[0]; 
+  // e.g. 'property' from 'property.choandco.co.za'
+
+  if (!profile || profile.portal_slug !== currentPortal) {
+    // Wrong portal — sign them out and show error
+    await sb.auth.signOut();
+    document.getElementById('pw-error').textContent = 
+      'You do not have access to this portal.';
+    document.getElementById('pw-error').classList.add('show');
+    return;
+  }
+
+  showPortal(session.user);
+});
 
 // ── SWITCH TABS ──
 function switchTab(tab) {
