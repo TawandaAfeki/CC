@@ -403,6 +403,14 @@ const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 window.addEventListener('load', async () => {
   const { data: { session } } = await sb.auth.getSession();
   if (!session) return;
+
+  // Verify session is still valid before proceeding
+  const { data: { user }, error } = await sb.auth.getUser();
+  if (error || !user) {
+    await sb.auth.signOut();
+    return;
+  }
+
   await checkAndShowPortal(session);
 });
 
