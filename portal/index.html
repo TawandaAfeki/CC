@@ -416,6 +416,27 @@ sb.auth.onAuthStateChange(async (event, session) => {
 
 // ── CHECK PORTAL ACCESS ──
 async function checkAndShowPortal(session) {
+  const { data: profile } = await sb.from('client_profiles')
+    .select('portal_slug, is_admin')
+    .eq('id', session.user.id)
+    .single();
+
+  // Admins bypass portal slug check and can access everything
+  if (profile && profile.is_admin) {
+    showPortal(session.user);
+    return;
+  }
+
+  // Regular clients must match the portal slug
+  const currentPortal = window.location.hostname.split('.')[0];
+  if (!profile || profile.portal_slug !== currentPortal) {
+    await sb.auth.signOut();
+    const errEl = document.getElementById('pw-error');
+    errEl.textContent = 'You do not have access to this portal.';
+    errEl.classList.add('show');
+    return;
+  }
+
   showPortal(session.user);
 }
 
