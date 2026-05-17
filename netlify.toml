@@ -3,3 +3,9 @@
   [headers.values]
     Content-Security-Policy = "default-src * 'unsafe-inline' 'unsafe-eval' data: blob:;"
     X-Frame-Options = "SAMEORIGIN"
+
+[[redirects]]
+  from = "/reports/*"
+  to = "https://ahdctxgdszwncyuvwbtp.supabase.co/storage/v1/object/public/Reports/:splat"
+  status = 200
+  force = true
