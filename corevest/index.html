@@ -71,26 +71,26 @@ html,body{height:100%;font-family:var(--sans);background:var(--coal)}
 /* ── PORTAL STYLES ── */
 #portal-shell{display:none}
 input[name="tab"]{display:none}
-.nav{background:var(--coal);border-bottom:3px solid var(--teal);display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:52px;position:sticky;top:0;z-index:9999}
+.nav{background:var(--coal);border-bottom:3px solid var(--teal);display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:52px;position:fixed;top:0;left:0;right:0;z-index:9999}
 .nav-brand{display:flex;align-items:center;gap:10px;text-decoration:none}
 .brand-tag{font-size:9px;color:rgba(255,255,255,.3);letter-spacing:.12em;text-transform:uppercase;border-left:1px solid rgba(255,255,255,.12);padding-left:10px}
 .nav-tabs{display:flex;gap:2px}
 .tab-label{display:inline-block;padding:7px 16px;border-radius:4px;font-size:12px;color:rgba(255,255,255,.45);cursor:pointer;transition:all .18s;user-select:none}
 .tab-label:hover{color:var(--white);background:rgba(255,255,255,.07)}
-#t-home:checked ~ .portal-shell .nav-tabs label[for="t-home"],
-#t-dash:checked ~ .portal-shell .nav-tabs label[for="t-dash"],
-#t-rep:checked  ~ .portal-shell .nav-tabs label[for="t-rep"],
-#t-help:checked ~ .portal-shell .nav-tabs label[for="t-help"]{color:var(--white);background:var(--teal)}
+#t-home:checked ~ .portal-shell{padding-top:52px} .nav-tabs label[for="t-home"],
+#t-dash:checked ~ .portal-shell{padding-top:52px} .nav-tabs label[for="t-dash"],
+#t-rep:checked  ~ .portal-shell{padding-top:52px} .nav-tabs label[for="t-rep"],
+#t-help:checked ~ .portal-shell{padding-top:52px} .nav-tabs label[for="t-help"]{color:var(--white);background:var(--teal)}
 .nav-right{display:flex;align-items:center;gap:10px}
 .nav-signout{padding:4px 12px;background:rgba(255,255,255,.1);color:white;border:1px solid rgba(255,255,255,.15);border-radius:3px;cursor:pointer;font-size:11px;font-family:var(--sans)}
 .nav-signout:hover{background:rgba(255,255,255,.18)}
 .page{display:none;min-height:calc(100vh - 52px)}
-#t-home:checked ~ .portal-shell .page-home,
-#t-dash:checked ~ .portal-shell .page-dash,
-#t-rep:checked  ~ .portal-shell .page-rep,
-#t-help:checked ~ .portal-shell .page-help{display:block}
-#t-home:checked ~ .portal-shell .page-home{display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--coal);position:relative;overflow:hidden;padding:40px 20px;text-align:center}
-#t-help:checked ~ .portal-shell .page-help{display:grid;grid-template-columns:240px 1fr}
+#t-home:checked ~ .portal-shell{padding-top:52px} .page-home,
+#t-dash:checked ~ .portal-shell{padding-top:52px} .page-dash,
+#t-rep:checked  ~ .portal-shell{padding-top:52px} .page-rep,
+#t-help:checked ~ .portal-shell{padding-top:52px} .page-help{display:block}
+#t-home:checked ~ .portal-shell{padding-top:52px} .page-home{display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--coal);position:relative;overflow:hidden;padding:40px 20px;text-align:center}
+#t-help:checked ~ .portal-shell{padding-top:52px} .page-help{display:grid;grid-template-columns:240px 1fr}
 .bg-quad{position:absolute;inset:0;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;pointer-events:none}
 .bq1{background:var(--teal);opacity:.07}.bq2{background:var(--orange);opacity:.07}
 .bq3{background:var(--coal-dk);opacity:.14}.bq4{background:var(--amber);opacity:.07}
@@ -182,15 +182,15 @@ input[name="dtab"]{display:none}
 .dtab-bar{display:flex;gap:4px;padding:12px 24px 0;background:var(--white);border-bottom:1px solid var(--paper2);overflow-x:auto}
 .dtab-lbl{display:inline-block;padding:7px 14px;border-radius:5px 5px 0 0;font-size:11px;color:var(--ink3);cursor:pointer;transition:all .18s;user-select:none;white-space:nowrap;border:1px solid transparent;border-bottom:none}
 .dtab-lbl:hover{color:var(--ink);background:var(--paper)}
-#d1:checked ~ .portal-shell .dtab-lbl[for="d1"],
-#d2:checked ~ .portal-shell .dtab-lbl[for="d2"],
-#d3:checked ~ .portal-shell .dtab-lbl[for="d3"],
-#d4:checked ~ .portal-shell .dtab-lbl[for="d4"],
-#d5:checked ~ .portal-shell .dtab-lbl[for="d5"]{color:var(--teal-dk);background:var(--white);border-color:var(--paper2);border-bottom-color:var(--white);font-weight:500}
+#d1:checked ~ .portal-shell{padding-top:52px} .dtab-lbl[for="d1"],
+#d2:checked ~ .portal-shell{padding-top:52px} .dtab-lbl[for="d2"],
+#d3:checked ~ .portal-shell{padding-top:52px} .dtab-lbl[for="d3"],
+#d4:checked ~ .portal-shell{padding-top:52px} .dtab-lbl[for="d4"],
+#d5:checked ~ .portal-shell{padding-top:52px} .dtab-lbl[for="d5"]{color:var(--teal-dk);background:var(--white);border-color:var(--paper2);border-bottom-color:var(--white);font-weight:500}
 .dframe{display:none}
-#d1:checked ~ .portal-shell .df1,#d2:checked ~ .portal-shell .df2,
-#d3:checked ~ .portal-shell .df3,#d4:checked ~ .portal-shell .df4,
-#d5:checked ~ .portal-shell .df5{display:block;min-height:840px}
+#d1:checked ~ .portal-shell{padding-top:52px} .df1,#d2:checked ~ .portal-shell{padding-top:52px} .df2,
+#d3:checked ~ .portal-shell{padding-top:52px} .df3,#d4:checked ~ .portal-shell{padding-top:52px} .df4,
+#d5:checked ~ .portal-shell{padding-top:52px} .df5{display:block;min-height:840px}
   
 @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 @keyframes fu{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
