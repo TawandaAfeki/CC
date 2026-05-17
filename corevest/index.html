@@ -176,6 +176,22 @@ input[name="hsec"]{display:none}
 .fi.open .farr{transform:rotate(180deg)}
 .fa{font-size:11px;color:var(--ink3);line-height:1.6;max-height:0;overflow:hidden;transition:max-height .3s ease,padding .3s;padding:0}
 .fi.open .fa{max-height:160px;padding:9px 0 13px}
+
+/* ── DASHBOARD SUB-TABS ── */
+input[name="dtab"]{display:none}
+.dtab-bar{display:flex;gap:4px;padding:12px 24px 0;background:var(--white);border-bottom:1px solid var(--paper2);overflow-x:auto}
+.dtab-lbl{display:inline-block;padding:7px 14px;border-radius:5px 5px 0 0;font-size:11px;color:var(--ink3);cursor:pointer;transition:all .18s;user-select:none;white-space:nowrap;border:1px solid transparent;border-bottom:none}
+.dtab-lbl:hover{color:var(--ink);background:var(--paper)}
+#d1:checked ~ .shell .dtab-lbl[for="d1"],
+#d2:checked ~ .shell .dtab-lbl[for="d2"],
+#d3:checked ~ .shell .dtab-lbl[for="d3"],
+#d4:checked ~ .shell .dtab-lbl[for="d4"],
+#d5:checked ~ .shell .dtab-lbl[for="d5"]{color:var(--teal-dk);background:var(--white);border-color:var(--paper2);border-bottom-color:var(--white);font-weight:500}
+.dframe{display:none}
+#d1:checked ~ .shell .df1,#d2:checked ~ .shell .df2,
+#d3:checked ~ .shell .df3,#d4:checked ~ .shell .df4,
+#d5:checked ~ .shell .df5{display:block;min-height:840px}
+  
 @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 @keyframes fu{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 </style>
