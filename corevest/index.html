@@ -425,6 +425,15 @@ const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 
 // ── CHECK SESSION ON LOAD ──
 window.addEventListener('load', async () => {
+  // Kill any stale session on signout redirect
+  if (window.location.search.includes('signout=1')) {
+    Object.keys(localStorage)
+      .filter(k => k.startsWith('sb-'))
+      .forEach(k => localStorage.removeItem(k));
+    history.replaceState({}, '', window.location.pathname);
+    return; // Stop here — show login screen
+  }
+
   const { data: { session } } = await sb.auth.getSession();
   if (!session) return;
   await checkAndShowPortal(session);
@@ -522,8 +531,10 @@ function showLogin() {
 // ── SIGN OUT ──
 async function signOut() {
   await sb.auth.signOut();
-  localStorage.removeItem('sb-ahdctxgdszwncyuvwbtp-auth-token');
-  showLogin();
+  Object.keys(localStorage)
+    .filter(k => k.startsWith('sb-'))
+    .forEach(k => localStorage.removeItem(k));
+  window.location.href = window.location.pathname + '?signout=1';
 }
 
 // ── FAQ ACCORDION ──
