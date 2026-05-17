@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Corevest | Cho&amp;Co Analytics Portal</title>
+  <link rel="icon" type="image/png" sizes="128x128" href="https://raw.githubusercontent.com/TawandaAfeki/CC/main/fav.webp"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#0D1B40;--navy2:#162254;
+  --gold:#C19A4F;--gold-lt:#f5eddc;
+  --teal:#2A9D8F;--teal-lt:#e6f5f3;
+  --coal:#3D4756;--coal-lt:#f0f1f3;
+  --paper:#f7f6f3;--paper2:#eceae4;
+  --ink:#2b3340;--ink2:#4a5568;--ink3:#718096;
+  --white:#fdfcfa;
+  --serif:'DM Serif Display',Georgia,serif;
+  --sans:'DM Sans',system-ui,sans-serif;
+}
+body{font-family:var(--sans);background:var(--paper);color:var(--ink)}
+input[name="tab"]{display:none}
+input[name="dtab"]{display:none}
+
+/* NAV */
+.nav{background:var(--navy);border-bottom:3px solid var(--gold);display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:52px;position:sticky;top:0;z-index:10}
+.nav-brand{display:flex;align-items:center;gap:10px}
+.lm{width:28px;height:28px;border-radius:50%;display:grid;grid-template-columns:1fr 1fr;gap:2px;overflow:hidden}
+.lm div:nth-child(1){background:var(--teal)}.lm div:nth-child(2){background:var(--gold)}
+.lm div:nth-child(3){background:var(--navy2)}.lm div:nth-child(4){background:#E8622A}
+.brand-txt{font-family:var(--serif);font-size:17px;font-weight:700;color:var(--white)}
+.brand-txt span{color:var(--gold)}
+.client-tag{font-size:9px;color:rgba(255,255,255,.45);letter-spacing:.12em;text-transform:uppercase;border-left:1px solid rgba(255,255,255,.15);padding-left:10px}
+.nav-tabs{display:flex;gap:2px}
+.tab-label{display:inline-block;padding:7px 16px;border-radius:4px;font-size:12px;color:rgba(255,255,255,.45);cursor:pointer;transition:all .18s;user-select:none}
+.tab-label:hover{color:var(--white);background:rgba(255,255,255,.07)}
+#t-home:checked  ~ .shell .nav-tabs label[for="t-home"],
+#t-dash:checked  ~ .shell .nav-tabs label[for="t-dash"],
+#t-rep:checked   ~ .shell .nav-tabs label[for="t-rep"],
+#t-help:checked  ~ .shell .nav-tabs label[for="t-help"]{color:var(--white);background:var(--gold);color:var(--navy)}
+.ndot{display:flex;align-items:center;gap:6px;font-size:10px;color:rgba(255,255,255,.3)}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--gold);box-shadow:0 0 0 2px rgba(193,154,79,.2)}
+
+/* PAGES */
+.page{display:none;min-height:calc(100vh - 52px)}
+#t-home:checked ~ .shell .page-home,
+#t-dash:checked ~ .shell .page-dash,
+#t-rep:checked  ~ .shell .page-rep,
+#t-help:checked ~ .shell .page-help{display:block}
+#t-home:checked ~ .shell .page-home{display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--navy);position:relative;overflow:hidden;padding:40px 20px;text-align:center;min-height:calc(100vh - 52px)}
+
+/* HOME */
+.bg-quad{position:absolute;inset:0;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;pointer-events:none;opacity:.08}
+.bg-quad div:nth-child(1){background:var(--teal)}.bg-quad div:nth-child(2){background:var(--gold)}
+.bg-quad div:nth-child(3){background:#E8622A}.bg-quad div:nth-child(4){background:#a8b2c4}
+.hero{position:relative;z-index:1;max-width:680px}
+.client-badge{display:inline-block;background:rgba(193,154,79,.15);border:1px solid rgba(193,154,79,.4);color:var(--gold);font-size:10px;letter-spacing:.12em;text-transform:uppercase;padding:4px 14px;border-radius:20px;margin-bottom:20px}
+.hero h1{font-family:var(--serif);font-size:clamp(32px,5vw,56px);color:var(--white);line-height:1.15;margin-bottom:16px}
+.hero h1 em{color:var(--gold);font-style:normal}
+.hero p{font-size:15px;color:rgba(255,255,255,.6);line-height:1.7;margin-bottom:32px;max-width:520px;margin-left:auto;margin-right:auto}
+.hero-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.btn-gold{background:var(--gold);color:var(--navy);padding:11px 26px;border-radius:6px;font-weight:500;font-size:13px;cursor:pointer;border:none;letter-spacing:.03em;transition:opacity .15s}
+.btn-ghost{background:transparent;color:var(--white);padding:11px 26px;border-radius:6px;font-weight:400;font-size:13px;cursor:pointer;border:1px solid rgba(255,255,255,.2);letter-spacing:.03em;transition:all .15s}
+.btn-ghost:hover{border-color:rgba(255,255,255,.5)}
+.kpi-strip{display:flex;gap:1px;background:rgba(255,255,255,.06);border-radius:10px;overflow:hidden;margin-top:48px;width:100%;max-width:620px}
+.kpi-item{flex:1;padding:18px 12px;text-align:center;background:rgba(0,0,0,.18)}
+.kpi-val{font-family:var(--serif);font-size:22px;color:var(--gold);display:block}
+.kpi-lbl{font-size:9px;color:rgba(255,255,255,.4);letter-spacing:.1em;text-transform:uppercase;margin-top:4px;display:block}
+
+/* DASHBOARD PAGE */
+.dash-header{background:var(--navy);padding:20px 28px 0;border-bottom:1px solid rgba(255,255,255,.07)}
+.dash-header h2{font-family:var(--serif);font-size:20px;color:var(--white);margin-bottom:14px}
+.dtab-bar{display:flex;gap:4px;overflow-x:auto;padding-bottom:0}
+.dtab-label{display:inline-block;padding:8px 18px;border-radius:6px 6px 0 0;font-size:12px;color:rgba(255,255,255,.45);cursor:pointer;transition:all .18s;user-select:none;white-space:nowrap;border:1px solid transparent;border-bottom:none}
+.dtab-label:hover{color:var(--white);background:rgba(255,255,255,.07)}
+#d1:checked ~ .shell .page-dash label[for="d1"],
+#d2:checked ~ .shell .page-dash label[for="d2"],
+#d3:checked ~ .shell .page-dash label[for="d3"],
+#d4:checked ~ .shell .page-dash label[for="d4"],
+#d5:checked ~ .shell .page-dash label[for="d5"]{color:var(--navy);background:var(--gold);border-color:var(--gold)}
+.dash-frame{display:none}
+#d1:checked ~ .shell .page-dash .df1,
+#d2:checked ~ .shell .page-dash .df2,
+#d3:checked ~ .shell .page-dash .df3,
+#d4:checked ~ .shell .page-dash .df4,
+#d5:checked ~ .shell .page-dash .df5{display:block}
+.dash-frame iframe{width:100%;height:calc(100vh - 160px);border:none;display:block}
+
+/* REPORTS PAGE */
+.rep-header{padding:28px 28px 16px;background:var(--white);border-bottom:1px solid var(--paper2)}
+.rep-header h2{font-family:var(--serif);font-size:24px;color:var(--navy);margin-bottom:6px}
+.rep-header p{font-size:13px;color:var(--ink3)}
+.rgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;padding:24px 28px}
+.rcard{background:var(--white);border-radius:10px;border:1px solid var(--paper2);padding:20px;cursor:pointer;transition:all .18s;position:relative;overflow:hidden}
+.rcard:hover{box-shadow:0 4px 20px rgba(13,27,64,.1);transform:translateY(-2px)}
+.rcard::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.rcard.gold::before{background:var(--gold)}
+.rcard.teal::before{background:var(--teal)}
+.rcard.navy::before{background:var(--navy)}
+.rcard.rust::before{background:#E8622A}
+.rcard.purple::before{background:#7B61FF}
+.rtype{font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;font-weight:500}
+.rtitle{font-family:var(--serif);font-size:15px;color:var(--navy);margin-bottom:8px;line-height:1.4}
+.rdesc{font-size:12px;color:var(--ink3);line-height:1.6;margin-bottom:14px}
+.rmeta{display:flex;align-items:center;justify-content:space-between}
+.rper{font-size:10px;color:var(--ink3)}
+.rst{font-size:9px;padding:3px 10px;border-radius:20px;letter-spacing:.06em;text-transform:uppercase;font-weight:500}
+.st-ready{background:var(--teal-lt);color:var(--teal)}
+.st-draft{background:var(--gold-lt);color:#8a6a1a}
+.download-ico{font-size:18px;opacity:.5}
+
+/* HELP PAGE */
+.help-grid{display:grid;grid-template-columns:240px 1fr}
+.help-sidebar{background:var(--navy);padding:28px 20px;min-height:calc(100vh - 52px)}
+.help-sidebar h3{font-family:var(--serif);font-size:14px;color:var(--gold);margin-bottom:16px;letter-spacing:.04em}
+.help-nav-item{display:block;padding:8px 12px;border-radius:6px;font-size:12px;color:rgba(255,255,255,.5);margin-bottom:4px;cursor:default}
+.help-nav-item.active{background:rgba(193,154,79,.15);color:var(--gold)}
+.help-content{padding:32px;background:var(--paper)}
+.help-content h2{font-family:var(--serif);font-size:22px;color:var(--navy);margin-bottom:6px}
+.help-content > p{font-size:13px;color:var(--ink3);margin-bottom:28px}
+.faq{max-width:700px}
+.fi{border:1px solid var(--paper2);border-radius:8px;margin-bottom:10px;background:var(--white);overflow:hidden}
+.fq{width:100%;background:none;border:none;padding:14px 16px;text-align:left;font-family:var(--sans);font-size:13px;color:var(--navy);cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-weight:500}
+.fq:hover{background:var(--paper)}
+.farr{transition:transform .2s;color:var(--gold);font-size:11px}
+.fa{display:none;padding:0 16px 14px;font-size:12px;color:var(--ink3);line-height:1.7}
+.fa.open{display:block}
+.contact-box{background:var(--navy);color:var(--white);border-radius:10px;padding:24px;margin-top:28px;max-width:700px}
+.contact-box h3{font-family:var(--serif);font-size:16px;color:var(--gold);margin-bottom:12px}
+.contact-box p{font-size:12px;color:rgba(255,255,255,.6);line-height:1.7}
+.contact-box a{color:var(--gold);text-decoration:none}
+</style>
+</head>
+<body>
+
+<!-- Main tab radios -->
+<input type="radio" name="tab" id="t-home" checked>
+<input type="radio" name="tab" id="t-dash">
+<input type="radio" name="tab" id="t-rep">
+<input type="radio" name="tab" id="t-help">
+
+<!-- Dashboard sub-tab radios -->
+<input type="radio" name="dtab" id="d1" checked>
+<input type="radio" name="dtab" id="d2">
+<input type="radio" name="dtab" id="d3">
+<input type="radio" name="dtab" id="d4">
+<input type="radio" name="dtab" id="d5">
+
+<div class="shell">
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="nav-brand">
+      <div class="lm"><div></div><div></div><div></div><div></div></div>
+      <span class="brand-txt">Cho<span>&</span>Co</span>
+      <span class="client-tag">Corevest (Pty) Ltd &nbsp;|&nbsp; Property Intelligence</span>
+    </div>
+    <div class="nav-tabs">
+      <label class="tab-label" for="t-home">Home</label>
+      <label class="tab-label" for="t-dash">Dashboards</label>
+      <label class="tab-label" for="t-rep">Reports</label>
+      <label class="tab-label" for="t-help">Support</label>
+    </div>
+    <div class="ndot"><div class="dot"></div> Live</div>
+  </nav>
+
+  <!-- ── HOME ── -->
+  <div class="page page-home">
+    <div class="bg-quad"><div></div><div></div><div></div><div></div></div>
+    <div class="hero">
+      <span class="client-badge">Corevest (Pty) Ltd &nbsp;·&nbsp; Western Cape Portfolio</span>
+      <h1>Your Property Portfolio.<br><em>Fully Visible.</em></h1>
+      <p>Real-time dashboards across all 8 properties — portfolio value, NOI, occupancy, lease expiry, development projects and investor performance. No spreadsheets. No delays.</p>
+      <div class="hero-btns">
+        <label class="btn-gold" for="t-dash">View Dashboards</label>
+        <label class="btn-ghost" for="t-rep">Download Reports</label>
+      </div>
+      <div class="kpi-strip">
+        <div class="kpi-item"><span class="kpi-val">R165M+</span><span class="kpi-lbl">Portfolio Value</span></div>
+        <div class="kpi-item"><span class="kpi-val">8</span><span class="kpi-lbl">Properties</span></div>
+        <div class="kpi-item"><span class="kpi-val">91%</span><span class="kpi-lbl">Avg Occupancy</span></div>
+        <div class="kpi-item"><span class="kpi-val">R7.8M</span><span class="kpi-lbl">Annual NOI</span></div>
+        <div class="kpi-item"><span class="kpi-val">13.1%</span><span class="kpi-lbl">Avg IRR</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── DASHBOARDS ── -->
+  <div class="page page-dash">
+    <div class="dash-header">
+      <h2>Live Analytics Dashboards</h2>
+      <div class="dtab-bar">
+        <label class="dtab-label" for="d1">&#9632; Portfolio Overview</label>
+        <label class="dtab-label" for="d2">&#9632; Financial Performance</label>
+        <label class="dtab-label" for="d3">&#9632; Lease Management</label>
+        <label class="dtab-label" for="d4">&#9632; Development Projects</label>
+        <label class="dtab-label" for="d5">&#9632; Investor Reporting</label>
+      </div>
+    </div>
+    <div class="dash-frame df1"><iframe src="https://metabase-production-2504.up.railway.app/public/dashboard/fb6f4263-20ca-49ee-b7b4-2bf9cd65a42a" allowfullscreen></iframe></div>
+    <div class="dash-frame df2"><iframe src="https://metabase-production-2504.up.railway.app/public/dashboard/139eea34-8876-4d3a-a921-16f9815757e2" allowfullscreen></iframe></div>
+    <div class="dash-frame df3"><iframe src="https://metabase-production-2504.up.railway.app/public/dashboard/a5accc88-d1c3-4c4e-aecd-1b1d6fc513e6" allowfullscreen></iframe></div>
+    <div class="dash-frame df4"><iframe src="https://metabase-production-2504.up.railway.app/public/dashboard/a9ca967a-bc61-4ad5-b2e7-3017860153cc" allowfullscreen></iframe></div>
+    <div class="dash-frame df5"><iframe src="https://metabase-production-2504.up.railway.app/public/dashboard/6ee54e58-5fb8-42da-8e99-a329bb12325a" allowfullscreen></iframe></div>
+  </div>
+
+  <!-- ── REPORTS ── -->
+  <div class="page page-rep">
+    <div class="rep-header">
+      <h2>Reports &amp; Analytics Documents</h2>
+      <p>Branded, investor-ready PDF reports — generated from your live data. Click any report to open or download.</p>
+    </div>
+    <div class="rgrid">
+      <div class="rcard gold" onclick="window.open('https://ahdctxgdszwncyuvwbtp.supabase.co/storage/v1/object/public/Reports/Corevest_Monthly_Portfolio_Report.pdf','_blank')">
+        <div class="rtype">Portfolio Report</div>
+        <div class="rtitle">Monthly Portfolio Performance Report — May 2026</div>
+        <div class="rdesc">18-month NOI trend, gross rental income, occupancy rate, cash flow after debt service, and vacancy analysis across all properties.</div>
+        <div class="rmeta"><span class="rper">Nov 2024 – Apr 2026</span><span class="rst st-ready">&#8595; Ready</span></div>
+      </div>
+      <div class="rcard teal" onclick="window.open('https://ahdctxgdszwncyuvwbtp.supabase.co/storage/v1/object/public/Reports/Corevest_Quarterly_Investor_Report.pdf','_blank')">
+        <div class="rtype">Investor Report</div>
+        <div class="rtitle">Quarterly Investor Distribution Report — Q1 2026</div>
+        <div class="rdesc">IRR by investor, YTD distributions, AUM summary, fund performance vs benchmark for Core Fund I and Core Fund II.</div>
+        <div class="rmeta"><span class="rper">Jan – Mar 2026</span><span class="rst st-ready">&#8595; Ready</span></div>
+      </div>
+      <div class="rcard rust" onclick="window.open('https://ahdctxgdszwncyuvwbtp.supabase.co/storage/v1/object/public/Reports/Corevest_Lease_Expiry_Risk_Report.pdf','_blank')">
+        <div class="rtype">Risk Report</div>
+        <div class="rtitle">Lease Expiry Risk Report — May 2026</div>
+        <div class="rdesc">Leases expiring within 30/60/90 days, renewal probability by tenant, income at risk, and recommended retention actions.</div>
+        <div class="rmeta"><span class="rper">May 2026</span><span class="rst st-ready">&#8595; Ready</span></div>
+      </div>
+      <div class="rcard navy" onclick="window.open('https://ahdctxgdszwncyuvwbtp.supabase.co/storage/v1/object/public/Reports/Corevest_Development_Projects_Report.pdf','_blank')">
+        <div class="rtype">Project Report</div>
+        <div class="rtitle">Development Projects Status Report — May 2026</div>
+        <div class="rdesc">Budget vs spend, completion %, RAG status, contractor notes, and revised forecasts for all 5 active development and renovation projects.</div>
+        <div class="rmeta"><span class="rper">May 2026</span><span class="rst st-ready">&#8595; Ready</span></div>
+      </div>
+      <div class="rcard purple" onclick="window.open('https://ahdctxgdszwncyuvwbtp.supabase.co/storage/v1/object/public/Reports/Corevest_Annual_Fund_Performance_Summary.pdf','_blank')">
+        <div class="rtype">Annual Summary</div>
+        <div class="rtitle">Annual Fund Performance Summary — FY2025/26</div>
+        <div class="rdesc">Full-year portfolio return, capital growth, total distributions, IRR vs benchmark, occupancy trend, and FY2026/27 outlook.</div>
+        <div class="rmeta"><span class="rper">Apr 2025 – Mar 2026</span><span class="rst st-draft">&#8861; Draft</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── HELP ── -->
+  <div class="page page-help">
+    <div class="help-grid">
+      <div class="help-sidebar">
+        <h3>Support</h3>
+        <span class="help-nav-item active">FAQ</span>
+        <span class="help-nav-item">Data Updates</span>
+        <span class="help-nav-item">Contact Cho&amp;Co</span>
+      </div>
+      <div class="help-content">
+        <h2>Frequently Asked Questions</h2>
+        <p>Everything you need to know about your Corevest analytics portal.</p>
+        <div class="faq">
+          <div class="fi"><button class="fq" onclick="tf(this)">How often does the dashboard data refresh? <span class="farr">&#9660;</span></button><div class="fa">Your dashboards connect directly to the Supabase database. Data updates automatically within minutes of a new data file being processed. You can also request a manual refresh by emailing info@choandco.co.za.</div></div>
+          <div class="fi"><button class="fq" onclick="tf(this)">How do I submit new monthly data for processing? <span class="farr">&#9660;</span></button><div class="fa">Send your monthly export (Excel or CSV) from your property management system to info@choandco.co.za. Cho&Co processes, cleans and uploads the data within 1 business day. Your dashboard will reflect the new data automatically.</div></div>
+          <div class="fi"><button class="fq" onclick="tf(this)">Can I add more properties or change the property list? <span class="farr">&#9660;</span></button><div class="fa">Yes. Email info@choandco.co.za with the new property details. We will update the database and reconfigure the affected dashboards within 2 business days. There is no additional charge for this within your current plan.</div></div>
+          <div class="fi"><button class="fq" onclick="tf(this)">Who can access this portal and the underlying data? <span class="farr">&#9660;</span></button><div class="fa">Your data is stored in a dedicated Supabase project with row-level security enabled. Only Cho&Co staff assigned to your account and users you explicitly authorise can access the database. The portal links are shared only with you.</div></div>
+          <div class="fi"><button class="fq" onclick="tf(this)">Can I share dashboard links with my investors? <span class="farr">&#9660;</span></button><div class="fa">Yes. Each dashboard has a unique public link that can be shared without requiring a login. You can share Dashboard 5 (Investor Reporting) directly with your investors. If you need a private, password-protected view, contact us to set up restricted access.</div></div>
+          <div class="fi"><button class="fq" onclick="tf(this)">Can I get custom reports not listed here? <span class="farr">&#9660;</span></button><div class="fa">Absolutely. Contact info@choandco.co.za with the specific metrics, date range, and format you need. Custom reports are typically delivered within 2 business days. Examples include agent-level performance reports, area market analyses, and individual investor statements.</div></div>
+          <div class="fi"><button class="fq" onclick="tf(this)">What happens if a figure looks incorrect in the dashboard? <span class="farr">&#9660;</span></button><div class="fa">First check your source data file for the relevant month. If the source is correct but the dashboard shows a different value, email info@choandco.co.za with a screenshot and the expected value. We will investigate and correct within 4 business hours.</div></div>
+        </div>
+        <div class="contact-box">
+          <h3>Contact Cho&amp;Co</h3>
+          <p>For data updates, new reports, or any questions about your portal:<br>
+          &#x2709;&nbsp;<a href="mailto:info@choandco.co.za">info@choandco.co.za</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+          &#127760;&nbsp;<a href="https://www.choandco.co.za" target="_blank">www.choandco.co.za</a><br><br>
+          Response time: within 4 business hours on weekdays.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function tf(btn){
+  var a=btn.nextElementSibling;
+  var arr=btn.querySelector('.farr');
+  a.classList.toggle('open');
+  arr.style.transform=a.classList.contains('open')?'rotate(180deg)':'';
+}
+</script>
+</body>
+</html>
