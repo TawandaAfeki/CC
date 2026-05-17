@@ -529,12 +529,20 @@ function showLogin() {
 }
 
 // ── SIGN OUT ──
-async function signOut() {
-  await sb.auth.signOut();
+function signOut() {
+  // Fire but don't wait — prevents SDK re-writing token
+  sb.auth.signOut().catch(() => {});
+  
+  // Clear immediately before SDK can write back
   Object.keys(localStorage)
     .filter(k => k.startsWith('sb-'))
     .forEach(k => localStorage.removeItem(k));
-  window.location.href = window.location.pathname + '?signout=1';
+  Object.keys(sessionStorage)
+    .filter(k => k.startsWith('sb-'))
+    .forEach(k => sessionStorage.removeItem(k));
+
+  // Replace instead of reload — no history entry
+  window.location.replace(window.location.pathname);
 }
 
 // ── FAQ ACCORDION ──
