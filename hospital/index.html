@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cho&amp;Co. – Healthcare Analytics Portal</title>
+<link rel="icon" type="image/png" sizes="128x128" href="https://raw.githubusercontent.com/TawandaAfeki/CC/main/fav.webp"/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --teal:#2A9D8F;--teal-dk:#1e7268;--teal-lt:#e6f5f3;
+  --orange:#E8622A;--orange-lt:#fdf0eb;
+  --coal:#3D4756;--coal-dk:#2b3340;--coal-lt:#f0f1f3;
+  --amber:#F5A623;--amber-lt:#fef6e6;
+  --red:#e05252;--red-lt:#fdf0f0;--green:#52c77e;--green-lt:#eafaf0;
+  --paper:#f7f6f3;--paper2:#eceae4;
+  --ink:#2b3340;--ink2:#4a5568;--ink3:#718096;
+  --white:#fdfcfa;
+  --serif:'DM Serif Display',Georgia,serif;
+  --sans:'DM Sans',system-ui,sans-serif;
+}
+body{font-family:var(--sans);background:var(--paper);color:var(--ink)}
+input[name="tab"],input[name="dtab"],input[name="hsec"]{display:none}
+
+/* ── LOGIN GATE ── */
+#portal-shell{display:none}
+.login-shell{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;background:var(--coal)}
+.brand-panel{background:var(--coal-dk);display:flex;flex-direction:column;justify-content:space-between;padding:48px;position:relative;overflow:hidden}
+.bp-quad{position:absolute;inset:0;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;pointer-events:none}
+.bp-circle{position:absolute;bottom:-120px;right:-120px;width:420px;height:420px;border-radius:50%;display:grid;grid-template-columns:1fr 1fr;gap:4px;overflow:hidden;opacity:.07;pointer-events:none}
+.bc1{background:var(--teal)}.bc2{background:var(--orange)}.bc3{background:var(--coal-dk)}.bc4{background:var(--amber)}
+.bp-top{position:relative;z-index:2}
+.logo-row{display:flex;align-items:center;gap:12px;margin-bottom:56px}
+.bp-headline{font-family:var(--serif);font-size:clamp(30px,3.3vw,50px);font-weight:300;color:var(--white);letter-spacing:-.03em;line-height:1.05;margin-bottom:20px}
+.bp-headline em{color:var(--teal);font-style:normal}
+.bp-sub{font-size:14px;color:rgba(255,255,255,.42);line-height:1.7;max-width:360px;font-weight:300}
+.bp-bottom{position:relative;z-index:2}
+.feature-list{list-style:none;margin-bottom:40px}
+.feature-list li{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:13px;color:rgba(255,255,255,.5)}
+.feature-list li:last-child{border-bottom:none}
+.f-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.f-teal{background:var(--teal)}.f-orange{background:var(--orange)}.f-amber{background:var(--amber)}.f-coal{background:rgba(255,255,255,.3)}
+.bp-footer{font-size:10px;color:rgba(255,255,255,.18);letter-spacing:.1em;text-transform:uppercase}
+.auth-panel{background:var(--paper);display:flex;align-items:center;justify-content:center;padding:48px}
+.auth-box{width:100%;max-width:400px}
+.auth-eyebrow{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--teal-dk);font-weight:500;margin-bottom:10px}
+.auth-title{font-family:var(--serif);font-size:30px;font-weight:300;color:var(--ink);letter-spacing:-.02em;margin-bottom:6px}
+.auth-sub{font-size:13px;color:var(--ink3);margin-bottom:32px;line-height:1.6}
+.auth-tabs{display:flex;margin-bottom:24px;border-bottom:1px solid var(--paper2)}
+.auth-tab{flex:1;padding:10px 0;font-size:13px;color:var(--teal-dk);cursor:default;border:none;background:transparent;font-family:var(--sans);border-bottom:2px solid var(--teal);margin-bottom:-1px;font-weight:500}
+.field{margin-bottom:18px}
+.field input{width:100%;padding:11px 14px;background:var(--white);border:1px solid var(--paper2);border-radius:6px;font-size:14px;color:var(--ink);font-family:var(--sans);outline:none;transition:border-color .18s,box-shadow .18s}
+.field input:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(42,157,143,.1)}
+.field input::placeholder{color:var(--ink3)}
+.btn-submit{width:100%;padding:13px;background:var(--teal);color:var(--white);border:none;border-radius:6px;font-size:14px;font-weight:500;font-family:var(--sans);cursor:pointer;transition:background .18s,transform .15s;margin-top:4px}
+.btn-submit:hover{background:var(--teal-dk);transform:translateY(-1px)}
+.btn-submit:disabled{background:var(--ink3);cursor:not-allowed;transform:none}
+.msg{padding:12px 14px;border-radius:6px;font-size:13px;line-height:1.5;margin-bottom:16px;display:none}
+.msg.show{display:block}
+.msg-error{background:#fef0f0;color:#8b2e2e;border:1px solid rgba(139,46,46,.2)}
+.auth-footer{margin-top:28px;padding-top:20px;border-top:1px solid var(--paper2);font-size:11px;color:var(--ink3);text-align:center;line-height:1.7}
+.auth-footer a{color:var(--teal-dk);text-decoration:none}.auth-footer a:hover{text-decoration:underline}
+.nav-right{display:flex;align-items:center;gap:12px}
+.nav-signout{padding:4px 12px;background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.15);border-radius:3px;cursor:pointer;font-size:11px;font-family:var(--sans)}
+.nav-signout:hover{background:rgba(255,255,255,.18)}
+@media(max-width:768px){.login-shell{grid-template-columns:1fr}.brand-panel{display:none}.auth-panel{padding:40px 24px;align-items:flex-start}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+/* NAV */
+.nav{background:var(--coal);border-bottom:3px solid var(--teal);display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:52px;position:sticky;top:0;z-index:10}
+.nav-brand{display:flex;align-items:center;gap:10px}
+.brand-tag{font-size:9px;color:rgba(255,255,255,.32);letter-spacing:.12em;text-transform:uppercase;border-left:1px solid rgba(255,255,255,.12);padding-left:10px}
+.nav-tabs{display:flex;gap:2px}
+.tab-label{display:inline-block;padding:7px 16px;border-radius:4px;font-size:12px;color:rgba(255,255,255,.45);cursor:pointer;transition:all .18s;user-select:none}
+.tab-label:hover{color:var(--white);background:rgba(255,255,255,.07)}
+#t-home:checked~.shell .nav-tabs label[for="t-home"],
+#t-dash:checked~.shell .nav-tabs label[for="t-dash"],
+#t-rep:checked~.shell .nav-tabs label[for="t-rep"],
+#t-help:checked~.shell .nav-tabs label[for="t-help"]{color:var(--white);background:var(--teal)}
+.ndot{display:flex;align-items:center;gap:6px;font-size:10px;color:rgba(255,255,255,.3)}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--teal);box-shadow:0 0 0 2px rgba(42,157,143,.2)}
+
+/* PAGES */
+.page{display:none;min-height:calc(100vh - 52px)}
+#t-home:checked~.shell .page-home{display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--coal);position:relative;overflow:hidden;padding:40px 20px;text-align:center}
+#t-dash:checked~.shell .page-dash,
+#t-rep:checked~.shell .page-rep{display:block}
+#t-help:checked~.shell .page-help{display:grid;grid-template-columns:240px 1fr}
+
+/* SHARED */
+.rbar{height:3px}
+.rb1{background:linear-gradient(90deg,var(--teal),var(--orange),var(--amber))}
+.rb2{background:linear-gradient(90deg,var(--orange),var(--amber),var(--teal))}
+.rb3{background:linear-gradient(90deg,var(--amber),var(--teal),var(--orange))}
+.phdr{background:var(--white);border-bottom:1px solid var(--paper2);padding:16px 24px;display:flex;align-items:flex-end;justify-content:space-between}
+.phdr h1{font-family:var(--serif);font-size:20px;font-weight:400;color:var(--ink);letter-spacing:-.02em}
+.phdr p{font-size:11px;color:var(--ink3);margin-top:2px}
+.phdr-r{display:flex;gap:7px;align-items:center}
+.badge{padding:3px 9px;border-radius:3px;font-size:10px;letter-spacing:.05em;text-transform:uppercase;font-weight:500}
+.bl{background:var(--teal-lt);color:var(--teal-dk)}.bd{background:var(--coal-lt);color:var(--ink3)}.ba{background:var(--amber-lt);color:#9a6800}.br{background:var(--red-lt);color:var(--red)}
+
+/* HOME */
+.bg-quad{position:absolute;inset:0;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;pointer-events:none}
+.bq1{background:var(--teal);opacity:.07}.bq2{background:var(--orange);opacity:.07}
+.bq3{background:var(--coal-dk);opacity:.14}.bq4{background:var(--amber);opacity:.07}
+.hero{position:relative;z-index:2;animation:fu .8s cubic-bezier(.16,1,.3,1) both}
+.hero-name{font-family:var(--serif);font-size:clamp(40px,6vw,72px);font-weight:400;color:var(--white);letter-spacing:-.03em;line-height:.95;margin-bottom:6px}
+.hero-name em{color:var(--teal);font-style:normal}
+.hero-sub{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:12px}
+.hero-ind{font-size:13px;color:rgba(255,255,255,.6);margin-bottom:30px;font-style:italic}
+.hero-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.btn-t{padding:10px 24px;background:var(--teal);color:var(--white);border:none;border-radius:5px;font-size:12px;font-weight:500;cursor:pointer;font-family:var(--sans)}
+.btn-g{padding:10px 24px;background:transparent;border:1px solid rgba(255,255,255,.22);color:rgba(255,255,255,.75);border-radius:5px;font-size:12px;cursor:pointer;font-family:var(--sans)}
+.hfoot{position:absolute;bottom:14px;left:0;right:0;font-size:9px;color:rgba(255,255,255,.15);letter-spacing:.08em;text-transform:uppercase;text-align:center}
+.pill-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:28px;max-width:640px}
+.pill-item{padding:5px 12px;border-radius:20px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);font-size:10px;color:rgba(255,255,255,.55);letter-spacing:.05em}
+
+/* DASHBOARD SUB-NAV */
+.dsnav{background:var(--white);border-bottom:1px solid var(--paper2);padding:0 24px;display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.dsnav label{display:inline-flex;align-items:center;gap:7px;padding:12px 16px;font-size:12px;color:var(--ink3);cursor:pointer;user-select:none;white-space:nowrap;border-bottom:2px solid transparent;transition:all .18s}
+.dsnav label:hover{color:var(--ink);background:var(--paper)}
+.dsnav .num{font-family:var(--serif);font-size:12px;opacity:.55}
+#d-desc:checked~.shell .page-dash .dsnav label[for="d-desc"],
+#d-diag:checked~.shell .page-dash .dsnav label[for="d-diag"],
+#d-pred:checked~.shell .page-dash .dsnav label[for="d-pred"],
+#d-presc:checked~.shell .page-dash .dsnav label[for="d-presc"],
+#d-qual:checked~.shell .page-dash .dsnav label[for="d-qual"],
+#d-rev:checked~.shell .page-dash .dsnav label[for="d-rev"]{color:var(--teal-dk);border-bottom-color:var(--teal);font-weight:500;background:var(--teal-lt)}
+
+/* DASHBOARD PANELS */
+.dpanel{display:none;padding:20px 24px;animation:fu .25s ease both}
+#d-desc:checked~.shell .page-dash .dp-desc,
+#d-diag:checked~.shell .page-dash .dp-diag,
+#d-pred:checked~.shell .page-dash .dp-pred,
+#d-presc:checked~.shell .page-dash .dp-presc,
+#d-qual:checked~.shell .page-dash .dp-qual,
+#d-rev:checked~.shell .page-dash .dp-rev{display:block}
+.pillar-tag{display:inline-block;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink3);font-weight:500;margin-bottom:10px}
+.pillar-tag b{color:var(--teal-dk)}
+
+/* KPI CARDS */
+.kpi-row{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:18px}
+.kpi-card{flex:1 1 190px;background:var(--white);border:1px solid var(--paper2);border-radius:8px;padding:16px 18px;position:relative;overflow:hidden}
+.kpi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.kpi-t::before{background:var(--teal)}.kpi-o::before{background:var(--orange)}.kpi-a::before{background:var(--amber)}.kpi-c::before{background:var(--coal)}.kpi-r::before{background:var(--red)}.kpi-g::before{background:var(--green)}
+.kpi-lbl{font-size:9px;color:var(--ink3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:7px;font-weight:500}
+.kpi-val{font-family:var(--serif);font-size:26px;font-weight:400;color:var(--ink);line-height:1}
+.kpi-sub{font-size:10px;color:var(--ink3);margin-top:5px}
+.kpi-trend{font-size:10px;margin-top:5px;font-weight:500}
+.kpi-up{color:var(--teal)}.kpi-dn{color:var(--orange)}.kpi-warn{color:var(--red)}
+
+/* ALERT BANDS */
+.alert-band{border-radius:8px;padding:12px 16px;margin-bottom:16px;display:flex;gap:12px;align-items:flex-start;font-size:11px;line-height:1.5}
+.ab-warn{background:#fff8f0;border:1px solid #f5c07a;border-left:4px solid var(--orange)}
+.ab-red{background:var(--red-lt);border:1px solid #f5c0c0;border-left:4px solid var(--red)}
+.ab-ok{background:var(--teal-lt);border:1px solid #a8dbd6;border-left:4px solid var(--teal)}
+.ab-icon{font-size:15px;flex-shrink:0;line-height:1.3}
+.ab-txt strong{display:block;color:var(--ink);margin-bottom:2px}
+
+/* CHART GRIDS */
+.chart-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:14px}
+@media(max-width:720px){.chart-grid{grid-template-columns:1fr}}
+.chart-card{background:var(--white);border:1px solid var(--paper2);border-radius:8px;padding:16px}
+.ch-title{font-family:var(--serif);font-size:14px;color:var(--ink);margin-bottom:2px}
+.ch-sub{font-size:10px;color:var(--ink3);margin-bottom:10px;line-height:1.4}
+.ch-wrap{height:230px;position:relative}
+.ch-wrap-lg{height:270px;position:relative}
+.chart-full{grid-column:1/-1}
+
+/* RECOMMENDATION CARDS */
+.rec-grid{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:16px}
+.rec-card{flex:1 1 300px;background:var(--white);border:1px solid var(--paper2);border-radius:8px;padding:16px 18px;position:relative;border-left:4px solid var(--teal)}
+.rec-card.p-high{border-left-color:var(--orange)}
+.rec-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px;gap:8px}
+.rec-area{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--teal-dk);font-weight:500}
+.rec-prio{font-size:8px;letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;border-radius:3px;font-weight:600}
+.pr-high{background:var(--orange-lt);color:var(--orange)}.pr-med{background:var(--amber-lt);color:#9a6800}
+.rec-title{font-family:var(--serif);font-size:15px;color:var(--ink);margin-bottom:6px;line-height:1.3}
+.rec-action{font-size:11px;color:var(--ink3);line-height:1.55;margin-bottom:12px}
+.rec-impact{display:flex;gap:16px;padding-top:10px;border-top:1px solid var(--paper2)}
+.ri-lbl{font-size:8px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);display:block;margin-bottom:2px}
+.ri-val{font-size:12px;color:var(--teal-dk);font-weight:500}
+.ri-val.money{color:var(--orange)}
+
+/* SCENARIO CALCULATOR */
+.calc{background:var(--coal);border-radius:10px;padding:22px 24px;margin-bottom:16px;color:#fff}
+.calc h3{font-family:var(--serif);font-size:17px;font-weight:400;margin-bottom:4px}
+.calc p.sub{font-size:11px;color:rgba(255,255,255,.5);margin-bottom:18px}
+.calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:26px;align-items:center}
+@media(max-width:640px){.calc-grid{grid-template-columns:1fr}}
+.calc-ctrl{margin-bottom:16px}
+.calc-ctrl label{font-size:11px;color:rgba(255,255,255,.7);display:flex;justify-content:space-between;margin-bottom:8px}
+.calc-ctrl label b{color:var(--amber);font-family:var(--serif);font-size:15px}
+.calc-ctrl input[type=range]{width:100%;accent-color:var(--teal);cursor:pointer}
+.calc-out{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.co-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:14px}
+.co-lbl{font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:6px}
+.co-val{font-family:var(--serif);font-size:24px;color:var(--teal)}
+.co-val.amber{color:var(--amber)}
+
+/* DATA TABLE */
+.dtbl-wrap{background:var(--white);border:1px solid var(--paper2);border-radius:8px;padding:16px;overflow-x:auto;margin-bottom:14px}
+.dtbl{width:100%;border-collapse:collapse;font-size:11px;min-width:520px}
+.dtbl th{text-align:left;padding:8px 10px;color:var(--ink3);font-weight:500;font-size:9px;letter-spacing:.06em;text-transform:uppercase;border-bottom:2px solid var(--paper2)}
+.dtbl td{padding:8px 10px;border-bottom:1px solid var(--paper2);color:var(--ink2)}
+.dtbl td.num{text-align:right;font-variant-numeric:tabular-nums}
+.dtbl tr:last-child td{border-bottom:none}
+.chip{display:inline-block;padding:1px 7px;border-radius:10px;font-size:9px;font-weight:600}
+.chip-r{background:var(--red-lt);color:var(--red)}.chip-a{background:var(--amber-lt);color:#9a6800}.chip-g{background:var(--green-lt);color:#1f9254}
+
+/* REPORTING */
+.rsec-title{font-family:var(--serif);font-size:15px;color:var(--ink);padding:6px 24px 0;margin-top:8px;display:flex;align-items:center;gap:8px}
+.rsec-title .dotc{width:8px;height:8px;border-radius:2px}
+.rsec-sub{font-size:10px;color:var(--ink3);padding:2px 24px 0}
+.rgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;padding:12px 24px}
+.rcard{background:var(--white);border:1px solid var(--paper2);border-radius:8px;padding:18px;position:relative;overflow:hidden;transition:transform .15s,border-color .2s}
+.rcard::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;opacity:0;transition:opacity .2s}
+.rcard:hover{transform:translateY(-2px)}.rcard:hover::before{opacity:1}
+.rc-t::before{background:var(--teal)}.rc-t:hover{border-color:var(--teal)}
+.rc-o::before{background:var(--orange)}.rc-o:hover{border-color:var(--orange)}
+.rc-c::before{background:var(--coal)}.rc-c:hover{border-color:var(--coal)}
+.rc-a::before{background:var(--amber)}.rc-a:hover{border-color:var(--amber)}
+.rtype{font-size:9px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:7px;font-weight:500}
+.rt-t{color:var(--teal-dk)}.rt-o{color:var(--orange)}.rt-c{color:var(--coal)}.rt-a{color:#9a6800}
+.rtitle{font-family:var(--serif);font-size:15px;color:var(--ink);margin-bottom:6px;line-height:1.25}
+.rdesc{font-size:11px;color:var(--ink3);line-height:1.5;margin-bottom:14px}
+.rmeta{display:flex;align-items:center;justify-content:space-between;padding-top:10px;border-top:1px solid var(--paper2)}
+.rper{font-size:10px;color:var(--ink3)}
+.rst{font-size:9px;letter-spacing:.07em;text-transform:uppercase;padding:2px 7px;border-radius:3px;font-weight:500}
+.sr{background:var(--teal-lt);color:var(--teal-dk)}.sd{background:var(--amber-lt);color:#9a6800}.ss{background:var(--coal-lt);color:var(--ink3)}
+
+/* HELP */
+.hside{background:var(--coal);padding:24px 18px}
+.hs-brand{margin-bottom:24px;padding-bottom:18px;border-bottom:1px solid rgba(255,255,255,.08)}
+.hs-nm{font-family:var(--serif);font-size:13px;color:var(--white)}
+.hs-lbl{font-size:8px;letter-spacing:.15em;text-transform:uppercase;color:var(--teal);margin-bottom:9px;font-weight:500}
+.hn{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:5px;cursor:pointer;color:rgba(255,255,255,.4);font-size:12px;margin-bottom:2px;transition:all .18s;user-select:none}
+.hn:hover{color:var(--white);background:rgba(255,255,255,.06)}
+.hndot{width:4px;height:4px;border-radius:50%;background:currentColor;flex-shrink:0}
+#hs-contact:checked~.shell .hside .hn[for="hs-contact"],
+#hs-hours:checked~.shell .hside .hn[for="hs-hours"],
+#hs-sla:checked~.shell .hside .hn[for="hs-sla"],
+#hs-faq:checked~.shell .hside .hn[for="hs-faq"],
+#hs-platform:checked~.shell .hside .hn[for="hs-platform"]{color:var(--white);background:var(--teal)}
+.hmain{padding:32px 36px;background:var(--paper);overflow-y:auto}
+.hsec{display:none}
+#hs-contact:checked~.shell .hmain .sec-contact,
+#hs-hours:checked~.shell .hmain .sec-hours,
+#hs-sla:checked~.shell .hmain .sec-sla,
+#hs-faq:checked~.shell .hmain .sec-faq,
+#hs-platform:checked~.shell .hmain .sec-platform{display:block;animation:fu .3s ease both}
+.abar{display:inline-block;width:26px;height:3px;border-radius:2px;margin-bottom:8px}
+.at{background:var(--teal)}.ao{background:var(--orange)}.aa{background:var(--amber)}.ac{background:var(--coal)}
+.stitle{font-family:var(--serif);font-size:24px;font-weight:300;color:var(--ink);margin-bottom:5px;letter-spacing:-.02em}
+.ssub{font-size:11px;color:var(--ink3);margin-bottom:24px;padding-bottom:18px;border-bottom:1px solid var(--paper2);line-height:1.6}
+.ccg{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:24px}
+.cc{background:var(--white);border:1px solid var(--paper2);border-radius:7px;padding:15px;position:relative;overflow:hidden}
+.cc::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px}
+.cc-t::after{background:var(--teal)}.cc-o::after{background:var(--orange)}.cc-a::after{background:var(--amber)}.cc-c::after{background:var(--coal)}
+.cclbl{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:5px;font-weight:500}
+.ccval{font-size:12px;color:var(--ink)}.ccval a{color:var(--teal-dk);text-decoration:none}.ccval a:hover{text-decoration:underline}
+.ccnote{font-size:10px;color:var(--ink3);margin-top:3px}
+.htbl{width:100%;border-collapse:collapse;margin-bottom:22px}
+.htbl td{padding:9px 0;font-size:11px;border-bottom:1px solid var(--paper2);color:var(--ink2)}
+.htbl td:first-child{color:var(--ink3);width:150px}
+.htbl tr:last-child td{border-bottom:none}
+.srow{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;margin-bottom:22px}
+.sc{background:var(--white);border:1px solid var(--paper2);border-radius:7px;padding:14px;text-align:center}
+.sp{font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:500;margin-bottom:6px}
+.sp-cr{color:var(--orange)}.sp-hi{color:#9a6800}.sp-st{color:var(--teal-dk)}
+.st{font-family:var(--serif);font-size:22px;color:var(--ink);font-weight:300}
+.sd2{font-size:10px;color:var(--ink3);margin-top:3px;line-height:1.4}
+.fi{margin-bottom:2px}
+.fq{width:100%;text-align:left;padding:11px 0;border:none;background:transparent;cursor:pointer;font-size:12px;color:var(--ink);border-bottom:1px solid var(--paper2);font-family:var(--sans);display:flex;justify-content:space-between;align-items:center;gap:10px}
+.farr{font-size:10px;color:var(--teal);transition:transform .2s;flex-shrink:0}
+.fi.open .farr{transform:rotate(180deg)}
+.fa{font-size:11px;color:var(--ink3);line-height:1.6;max-height:0;overflow:hidden;transition:max-height .3s ease,padding .3s;padding:0}
+.fi.open .fa{max-height:220px;padding:9px 0 13px}
+@keyframes fu{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+</style>
+</head>
+<body>
+
+<!-- ══ LOGIN SCREEN ══ -->
+<div id="login-screen">
+  <div class="login-shell">
+    <div class="brand-panel">
+      <div class="bp-quad"><div class="bq1"></div><div class="bq2"></div><div class="bq3"></div><div class="bq4"></div></div>
+      <div class="bp-circle"><div class="bc1"></div><div class="bc2"></div><div class="bc3"></div><div class="bc4"></div></div>
+      <div class="bp-top">
+        <div class="logo-row">
+          <a href="https://choandco.co.za" target="_blank"><img src="https://raw.githubusercontent.com/TawandaAfeki/CC/main/test2.webp" loading="lazy" alt="ChoandCo Logo" style="height:100px;width:auto;"></a>
+        </div>
+        <h1 class="bp-headline">Your hospital,<br><em>in focus.</em></h1>
+        <p class="bp-sub">Sign in to your Cho&amp;Co healthcare analytics portal — patient flow, capacity, clinical quality, revenue cycle and workforce, across descriptive, diagnostic, predictive and prescriptive views.</p>
+      </div>
+      <div class="bp-bottom">
+        <ul class="feature-list">
+          <li><span class="f-dot f-teal"></span>Live patient-flow &amp; capacity dashboards</li>
+          <li><span class="f-dot f-orange"></span>Descriptive → prescriptive analytics</li>
+          <li><span class="f-dot f-amber"></span>Clinical quality &amp; patient-safety tracking</li>
+          <li><span class="f-dot f-coal"></span>POPIA-aligned &dash; your data is never shared</li>
+        </ul>
+        <div class="bp-footer">choandco.co.za &nbsp;&middot;&nbsp; Powered by Cho&amp;Co BI Platform</div>
+      </div>
+    </div>
+    <div class="auth-panel">
+      <div class="auth-box">
+        <div class="auth-eyebrow">Healthcare Analytics Portal</div>
+        <h2 class="auth-title">Welcome back</h2>
+        <p class="auth-sub">Sign in to access your hospital analytics dashboards and reports.</p>
+        <div class="auth-tabs"><button class="auth-tab" type="button">Password</button></div>
+        <div class="auth-form" id="form-password">
+          <div class="msg msg-error" id="pw-error"></div>
+          <div class="field"><input type="email" id="pw-email" placeholder="Email Address" autocomplete="email"></div>
+          <div class="field"><input type="password" id="pw-password" placeholder="Password" autocomplete="current-password"></div>
+          <button class="btn-submit" id="pw-btn" onclick="signInPassword()">Sign in</button>
+        </div>
+        <div class="auth-footer">Having trouble signing in?<br>Email <a href="mailto:info@choandco.co.za">info@choandco.co.za</a></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PORTAL SHELL (revealed after login) ══ -->
+<div id="portal-shell">
+
+<!-- MAIN TAB RADIOS -->
+<input type="radio" name="tab" id="t-home" checked>
+<input type="radio" name="tab" id="t-dash">
+<input type="radio" name="tab" id="t-rep">
+<input type="radio" name="tab" id="t-help">
+
+<!-- DASHBOARD SUB-TAB RADIOS -->
+<input type="radio" name="dtab" id="d-desc" checked>
+<input type="radio" name="dtab" id="d-diag">
+<input type="radio" name="dtab" id="d-pred">
+<input type="radio" name="dtab" id="d-presc">
+<input type="radio" name="dtab" id="d-qual">
+<input type="radio" name="dtab" id="d-rev">
+
+<!-- HELP SUB-SECTION RADIOS -->
+<input type="radio" name="hsec" id="hs-contact" checked>
+<input type="radio" name="hsec" id="hs-hours">
+<input type="radio" name="hsec" id="hs-sla">
+<input type="radio" name="hsec" id="hs-faq">
+<input type="radio" name="hsec" id="hs-platform">
+
+<div class="shell">
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="nav-brand">
+      <div class="modal-logo"><img src="https://raw.githubusercontent.com/TawandaAfeki/CC/main/test2.webp" loading="lazy" alt="ChoandCo Logo" style="height:125px;width:auto;"></div>
+      <span class="brand-tag">Healthcare Analytics</span>
+    </div>
+    <div class="nav-tabs">
+      <label for="t-home" class="tab-label">Home</label>
+      <label for="t-dash" class="tab-label">Dashboards</label>
+      <label for="t-rep" class="tab-label">Reports</label>
+      <label for="t-help" class="tab-label">Help</label>
+    </div>
+    <div class="nav-right">
+      <div class="ndot"><span class="dot"></span><span>Live Data</span></div>
+      <span id="user-email" style="font-size:11px;color:rgba(255,255,255,.4)"></span>
+      <button class="nav-signout" onclick="signOut()">Sign out</button>
+    </div>
+  </nav>
+
+  <!-- HOME -->
+  <div class="page page-home">
+    <div class="bg-quad"><div class="bq1"></div><div class="bq2"></div><div class="bq3"></div><div class="bq4"></div></div>
+    <div class="hero">
+      <div class="modal-logo"><img src="https://raw.githubusercontent.com/TawandaAfeki/CC/main/fav.webp" loading="lazy" alt="ChoandCo Logo" style="height:100px;width:auto;margin-bottom:16px;"></div>
+      <h1 class="hero-name">Cho<em>&amp;</em>Co.</h1>
+      <p class="hero-sub">Data Analytics &amp; Business Intelligence</p>
+      <p class="hero-ind">Healthcare &amp; Private Hospital Analytics</p>
+      <div class="hero-btns">
+        <label for="t-dash" class="btn-t">Open Dashboards</label>
+        <label for="t-rep" class="btn-g">View Reports</label>
+      </div>
+    </div>
+    <div class="hfoot">choandco.co.za &nbsp;&middot;&nbsp; Powered by Cho&amp;Co BI Platform &nbsp;&middot;&nbsp;</div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div class="page page-dash">
+    <div class="rbar rb1"></div>
+    <div class="phdr">
+      <div>
+        <h1>Healthcare Analytics Dashboards</h1>
+        <p id="dash-sub">Meridian Private Hospital Group &middot; 3 hospitals &middot; 640 beds &middot; demonstration data</p>
+      </div>
+      <div class="phdr-r">
+        <span class="badge bl">Live</span>
+        <span class="badge bd" id="cur-date"></span>
+      </div>
+    </div>
+
+    <!-- Dashboard sub-navigation = the four analytics pillars + 2 operational -->
+    <div class="dsnav">
+      <label for="d-desc"><span class="num">1</span> Descriptive</label>
+      <label for="d-diag"><span class="num">2</span> Diagnostic</label>
+      <label for="d-pred"><span class="num">3</span> Predictive</label>
+      <label for="d-presc"><span class="num">4</span> Prescriptive</label>
+      <label for="d-qual">Quality &amp; Safety</label>
+      <label for="d-rev">Revenue &amp; Workforce</label>
+    </div>
+
+    <!-- ===== 1. DESCRIPTIVE ===== -->
+    <div class="dpanel dp-desc">
+      <span class="pillar-tag"><b>Descriptive analytics</b> &middot; What happened?</span>
+      <div class="alert-band ab-ok" id="desc-alert"><span class="ab-icon">&#9679;</span><div class="ab-txt"><strong>Operational summary</strong>Loading&hellip;</div></div>
+      <div class="kpi-row">
+        <div class="kpi-card kpi-t"><div class="kpi-lbl">Bed Occupancy</div><div class="kpi-val" id="k-occ">&hellip;</div><div class="kpi-sub" id="k-occ-s">latest month</div><div class="kpi-trend" id="k-occ-t"></div></div>
+        <div class="kpi-card kpi-c"><div class="kpi-lbl">Avg Length of Stay</div><div class="kpi-val" id="k-alos">&hellip;</div><div class="kpi-sub">days per admission</div><div class="kpi-trend" id="k-alos-t"></div></div>
+        <div class="kpi-card kpi-a"><div class="kpi-lbl">Monthly Admissions</div><div class="kpi-val" id="k-adm">&hellip;</div><div class="kpi-sub">inpatient admissions</div><div class="kpi-trend" id="k-adm-t"></div></div>
+        <div class="kpi-card kpi-o"><div class="kpi-lbl">ED Presentations</div><div class="kpi-val" id="k-ed">&hellip;</div><div class="kpi-sub">emergency arrivals</div></div>
+        <div class="kpi-card kpi-t"><div class="kpi-lbl">Monthly Revenue</div><div class="kpi-val" id="k-rev">&hellip;</div><div class="kpi-sub">group, all facilities</div></div>
+        <div class="kpi-card kpi-c"><div class="kpi-lbl">Patient Satisfaction</div><div class="kpi-val" id="k-sat">&hellip;</div><div class="kpi-sub">PREM composite</div><div class="kpi-trend" id="k-sat-t"></div></div>
+      </div>
+      <div class="chart-grid">
+        <div class="chart-card chart-full">
+          <div class="ch-title">Occupancy &amp; Admissions — 18-Month Trend</div>
+          <div class="ch-sub">Bed occupancy % (left) vs monthly inpatient admissions (right)</div>
+          <div class="ch-wrap-lg"><canvas id="ch-desc-occ"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="ch-title">Occupancy by Department</div>
+          <div class="ch-sub">Latest month — ICU &amp; Internal Medicine run hottest</div>
+          <div class="ch-wrap"><canvas id="ch-desc-dept"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="ch-title">Payer Mix</div>
+          <div class="ch-sub">Share of admissions by medical scheme / self-pay</div>
+          <div class="ch-wrap"><canvas id="ch-desc-payer"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="ch-title">Revenue vs Cost</div>
+          <div class="ch-sub">Monthly group revenue and total cost (ZAR)</div>
+          <div class="ch-wrap"><canvas id="ch-desc-revcost"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="ch-title">Average Length of Stay by Department</div>
+          <div class="ch-sub">Days per admission — ICU and Medicine drive bed-days</div>
+          <div class="ch-wrap"><canvas id="ch-desc-alos"></canvas></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== 2. DIAGNOSTIC ===== -->
+    <div class="dpanel dp-diag">
+      <span class="pillar-tag"><b>Diagnostic analytics</b> &middot; Why did it happen?</span>
+      <div class="alert-band ab-red"><span class="ab-icon">&#128680;</span><div class="ab-txt"><strong>Root cause: ED boarding is an occupancy problem, not an ED problem</strong>ED boarding hours track bed occupancy almost 1:1 (correlation ≈ 0.9). When occupancy passes ~87%, admitted patients have nowhere to go and stack up in the ED — boarding has tripled to <span id="diag-board-latest">&hellip;</span> hours/month over the period.</div></div>
+      <div class="kpi-row">
+        <div class="kpi-card kpi-r"><div class="kpi-lbl">ED Boarding Hours</div><div class="kpi-val" id="k-board">&hellip;</div><div class="kpi-sub">latest month</div><div class="kpi-trend" id="k-board-t"></div></div>
+        <div class="kpi-card kpi-o"><div class="kpi-lbl">30-Day Readmissions</div><div class="kpi-val" id="k-readm">&hellip;</div><div class="kpi-sub">of discharges</div></div>
+        <div class="kpi-card kpi-a"><div class="kpi-lbl">Theatre Cancellations</div><div class="kpi-val" id="k-cancel">&hellip;</div><div class="kpi-sub">per year (all specialties)</div></div>
+        <div class="kpi-card kpi-c"><div class="kpi-lbl">Nurse Overtime</div><div class="kpi-val" id="k-ot">&hellip;</div><div class="kpi-sub">hours, latest month</div><div class="kpi-trend" id="k-ot-t"></div></div>
+      </div>
+      <div class="chart-grid">
+        <div class="chart-card chart-full">
+          <div class="ch-title">Bed Occupancy vs ED Boarding Hours</div>
+          <div class="ch-sub">The two move together — boarding is caused by downstream bed unavailability</div>
+          <div class="ch-wrap-lg"><canvas id="ch-diag-board"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="ch-title">Readmission Drivers</div>
+          <div class="ch-sub">30-day readmissions concentrate in CHF, COPD &amp; surgical complications</div>
+          <div class="ch-wrap"><canvas id="ch-diag-readm"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="ch-title">Why Theatre Cases Get Cancelled</div>
+          <div class="ch-sub">"No inpatient bed available" is the single biggest cause — again, capacity</div>
+          <div class="ch-wrap"><canvas id="ch-diag-cancel"></canvas></div>
+        </div>
+        <div class="chart-card chart-full">
+          <div class="ch-title">Margin Compression vs Overtime</div>
+          <div class="ch-sub">EBITDA margin (left) falls as nurse overtime hours (right) climb</div>
+          <div class="ch-wrap"><canvas id="ch-diag-margin"></canvas></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== 3. PREDICTIVE ===== -->
+    <div class="dpanel dp-pred">
+      <span class="pillar-tag"><b>Predictive analytics</b> &middot; What is likely to happen?</span>
+      <div class="alert-band ab-warn"><span class="ab-icon">&#9888;</span><div class="ab-txt"><strong>Winter surge will breach capacity</strong>The demand model projects occupancy peaking at <span id="pred-peak">&hellip;</span> and a bed shortfall of up to <span id="pred-short">&hellip;</span> beds during the Jun–Aug surge. <span id="pred-risk">&hellip;</span> patients currently sit in the High / Very-High 30-day readmission bands.</div></div>
+      <div class="kpi-row">
+        <div class="kpi-card kpi-o"><div class="kpi-lbl">Forecast Peak Occupancy</div><div class="kpi-val" id="k-peak">&hellip;</div><div class="kpi-sub">next 6 months (surge)</div></div>
+        <div class="kpi-card kpi-r"><div class="kpi-lbl">Max Bed Shortfall</div><div class="kpi-val" id="k-short">&hellip;</div><div class="kpi-sub">beds over capacity</div></div>
+        <div class="kpi-card kpi-a"><div class="kpi-lbl">High-Risk Readmit Patients</div><div class="kpi-val" id="k-hrisk">&hellip;</div><div class="kpi-sub">predicted &gt;25% probability</div></div>
+        <div class="kpi-card kpi-t"><div class="kpi-lbl">Next-Month Admissions</div><div class="kpi-val" id="k-fadm">&hellip;</div><div class="kpi-sub">model central estimate</div></div>
+      </div>
+      <div class="chart-grid">
+        <div class="chart-card chart-full">
+          <div class="ch-title">Inpatient Admissions — Actual &amp; 6-Month Forecast</div>
+          <div class="ch-sub">Solid = actual · dashed = forecast · shaded = 94–107% confidence band</div>
+          <div class="ch-wrap-lg"><canvas id="ch-pred-adm"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="ch-title">Projected Bed Demand vs Capacity</div>
+          <div class="ch-sub">Red bars show months where demand exceeds 640 staffed beds</div>
+          <div class="ch-wrap"><canvas id="ch-pred-bed"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="ch-title">ED Demand by Day of Week</div>
+          <div class="ch-sub">Weekends peak — informs rostering &amp; fast-track cover</div>
+          <div class="ch-wrap"><canvas id="ch-pred-dow"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="ch-title">30-Day Readmission Risk Cohorts</div>
+          <div class="ch-sub">Predicted probability bands across the active discharge population</div>
+          <div class="ch-wrap"><canvas id="ch-pred-risk"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="ch-title">Winter Surge — Occupancy Projection</div>
+          <div class="ch-sub">Baseline vs surge scenario; surge crosses the 100% line</div>
+          <div class="ch-wrap"><canvas id="ch-pred-surge"></canvas></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== 4. PRESCRIPTIVE ===== -->
+    <div class="dpanel dp-presc">
+      <span class="pillar-tag"><b>Prescriptive analytics</b> &middot; What should we do?</span>
+      <div class="alert-band ab-ok"><span class="ab-icon">&#10003;</span><div class="ab-txt"><strong>Six prioritised interventions modelled at ~R53M/yr combined value</strong>Ranked by impact and effort. The scenario tool below lets executives test the flagship lever — length-of-stay reduction — in real time.</div></div>
+      <div class="calc">
+        <h3>Capacity &amp; Revenue Scenario Simulator</h3>
+        <p class="sub">Model the effect of reducing average length of stay across the group. Based on 640 staffed beds and current throughput.</p>
+        <div class="calc-grid">
+          <div>
+            <div class="calc-ctrl">
+              <label>Reduce Average Length of Stay by <b id="calc-alos-lbl">0.5 days</b></label>
+              <input type="range" id="calc-alos" min="0" max="1.5" step="0.1" value="0.5">
+            </div>
+            <div class="calc-ctrl">
+              <label>Target additional occupancy filled <b id="calc-fill-lbl">70%</b></label>
+              <input type="range" id="calc-fill" min="40" max="100" step="5" value="70">
+            </div>
+          </div>
+          <div class="calc-out">
+            <div class="co-card"><div class="co-lbl">Bed-days freed / year</div><div class="co-val" id="calc-beddays">&hellip;</div></div>
+            <div class="co-card"><div class="co-lbl">Equivalent beds released</div><div class="co-val" id="calc-beds">&hellip;</div></div>
+            <div class="co-card"><div class="co-lbl">Extra admissions / year</div><div class="co-val amber" id="calc-adm">&hellip;</div></div>
+            <div class="co-card"><div class="co-lbl">Revenue opportunity / year</div><div class="co-val amber" id="calc-rev">&hellip;</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="rec-grid" id="rec-grid"></div>
+      <div class="chart-grid">
+        <div class="chart-card chart-full">
+          <div class="ch-title">Modelled Annual Value by Intervention</div>
+          <div class="ch-sub">Estimated recurring ZAR value of each recommended action</div>
+          <div class="ch-wrap"><canvas id="ch-presc-impact"></canvas></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== 5. QUALITY & SAFETY ===== -->
+    <div class="dpanel dp-qual">
+      <span class="pillar-tag"><b>Clinical quality &amp; patient safety</b></span>
+      <div class="alert-band ab-warn"><span class="ab-icon">&#9888;</span><div class="ab-txt"><strong>Winter erodes safety margins</strong>Hospital-acquired infection rate and sepsis-bundle non-compliance both worsen through the high-occupancy winter months — a downstream signal of the same capacity pressure.</div></div>
+      <div class="kpi-row">
+        <div class="kpi-card kpi-r"><div class="kpi-lbl">HAI Rate</div><div class="kpi-val" id="k-hai">&hellip;</div><div class="kpi-sub">per 1,000 patient-days</div></div>
+        <div class="kpi-card kpi-a"><div class="kpi-lbl">Patient Falls</div><div class="kpi-val" id="k-falls">&hellip;</div><div class="kpi-sub">per 1,000 patient-days</div></div>
+        <div class="kpi-card kpi-t"><div class="kpi-lbl">Sepsis Bundle</div><div class="kpi-val" id="k-sepsis">&hellip;</div><div class="kpi-sub">6-hour compliance</div></div>
+        <div class="kpi-card kpi-c"><div class="kpi-lbl">Hand Hygiene</div><div class="kpi-val" id="k-hh">&hellip;</div><div class="kpi-sub">audit compliance</div></div>
+        <div class="kpi-card kpi-o"><div class="kpi-lbl">Crude Mortality</div><div class="kpi-val" id="k-mort">&hellip;</div><div class="kpi-sub">inpatient deaths</div></div>
+      </div>
+      <div class="chart-grid">
+        <div class="chart-card chart-full">
+          <div class="ch-title">Infection &amp; Falls Rates — 18-Month Trend</div>
+          <div class="ch-sub">HAI and falls per 1,000 patient-days; winter peaks visible</div>
+          <div class="ch-wrap-lg"><canvas id="ch-qual-trend"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="ch-title">Sepsis Bundle &amp; Hand Hygiene Compliance</div>
+          <div class="ch-sub">Both dip when the hospital is fullest</div>
+          <div class="ch-wrap"><canvas id="ch-qual-comp"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="ch-title">Readmission Rate by Department</div>
+          <div class="ch-sub">Medicine, ICU and Cardiology carry the highest readmission burden</div>
+          <div class="ch-wrap"><canvas id="ch-qual-readm"></canvas></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== 6. REVENUE & WORKFORCE ===== -->
+    <div class="dpanel dp-rev">
+      <span class="pillar-tag"><b>Revenue cycle &amp; workforce</b></span>
+      <div class="alert-band ab-warn"><span class="ab-icon">&#9888;</span><div class="ab-txt"><strong>Cash is leaking through denials and agency spend</strong>Self-pay denial rates and days-in-AR are well above scheme business, while agency nursing spend and vacancies concentrate in the ED and general wards — the units under the most flow pressure.</div></div>
+      <div class="kpi-row">
+        <div class="kpi-card kpi-t"><div class="kpi-lbl">Monthly Revenue</div><div class="kpi-val" id="k-rev2">&hellip;</div><div class="kpi-sub">group, latest month</div></div>
+        <div class="kpi-card kpi-o"><div class="kpi-lbl">Avg Claim Denial</div><div class="kpi-val" id="k-denial">&hellip;</div><div class="kpi-sub">weighted by volume</div></div>
+        <div class="kpi-card kpi-a"><div class="kpi-lbl">Days in AR</div><div class="kpi-val" id="k-ar">&hellip;</div><div class="kpi-sub">avg collection period</div></div>
+        <div class="kpi-card kpi-r"><div class="kpi-lbl">Agency Spend</div><div class="kpi-val" id="k-agency">&hellip;</div><div class="kpi-sub">nursing, latest month</div></div>
+        <div class="kpi-card kpi-c"><div class="kpi-lbl">Avg Vacancy</div><div class="kpi-val" id="k-vac">&hellip;</div><div class="kpi-sub">nursing establishment</div></div>
+      </div>
+      <div class="chart-grid">
+        <div class="chart-card">
+          <div class="ch-title">Revenue by Payer</div>
+          <div class="ch-sub">Latest-month revenue split across schemes and self-pay (ZAR)</div>
+          <div class="ch-wrap"><canvas id="ch-rev-payer"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="ch-title">Claim Denial Rate by Payer</div>
+          <div class="ch-sub">Self-pay and GEMS denials run highest</div>
+          <div class="ch-wrap"><canvas id="ch-rev-denial"></canvas></div>
+        </div>
+        <div class="chart-card chart-full">
+          <div class="ch-title">Agency Spend &amp; Vacancy by Unit</div>
+          <div class="ch-sub">Agency reliance (bars, ZAR) vs vacancy % (line)</div>
+          <div class="ch-wrap"><canvas id="ch-rev-agency"></canvas></div>
+        </div>
+      </div>
+      <div class="dtbl-wrap">
+        <table class="dtbl" id="tbl-payer">
+          <thead><tr><th>Payer</th><th class="num">Admissions Share</th><th class="num">Revenue (ZAR)</th><th class="num">Denial Rate</th><th class="num">Days in AR</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- REPORTING -->
+  <div class="page page-rep">
+    <div class="rbar rb2"></div>
+    <div class="phdr">
+      <div><h1>Reports</h1><p>Descriptive, diagnostic, predictive &amp; prescriptive report packs, plus clinical and regulatory reporting for the hospital group</p></div>
+      <div class="phdr-r"><span class="badge ba">FY2025/26</span></div>
+    </div>
+
+    <div class="rsec-title"><span class="dotc" style="background:var(--teal)"></span> Descriptive — What happened</div>
+    <div class="rsec-sub">Operational activity, capacity and throughput reporting</div>
+    <div class="rgrid">
+      <div class="rcard rc-t"><div class="rtype rt-t">Operations</div><div class="rtitle">Monthly Operations Report</div><div class="rdesc">Group scorecard: admissions, occupancy, ALOS, ED activity, theatre throughput, revenue and satisfaction with month-on-month movement.</div><div class="rmeta"><span class="rper">Jun 2026</span><span class="rst sr">Ready</span></div></div>
+      <div class="rcard rc-t"><div class="rtype rt-t">Capacity</div><div class="rtitle">Bed Occupancy &amp; Census Report</div><div class="rdesc">Daily census, occupancy by ward, patient-days and discharge-time-of-day distribution across all three facilities.</div><div class="rmeta"><span class="rper">Jun 2026</span><span class="rst sr">Ready</span></div></div>
+      <div class="rcard rc-t"><div class="rtype rt-t">Emergency</div><div class="rtitle">Emergency Department Activity Report</div><div class="rdesc">Presentations, SA Triage Scale mix, door-to-triage and door-to-bed times, boarding hours and LWBS rate.</div><div class="rmeta"><span class="rper">Jun 2026</span><span class="rst sr">Ready</span></div></div>
+      <div class="rcard rc-t"><div class="rtype rt-t">Theatre</div><div class="rtitle">Theatre Activity &amp; Utilisation Report</div><div class="rdesc">Cases, utilisation, turnaround, first-case on-time starts and cancellations by specialty and theatre.</div><div class="rmeta"><span class="rper">Jun 2026</span><span class="rst sd">Draft</span></div></div>
+    </div>
+
+    <div class="rsec-title"><span class="dotc" style="background:var(--orange)"></span> Diagnostic — Why it happened</div>
+    <div class="rsec-sub">Root-cause and variance analysis</div>
+    <div class="rgrid">
+      <div class="rcard rc-o"><div class="rtype rt-o">Root Cause</div><div class="rtitle">Readmissions Root-Cause Analysis</div><div class="rdesc">30-day readmissions decomposed by department, diagnosis and payer; identifies CHF/COPD as the dominant, addressable drivers.</div><div class="rmeta"><span class="rper">Q4 FY2025/26</span><span class="rst sr">Ready</span></div></div>
+      <div class="rcard rc-o"><div class="rtype rt-o">Root Cause</div><div class="rtitle">ED Boarding Root-Cause Report</div><div class="rdesc">Correlates boarding hours with downstream occupancy and discharge timing to locate the true bottleneck.</div><div class="rmeta"><span class="rper">Q4 FY2025/26</span><span class="rst sr">Ready</span></div></div>
+      <div class="rcard rc-o"><div class="rtype rt-o">Theatre</div><div class="rtitle">Theatre Cancellation Analysis</div><div class="rdesc">Cancellation reasons ranked and costed; quantifies the bed-availability driver and its revenue impact.</div><div class="rmeta"><span class="rper">Q4 FY2025/26</span><span class="rst sd">Draft</span></div></div>
+      <div class="rcard rc-o"><div class="rtype rt-o">Finance</div><div class="rtitle">Cost &amp; Margin Variance Report</div><div class="rdesc">EBITDA-margin bridge isolating overtime, agency and consumable cost drivers behind margin compression.</div><div class="rmeta"><span class="rper">Q4 FY2025/26</span><span class="rst ss">Coming Soon</span></div></div>
+    </div>
+
+    <div class="rsec-title"><span class="dotc" style="background:var(--amber)"></span> Predictive — What will happen</div>
+    <div class="rsec-sub">Forecasts and risk registers</div>
+    <div class="rgrid">
+      <div class="rcard rc-a"><div class="rtype rt-a">Forecast</div><div class="rtitle">Patient Census &amp; Admissions Forecast</div><div class="rdesc">Six-month admissions and census forecast with confidence bands and seasonal decomposition.</div><div class="rmeta"><span class="rper">Jul–Dec 2026</span><span class="rst sr">Ready</span></div></div>
+      <div class="rcard rc-a"><div class="rtype rt-a">Forecast</div><div class="rtitle">Winter Surge Capacity Forecast</div><div class="rdesc">Projects occupancy and bed shortfall through the respiratory season and stress-tests staffed-bed capacity.</div><div class="rmeta"><span class="rper">Jun–Aug 2026</span><span class="rst sr">Ready</span></div></div>
+      <div class="rcard rc-a"><div class="rtype rt-a">Risk</div><div class="rtitle">30-Day Readmission Risk Register</div><div class="rdesc">Patient-level predicted readmission probabilities, banded into cohorts for targeted follow-up.</div><div class="rmeta"><span class="rper">Live</span><span class="rst sd">Template</span></div></div>
+      <div class="rcard rc-a"><div class="rtype rt-a">Demand</div><div class="rtitle">ED Demand &amp; Staffing Forecast</div><div class="rdesc">Day-of-week and hour-of-day ED demand model feeding nursing and medical roster requirements.</div><div class="rmeta"><span class="rper">Jul–Dec 2026</span><span class="rst ss">Coming Soon</span></div></div>
+    </div>
+
+    <div class="rsec-title"><span class="dotc" style="background:var(--coal)"></span> Prescriptive — What to do</div>
+    <div class="rsec-sub">Optimisation and intervention plans</div>
+    <div class="rgrid">
+      <div class="rcard rc-c"><div class="rtype rt-c">Optimisation</div><div class="rtitle">Bed &amp; Discharge Optimisation Plan</div><div class="rdesc">Criteria-led discharge, morning board rounds and discharge-lounge model with quantified bed-hour release.</div><div class="rmeta"><span class="rper">FY2026/27</span><span class="rst sr">Ready</span></div></div>
+      <div class="rcard rc-c"><div class="rtype rt-c">Optimisation</div><div class="rtitle">Theatre Scheduling Optimisation</div><div class="rdesc">Bed ring-fencing and list-sequencing recommendations to lift utilisation and cut cancellations.</div><div class="rmeta"><span class="rper">FY2026/27</span><span class="rst sd">Draft</span></div></div>
+      <div class="rcard rc-c"><div class="rtype rt-c">Workforce</div><div class="rtitle">Staffing &amp; Roster Recommendations</div><div class="rdesc">Demand-matched rostering to reduce agency reliance and align nursing hours to the winter demand curve.</div><div class="rmeta"><span class="rper">FY2026/27</span><span class="rst sd">Draft</span></div></div>
+      <div class="rcard rc-c"><div class="rtype rt-c">Clinical</div><div class="rtitle">Readmission Intervention Plan</div><div class="rdesc">Targeted 48-hour follow-up and 7-day review protocol for the high-risk CHF/COPD cohorts.</div><div class="rmeta"><span class="rper">FY2026/27</span><span class="rst ss">Coming Soon</span></div></div>
+    </div>
+
+    <div class="rsec-title"><span class="dotc" style="background:var(--teal)"></span> Clinical, Regulatory &amp; Financial</div>
+    <div class="rsec-sub">Additional reporting required across the medical industry</div>
+    <div class="rgrid">
+      <div class="rcard rc-o"><div class="rtype rt-o">Quality</div><div class="rtitle">Clinical Quality &amp; Patient Safety Scorecard</div><div class="rdesc">HAIs, falls, pressure injuries, sepsis-bundle compliance, medication errors and mortality against benchmark.</div><div class="rmeta"><span class="rper">Jun 2026</span><span class="rst sr">Ready</span></div></div>
+      <div class="rcard rc-t"><div class="rtype rt-t">IPC</div><div class="rtitle">Infection Prevention &amp; Control Report</div><div class="rdesc">HAI surveillance by organism and unit, hand-hygiene audits and antimicrobial stewardship indicators.</div><div class="rmeta"><span class="rper">Jun 2026</span><span class="rst sd">Draft</span></div></div>
+      <div class="rcard rc-c"><div class="rtype rt-c">Compliance</div><div class="rtitle">Regulatory &amp; Accreditation Compliance</div><div class="rdesc">Readiness against OHSC norms &amp; standards, COHSASA accreditation criteria and POPIA data-protection controls.</div><div class="rmeta"><span class="rper">FY2025/26</span><span class="rst sd">Draft</span></div></div>
+      <div class="rcard rc-a"><div class="rtype rt-a">Revenue Cycle</div><div class="rtitle">Revenue Cycle &amp; Payer-Mix Report</div><div class="rdesc">Payer mix, claim denials, days-in-AR and cost-per-case by case type across medical schemes and self-pay.</div><div class="rmeta"><span class="rper">Jun 2026</span><span class="rst sr">Ready</span></div></div>
+      <div class="rcard rc-o"><div class="rtype rt-o">Experience</div><div class="rtitle">Patient Experience (PREM / PROM) Report</div><div class="rdesc">Patient-reported experience and outcome measures by ward, with driver analysis of satisfaction.</div><div class="rmeta"><span class="rper">Q4 FY2025/26</span><span class="rst ss">Coming Soon</span></div></div>
+      <div class="rcard rc-c"><div class="rtype rt-c">Governance</div><div class="rtitle">Mortality &amp; Morbidity (M&amp;M) Report</div><div class="rdesc">Structured mortality review, HSMR-style indexing and morbidity case flags for clinical governance.</div><div class="rmeta"><span class="rper">Q4 FY2025/26</span><span class="rst ss">Coming Soon</span></div></div>
+    </div>
+
+    <div style="padding:6px 24px 0"><div class="ch-title" style="font-size:13px">Flagship report preview — Monthly Operations Report</div><div class="ch-sub" style="padding-bottom:6px">Branded PDF, auto-generated from the live dataset. Additional report packs are produced on the same engine.</div></div>
+    <div id="pdf-slot" style="margin:6px 24px 24px;border-radius:8px;overflow:hidden;border-top:3px solid var(--orange);background:var(--white)">
+      <iframe src="data:application/pdf;base64,JVBERi0xLjMKJenr8b8KMSAwIG9iago8PAovQ291bnQgMQovS2lkcyBbMyAwIFJdCi9NZWRpYUJveCBbMCAwIDU5NS4yOCA4NDEuODldCi9UeXBlIC9QYWdlcwo+PgplbmRvYmoKMiAwIG9iago8PAovT3BlbkFjdGlvbiBbMyAwIFIgL0ZpdEggbnVsbF0KL1BhZ2VMYXlvdXQgL09uZUNvbHVtbgovUGFnZXMgMSAwIFIKL1R5cGUgL0NhdGFsb2cKPj4KZW5kb2JqCjMgMCBvYmoKPDwKL0NvbnRlbnRzIDQgMCBSCi9QYXJlbnQgMSAwIFIKL1Jlc291cmNlcyA4IDAgUgovVHlwZSAvUGFnZQo+PgplbmRvYmoKNCAwIG9iago8PAovRmlsdGVyIC9GbGF0ZURlY29kZQovTGVuZ3RoIDIxNDMKPj4Kc3RyZWFtCnicnZpbU+PKEcff+RT9wilOxXTmfnn0ghfYLJgYJ1VbdV6EPdhKbMkryVCkTuWzp0YXfEEeaVM8qATMv2e6f9Nq9YjBtzOCUsPbGUEiKRCkRFogyCSFbOF/S8AIisaCtBKZgUtuUVnIHLycfZnCX79SoNT/2/QFRtOzn/BlCtKi5GCoQS1hOgeCWiovqwj3F06sgWwBF1e3Y/gNrsYAfwLcumhVLGdR5mCYRKv3Ip7lv8P0XzCawt8rWwzMkSkhCFIFhlpUpS1a/njx+zQplqt3GG9cFhVxmuQwcZs0K3aiBBbBlROGjHysnAqNghwsnfGj+VBKUHDQkiLXwbXfjx+mt99/wPhxNBlO78YPTzAZPY4n009r/uRfaixSBpqx2sjeol0Wz+Mogccsfo0KB7dpvomLaAU3WbrdAFwCKEHg2c2PncvBHtlhnKIVoAlBZuvFGMGPLt7stctnWbwp4lcHURO8MqrftgkwwtSRMQqU7ax9MKOY8ZfpHC7+NvoBj6PJ1/HkfvhwNYK7h+u7q+F0PHmqpc5aXTu5OaMoGLydSeVBVYygtrAGyQ1K09yv4OmMoFXEwO6imfSxrwcSi0ICZQSFhkvFkKsq9p44ob1dKv1F+uGnxklU+nC3fEKGcLQMpKF+XOnlFiLhwvLzT2golAdalqO1IJVCSispLpndu1jGSrEvbg7j2Wy7iZLZ+96GOOESahRKFvRJ2y5qHxZ0SYkd94lj55ALgWLeRP3Eyhm1HtIeSx++LuC7SxbFEtIXeCqiHuvnVCGXwfVbTx9BXu2MkpCTA7uh4Iog7wGFGBBpOrHgQns0ezinSZrD+TrOc580u50jhEKq/48N0z6w2znCEqSy2zlqQFS3c4ShPpv2cM7oGh4zl7ukqJ4n3a6pUoLk0gP9y6nkaFy3Y6xXAEn0x4O31S8Tqina++5sQlEJEJah6EfNxL26ZOt655OQYwL55Ff84lMDM8j5nlsuqEBx3pVQmEBq+qx+9OVuej2E+yhbxEnvXBJaezCX/DIVXBpfI3Vi4UuX7kcMFwIN6eMXTi6vIw9F9OvJ5Ne3TPvAPsmE+6qu0ztGdvtGaIPS9vHNY1TELingKSri/CWa+XwSLJH2CmshKAoRynuXZXEJw6vp3T/vpj/g6R/398PJj52BKr8I/6Alu9qovq9qo7b9V8/roAivpXwtqsBIJAIuqUUjSrf7WRuNjIGgxP/tc4m+m9VPoIKi5o1aFfUjNaqk3wVtcuPZbF+MEYHEBsXKTa5axYbfx08HakqhUI2aVcjNJzVL0ep2tZYt8BO4Ymg+lmsJanqsKQhDxVs1R9f7WkJylCIYCKEtctuq1Ttzt72H1QgQ5pNzY1kjoTsEGGoF3D9QWAUupVrtXXwh7+fxLTp+XdhBUek3cTzQp0qgpX0MWHLexkhAmzGLmvXRFsjbiKm0G2IOtDkR/hHbR3tAGW1jp1av2TlUt8Y/wnqpGyraaArE1NNkeB/1CTUE5V690XD3wQ43EiU9yQ6nwLVARYNmvrrnU+zU+kF2ug0Y28ZOSLthp1tbIGlhp9YOstOtzQdWsBZ2GvUQO93qckAsaWEnFNOGnW71CVUc9X13YvpASRn/VD6JEgMuNSoStHofZSdRqvSDKHUbOIFSQLtBqVu7PQ3V2kGUemgPiLFtKNXqIZS61eVAUNWGUiCmDUrd6pOydAimIUlD7FgDXBBf4YXMDDen2an0g+x0GzCmlZ2AdsNOt7ZA2sZOpR1kp4f2gErdxk6tHmKnW10OGGllJxDThp1u9QlV+uCVuTMNcYHCnkCJ+mY1Z9wX3eE09H4SpUo/iFK3gfZqKKTdoNStLVC2oVRpB1HqoT0gRLahVKuHUOpWlwMhdBtKgZg2KHWrT6i2yIJpiGoUJlhJE9Vl5nPjfcdOpR9kp9vAQT96x05Au2GnW1ugaGOn0g6y00P7sGW6Y6dWD7HTrX7Uc9yxE4hpw063envn7mSngGnhD7BOdwruHp7ubm6nT/Ab3N7d3H4vb47bBLX3P9oE9X19hPK5VTW5OStbKs0RDJPMn5+ta7o9BYqWw+vZ26M2ijJIODAhvc9PT/7j/AKWUQ5ZnLsEihTy97xw68u8yFyew8q9ulXbOWKrSU7R1CaZFnJ34ZT7HhxQFNrC9A0uqvO09GMOs1W8fnZz+AsVaGHjspnvEy8cbNI4KXJIX10G1MDa9zxyP1HLzxGGz+mrg/8afb7TGsA8fUv8AqK1P6nbx2k3V2r8u31grhfbJHqN4lX0HK/i4h2e3SJOSsvzzB/Uja7hOY2yeZwsBlAsXVRkDmZRMnOrVX1gGiVz+LmNyuFZnP8bP7FBuAetia1/0TOyO7bUKn9Mejq2VTMV4hxm6XrjIxknC9gmc5dB2hzoRiso/7TNXM8AU8N9rz8YYOkn9vbR1l1XM/GIvUSrlUvgJUvX4L1/7n1Z9pIHlUsTWEXZwq3e4bn0l59zss1yV0a/iNcO/rigfECVgGWWQ5x8nI/+8bt3dmukqSZIglReRAtXMujN7MWotVc6ualjR6VArXex48wn8O7Y+cMkHYjdaO2yaj4enwasYpml28Vysy0gc+soTiAvsjRZ9I0cF/6JEowc8w3cN7iYLh0syu25jJL5ys2hzMoe+M3++U05Pz6g3O7hn7uDuCA8bfMiihMfy2IZ5zB3G5fMc0gTyNzKRT7K7XFj1L9uhuIWJ5u6ETyLNtHMbzMXZavYZX4OxdLBPHo/COjJjxW4QMJ2X2mUd7vGNwd9fOwsNHLh8bX1G/ipjzTS5CWeu6SIoxVc+hOwTZS5uUf8apn67zdSeEkz6Pz04E+At7c3nC3TKJnPUpyl+J9ot7b/Acs70hYKZW5kc3RyZWFtCmVuZG9iago1IDAgb2JqCjw8Ci9CYXNlRm9udCAvSGVsdmV0aWNhLUJvbGQKL0VuY29kaW5nIC9XaW5BbnNpRW5jb2RpbmcKL1N1YnR5cGUgL1R5cGUxCi9UeXBlIC9Gb250Cj4+CmVuZG9iago2IDAgb2JqCjw8Ci9CYXNlRm9udCAvSGVsdmV0aWNhCi9FbmNvZGluZyAvV2luQW5zaUVuY29kaW5nCi9TdWJ0eXBlIC9UeXBlMQovVHlwZSAvRm9udAo+PgplbmRvYmoKNyAwIG9iago8PAovQmFzZUZvbnQgL0hlbHZldGljYS1PYmxpcXVlCi9FbmNvZGluZyAvV2luQW5zaUVuY29kaW5nCi9TdWJ0eXBlIC9UeXBlMQovVHlwZSAvRm9udAo+PgplbmRvYmoKOCAwIG9iago8PAovRm9udCA8PC9GMSA1IDAgUgovRjIgNiAwIFIKL0YzIDcgMCBSPj4KL1Byb2NTZXQgWy9QREYgL1RleHQgL0ltYWdlQiAvSW1hZ2VDIC9JbWFnZUldCj4+CmVuZG9iago5IDAgb2JqCjw8Ci9DcmVhdGlvbkRhdGUgKEQ6MjAyNjA4MTUxMDU4MTRaKQo+PgplbmRvYmoKeHJlZgowIDEwCjAwMDAwMDAwMDAgNjU1MzUgZiAKMDAwMDAwMDAxNSAwMDAwMCBuIAowMDAwMDAwMTAyIDAwMDAwIG4gCjAwMDAwMDAyMDUgMDAwMDAgbiAKMDAwMDAwMDI4NSAwMDAwMCBuIAowMDAwMDAyNTAxIDAwMDAwIG4gCjAwMDAwMDI2MDMgMDAwMDAgbiAKMDAwMDAwMjcwMCAwMDAwMCBuIAowMDAwMDAyODA1IDAwMDAwIG4gCjAwMDAwMDI5MTIgMDAwMDAgbiAKdHJhaWxlcgo8PAovU2l6ZSAxMAovUm9vdCAyIDAgUgovSW5mbyA5IDAgUgovSUQgWzw0MDFBRDhCMTgxNjJDMEQ3MjYzNjg2OEYxNjNGOUNBQz48NDAxQUQ4QjE4MTYyQzBENzI2MzY4NjhGMTYzRjlDQUM+XQo+PgpzdGFydHhyZWYKMjk2NwolJUVPRgo=" width="100%" height="760px" style="border:0" title="Monthly Operations Report"></iframe>
+    </div>
+  </div>
+
+  <!-- HELP -->
+  <div class="page page-help">
+    <div class="rbar rb3" style="grid-column:1/-1"></div>
+    <aside class="hside">
+      <div class="hs-brand"><div class="hs-nm">Cho&amp;Co. Support</div></div>
+      <div class="hs-lbl">Support Centre</div>
+      <label for="hs-contact" class="hn"><span class="hndot"></span> Contact Us</label>
+      <label for="hs-hours" class="hn"><span class="hndot"></span> Office Hours</label>
+      <label for="hs-sla" class="hn"><span class="hndot"></span> Response Times</label>
+      <label for="hs-faq" class="hn"><span class="hndot"></span> FAQ</label>
+      <label for="hs-platform" class="hn"><span class="hndot"></span> Platform Info</label>
+    </aside>
+    <main class="hmain">
+      <div class="hsec sec-contact">
+        <div class="abar at"></div>
+        <h2 class="stitle">Contact Us</h2>
+        <p class="ssub">Reach the Cho&amp;Co team through any of the channels below. We operate on SAST (UTC+2).</p>
+        <div class="ccg">
+          <div class="cc cc-t"><div class="cclbl">Website</div><div class="ccval"><a href="https://choandco.co.za" target="_blank">choandco.co.za</a></div><div class="ccnote">Main website &amp; service info</div></div>
+          <div class="cc cc-o"><div class="cclbl">Email</div><div class="ccval"><a href="mailto:info@choandco.co.za">info@choandco.co.za</a></div><div class="ccnote">Enquiries, support &amp; data queries</div></div>
+          <div class="cc cc-a"><div class="cclbl">Phone</div><div class="ccval">+27 71 060 2976</div><div class="ccnote">Urgent issues during business hours</div></div>
+          <div class="cc cc-c"><div class="cclbl">Location</div><div class="ccval">Johannesburg, Gauteng</div><div class="ccnote">South Africa &middot; SAST (UTC+2)</div></div>
+          <div class="cc cc-t"><div class="cclbl">Account Manager</div><div class="ccval">Tawanda Afeki</div><div class="ccnote">Director &amp; BI Analyst</div></div>
+          <div class="cc cc-o"><div class="cclbl">Industry Focus</div><div class="ccval">Healthcare &amp; Hospitals</div><div class="ccnote">Private hospital groups, SA market</div></div>
+        </div>
+      </div>
+      <div class="hsec sec-hours">
+        <div class="abar ao"></div>
+        <h2 class="stitle">Office Hours</h2>
+        <p class="ssub">All times in SAST (UTC+2). Email support monitored for critical issues outside these hours.</p>
+        <table class="htbl">
+          <tr><td>Monday &ndash; Thursday</td><td>08:00 &ndash; 17:00</td></tr>
+          <tr><td>Friday</td><td>08:00 &ndash; 16:00</td></tr>
+          <tr><td>Saturday</td><td>09:00 &ndash; 12:00</td></tr>
+          <tr><td>Sunday</td><td>Closed</td></tr>
+          <tr><td>Public Holidays</td><td>Closed &dash; emergency email monitored</td></tr>
+        </table>
+      </div>
+      <div class="hsec sec-sla">
+        <div class="abar aa"></div>
+        <h2 class="stitle">Response Times</h2>
+        <p class="ssub">Committed response times for support requests during business hours.</p>
+        <div class="srow">
+          <div class="sc" style="border-top:3px solid var(--orange)"><div class="sp sp-cr">Critical</div><div class="st">2 hrs</div><div class="sd2">Dashboard down, data loss</div></div>
+          <div class="sc" style="border-top:3px solid var(--amber)"><div class="sp sp-hi">High</div><div class="st">4 hrs</div><div class="sd2">Report errors, data discrepancies</div></div>
+          <div class="sc" style="border-top:3px solid var(--teal)"><div class="sp sp-st">Standard</div><div class="st">1 day</div><div class="sd2">General queries, new reports</div></div>
+        </div>
+      </div>
+      <div class="hsec sec-faq">
+        <div class="abar ac"></div>
+        <h2 class="stitle">Frequently Asked Questions</h2>
+        <p class="ssub">Common questions about the Cho&amp;Co Healthcare Analytics Portal.</p>
+        <div class="fi"><button class="fq" onclick="tf(this)">Where does the data come from? <span class="farr">&#9660;</span></button><div class="fa">In production the portal connects to your Hospital Information System (HIS), Patient Administration System (PAS) and theatre / ED systems. Data is modelled into a governed analytics database and refreshed daily (or in near-real-time where source feeds allow). This demo uses fabricated data for a representative private hospital group.</div></div>
+        <div class="fi"><button class="fq" onclick="tf(this)">How are the four analytics layers different? <span class="farr">&#9660;</span></button><div class="fa">Descriptive reports what happened (occupancy, ALOS, activity). Diagnostic explains why (e.g. boarding driven by occupancy). Predictive forecasts what is likely next (census, surge, readmission risk). Prescriptive recommends what to do and quantifies the value — the scenario simulator is a live example.</div></div>
+        <div class="fi"><button class="fq" onclick="tf(this)">Is patient-identifiable data protected? <span class="farr">&#9660;</span></button><div class="fa">Yes. The platform is built POPIA-aligned: identifiable data stays in your governed environment, dashboards use role-based access and row-level security, and analytics can run on de-identified or aggregated data where appropriate. We sign a data-processing agreement before any integration.</div></div>
+        <div class="fi"><button class="fq" onclick="tf(this)">Can dashboards be split by hospital, ward or consultant? <span class="farr">&#9660;</span></button><div class="fa">Yes. Every view can be filtered and permissioned by facility, discipline, ward, theatre or clinician. Executives see the group roll-up; unit managers see only their area.</div></div>
+        <div class="fi"><button class="fq" onclick="tf(this)">How do the predictive models work? <span class="farr">&#9660;</span></button><div class="fa">Forecasts combine historical seasonality (including the SA winter respiratory surge) with recent trend. Readmission risk is scored from clinical and administrative features. Models are transparent, monitored for drift, and always presented with confidence ranges — never as black-box certainty.</div></div>
+        <div class="fi"><button class="fq" onclick="tf(this)">How quickly can you stand this up for our group? <span class="farr">&#9660;</span></button><div class="fa">A working pilot on one facility typically goes live within 4–6 weeks of data access, starting with the descriptive and diagnostic layers, then adding predictive and prescriptive as history accumulates. Email info@choandco.co.za to scope it.</div></div>
+      </div>
+      <div class="hsec sec-platform">
+        <div class="abar at"></div>
+        <h2 class="stitle">Platform Information</h2>
+        <p class="ssub">Technical details about the Cho&amp;Co Healthcare Analytics Platform.</p>
+        <div class="ccg">
+          <div class="cc cc-t"><div class="cclbl">Dashboard Engine</div><div class="ccval">Chart.js 4.4 (native)</div><div class="ccnote">6 dashboards, 20+ live charts</div></div>
+          <div class="cc cc-o"><div class="cclbl">Data Platform</div><div class="ccval">PostgreSQL / Supabase</div><div class="ccnote">Governed analytics store</div></div>
+          <div class="cc cc-t"><div class="cclbl">Data Security</div><div class="ccval">RLS + SSL/TLS, POPIA-aligned</div><div class="ccnote">Role-based, row-level access</div></div>
+          <div class="cc cc-a"><div class="cclbl">Data Coverage</div><div class="ccval">Jan 2025 – Jun 2026</div><div class="ccnote">18-month trend + 6-month forecast</div></div>
+          <div class="cc cc-c"><div class="cclbl">Analytics Layers</div><div class="ccval">Descriptive → Prescriptive</div><div class="ccnote">Full four-layer coverage</div></div>
+          <div class="cc cc-o"><div class="cclbl">Portal Version</div><div class="ccval">v1.0 — Aug 2026</div><div class="ccnote">Built &amp; maintained by Cho&amp;Co</div></div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div><!-- end shell -->
+</div><!-- end portal-shell -->
+
+<script>
+/* ============================================================
+   Cho&Co Healthcare Analytics Portal — embedded demo dataset
+   ============================================================ */
+const DB = {"meta":{"group":"Meridian Private Hospital Group","beds":640,"period_start":"2025-01-01","period_end":"2026-06-01","hospitals":3,"currency":"ZAR"},"monthly":[{"month":"2025-01-01","admissions":3722,"patient_days":15486,"beds_available":640,"occupancy_pct":78.1,"alos_days":4.16,"ed_presentations":5094,"ed_boarding_hours":644,"theatre_cases":2991,"theatre_util_pct":68.1,"readmission_30d_pct":9.88,"mortality_pct":1.87,"revenue_zar":165683530.94,"cost_zar":134574634.98,"ebitda_margin_pct":18.8,"patient_sat_pct":88.1,"nurse_overtime_hours":11285,"hai_per_1000_pd":3.99},{"month":"2025-02-01","admissions":3486,"patient_days":13912,"beds_available":640,"occupancy_pct":77.6,"alos_days":3.99,"ed_presentations":5100,"ed_boarding_hours":393,"theatre_cases":3276,"theatre_util_pct":76.4,"readmission_30d_pct":10.06,"mortality_pct":1.91,"revenue_zar":163523533.25,"cost_zar":133073845.65,"ebitda_margin_pct":18.6,"patient_sat_pct":86.8,"nurse_overtime_hours":11660,"hai_per_1000_pd":4.13},{"month":"2025-03-01","admissions":3458,"patient_days":15492,"beds_available":640,"occupancy_pct":78.1,"alos_days":4.48,"ed_presentations":5201,"ed_boarding_hours":438,"theatre_cases":3086,"theatre_util_pct":72.2,"readmission_30d_pct":9.63,"mortality_pct":1.85,"revenue_zar":167269507.21,"cost_zar":136794685.44,"ebitda_margin_pct":18.2,"patient_sat_pct":87.5,"nurse_overtime_hours":9559,"hai_per_1000_pd":4.0},{"month":"2025-04-01","admissions":3619,"patient_days":15020,"beds_available":640,"occupancy_pct":78.2,"alos_days":4.15,"ed_presentations":5239,"ed_boarding_hours":604,"theatre_cases":3149,"theatre_util_pct":71.6,"readmission_30d_pct":9.91,"mortality_pct":1.96,"revenue_zar":162789009.44,"cost_zar":133611555.82,"ebitda_margin_pct":17.9,"patient_sat_pct":88.3,"nurse_overtime_hours":10406,"hai_per_1000_pd":3.78},{"month":"2025-05-01","admissions":3748,"patient_days":15931,"beds_available":640,"occupancy_pct":80.3,"alos_days":4.25,"ed_presentations":5629,"ed_boarding_hours":679,"theatre_cases":3039,"theatre_util_pct":68.9,"readmission_30d_pct":9.63,"mortality_pct":1.98,"revenue_zar":169702696.85,"cost_zar":139457958.72,"ebitda_margin_pct":17.8,"patient_sat_pct":86.7,"nurse_overtime_hours":11889,"hai_per_1000_pd":3.97},{"month":"2025-06-01","admissions":3461,"patient_days":15890,"beds_available":640,"occupancy_pct":82.8,"alos_days":4.59,"ed_presentations":6128,"ed_boarding_hours":1112,"theatre_cases":3043,"theatre_util_pct":73.0,"readmission_30d_pct":10.81,"mortality_pct":1.97,"revenue_zar":166587025.01,"cost_zar":137538722.94,"ebitda_margin_pct":17.4,"patient_sat_pct":84.9,"nurse_overtime_hours":14085,"hai_per_1000_pd":4.16},{"month":"2025-07-01","admissions":3698,"patient_days":17126,"beds_available":640,"occupancy_pct":86.3,"alos_days":4.63,"ed_presentations":6206,"ed_boarding_hours":1483,"theatre_cases":2965,"theatre_util_pct":66.5,"readmission_30d_pct":10.6,"mortality_pct":2.02,"revenue_zar":168314197.73,"cost_zar":139488928.29,"ebitda_margin_pct":17.1,"patient_sat_pct":84.8,"nurse_overtime_hours":15378,"hai_per_1000_pd":4.03},{"month":"2025-08-01","admissions":4059,"patient_days":17620,"beds_available":640,"occupancy_pct":88.8,"alos_days":4.34,"ed_presentations":6155,"ed_boarding_hours":1800,"theatre_cases":3077,"theatre_util_pct":73.7,"readmission_30d_pct":10.59,"mortality_pct":1.88,"revenue_zar":178921554.35,"cost_zar":148457149.8,"ebitda_margin_pct":17.0,"patient_sat_pct":85.7,"nurse_overtime_hours":14527,"hai_per_1000_pd":4.13},{"month":"2025-09-01","admissions":3815,"patient_days":17209,"beds_available":640,"occupancy_pct":89.6,"alos_days":4.51,"ed_presentations":5747,"ed_boarding_hours":1750,"theatre_cases":3141,"theatre_util_pct":71.1,"readmission_30d_pct":9.76,"mortality_pct":1.89,"revenue_zar":165067813.35,"cost_zar":137661758.47,"ebitda_margin_pct":16.6,"patient_sat_pct":85.6,"nurse_overtime_hours":12619,"hai_per_1000_pd":3.48},{"month":"2025-10-01","admissions":4166,"patient_days":17667,"beds_available":640,"occupancy_pct":89.1,"alos_days":4.24,"ed_presentations":5503,"ed_boarding_hours":1422,"theatre_cases":3267,"theatre_util_pct":75.2,"readmission_30d_pct":9.99,"mortality_pct":1.96,"revenue_zar":179873157.35,"cost_zar":150700127.08,"ebitda_margin_pct":16.2,"patient_sat_pct":86.7,"nurse_overtime_hours":11321,"hai_per_1000_pd":3.66},{"month":"2025-11-01","admissions":3945,"patient_days":17085,"beds_available":640,"occupancy_pct":89.0,"alos_days":4.33,"ed_presentations":5402,"ed_boarding_hours":1500,"theatre_cases":3238,"theatre_util_pct":73.9,"readmission_30d_pct":9.53,"mortality_pct":1.89,"revenue_zar":179840054.51,"cost_zar":150830646.74,"ebitda_margin_pct":16.1,"patient_sat_pct":86.5,"nurse_overtime_hours":10925,"hai_per_1000_pd":3.94},{"month":"2025-12-01","admissions":4083,"patient_days":17925,"beds_available":640,"occupancy_pct":90.3,"alos_days":4.39,"ed_presentations":5659,"ed_boarding_hours":1650,"theatre_cases":3114,"theatre_util_pct":74.1,"readmission_30d_pct":9.98,"mortality_pct":1.78,"revenue_zar":164257646.99,"cost_zar":137274050.93,"ebitda_margin_pct":16.4,"patient_sat_pct":87.1,"nurse_overtime_hours":11499,"hai_per_1000_pd":3.76},{"month":"2026-01-01","admissions":4121,"patient_days":17807,"beds_available":640,"occupancy_pct":89.8,"alos_days":4.32,"ed_presentations":4814,"ed_boarding_hours":1557,"theatre_cases":3081,"theatre_util_pct":70.8,"readmission_30d_pct":9.61,"mortality_pct":1.72,"revenue_zar":180463955.2,"cost_zar":151424065.38,"ebitda_margin_pct":16.1,"patient_sat_pct":87.4,"nurse_overtime_hours":11097,"hai_per_1000_pd":3.78},{"month":"2026-02-01","admissions":3942,"patient_days":15968,"beds_available":640,"occupancy_pct":89.1,"alos_days":4.05,"ed_presentations":5090,"ed_boarding_hours":1532,"theatre_cases":2977,"theatre_util_pct":68.7,"readmission_30d_pct":9.45,"mortality_pct":1.99,"revenue_zar":163658702.68,"cost_zar":137850687.85,"ebitda_margin_pct":15.8,"patient_sat_pct":87.7,"nurse_overtime_hours":11681,"hai_per_1000_pd":3.97},{"month":"2026-03-01","admissions":4089,"patient_days":17584,"beds_available":640,"occupancy_pct":88.6,"alos_days":4.3,"ed_presentations":5416,"ed_boarding_hours":1383,"theatre_cases":3161,"theatre_util_pct":75.2,"readmission_30d_pct":9.86,"mortality_pct":2.02,"revenue_zar":165263866.68,"cost_zar":139983082.02,"ebitda_margin_pct":15.3,"patient_sat_pct":86.1,"nurse_overtime_hours":11885,"hai_per_1000_pd":3.73},{"month":"2026-04-01","admissions":4157,"patient_days":16963,"beds_available":640,"occupancy_pct":88.3,"alos_days":4.08,"ed_presentations":5206,"ed_boarding_hours":1425,"theatre_cases":3149,"theatre_util_pct":74.9,"readmission_30d_pct":9.82,"mortality_pct":1.86,"revenue_zar":167938365.66,"cost_zar":142737201.85,"ebitda_margin_pct":15.0,"patient_sat_pct":85.1,"nurse_overtime_hours":13072,"hai_per_1000_pd":4.12},{"month":"2026-05-01","admissions":4005,"patient_days":17906,"beds_available":640,"occupancy_pct":90.3,"alos_days":4.47,"ed_presentations":5447,"ed_boarding_hours":1888,"theatre_cases":3301,"theatre_util_pct":78.0,"readmission_30d_pct":9.99,"mortality_pct":2.01,"revenue_zar":179187646.17,"cost_zar":152988622.93,"ebitda_margin_pct":14.6,"patient_sat_pct":86.9,"nurse_overtime_hours":12745,"hai_per_1000_pd":3.67},{"month":"2026-06-01","admissions":4058,"patient_days":17856,"beds_available":640,"occupancy_pct":93.0,"alos_days":4.4,"ed_presentations":6068,"ed_boarding_hours":2065,"theatre_cases":3139,"theatre_util_pct":73.5,"readmission_30d_pct":10.39,"mortality_pct":1.86,"revenue_zar":171850634.79,"cost_zar":147040647.58,"ebitda_margin_pct":14.4,"patient_sat_pct":84.8,"nurse_overtime_hours":13164,"hai_per_1000_pd":3.95}],"departments":[{"department":"Intensive Care (ICU)","beds":48,"occupancy_pct":94.0,"alos_days":6.8,"readmission_pct":12.1,"staff_count":168,"vacancy_pct":14.2,"revenue_zar":200920911.07,"cost_zar":181833424.52,"margin_pct":9.5},{"department":"General Surgery","beds":104,"occupancy_pct":86.0,"alos_days":3.6,"readmission_pct":8.4,"staff_count":142,"vacancy_pct":7.1,"revenue_zar":333100124.76,"cost_zar":258485696.81,"margin_pct":22.4},{"department":"Internal Medicine","beds":132,"occupancy_pct":91.0,"alos_days":4.9,"readmission_pct":13.8,"staff_count":176,"vacancy_pct":11.6,"revenue_zar":504699673.11,"cost_zar":443631012.66,"margin_pct":12.1},{"department":"Cardiology","beds":72,"occupancy_pct":89.0,"alos_days":4.2,"readmission_pct":12.9,"staff_count":118,"vacancy_pct":9.4,"revenue_zar":273684067.87,"cost_zar":205810419.04,"margin_pct":24.8},{"department":"Orthopaedics","beds":88,"occupancy_pct":83.0,"alos_days":3.4,"readmission_pct":6.7,"staff_count":104,"vacancy_pct":6.2,"revenue_zar":309455377.71,"cost_zar":228687524.13,"margin_pct":26.1},{"department":"Maternity & Obstetrics","beds":96,"occupancy_pct":74.0,"alos_days":2.8,"readmission_pct":4.1,"staff_count":158,"vacancy_pct":5.8,"revenue_zar":265512747.66,"cost_zar":215861863.85,"margin_pct":18.7},{"department":"Paediatrics","beds":60,"occupancy_pct":77.0,"alos_days":3.1,"readmission_pct":5.9,"staff_count":96,"vacancy_pct":8.9,"revenue_zar":191775298.04,"cost_zar":171830667.04,"margin_pct":10.4}],"ed_monthly":[{"month":"2025-01-01","presentations":5094,"door_to_triage_min":13.0,"door_to_bed_min":153.0,"boarding_hours":644,"lwbs_pct":3.78,"admit_rate_pct":23.5},{"month":"2025-02-01","presentations":5100,"door_to_triage_min":11.9,"door_to_bed_min":150.0,"boarding_hours":393,"lwbs_pct":2.57,"admit_rate_pct":24.1},{"month":"2025-03-01","presentations":5201,"door_to_triage_min":15.2,"door_to_bed_min":190.0,"boarding_hours":438,"lwbs_pct":3.2,"admit_rate_pct":22.1},{"month":"2025-04-01","presentations":5239,"door_to_triage_min":11.5,"door_to_bed_min":142.0,"boarding_hours":604,"lwbs_pct":2.8,"admit_rate_pct":25.4},{"month":"2025-05-01","presentations":5629,"door_to_triage_min":14.7,"door_to_bed_min":218.0,"boarding_hours":679,"lwbs_pct":3.35,"admit_rate_pct":25.9},{"month":"2025-06-01","presentations":6128,"door_to_triage_min":16.0,"door_to_bed_min":212.0,"boarding_hours":1112,"lwbs_pct":4.09,"admit_rate_pct":26.6},{"month":"2025-07-01","presentations":6206,"door_to_triage_min":14.8,"door_to_bed_min":183.0,"boarding_hours":1483,"lwbs_pct":3.94,"admit_rate_pct":26.9},{"month":"2025-08-01","presentations":6155,"door_to_triage_min":17.2,"door_to_bed_min":211.0,"boarding_hours":1800,"lwbs_pct":4.46,"admit_rate_pct":25.4},{"month":"2025-09-01","presentations":5747,"door_to_triage_min":16.1,"door_to_bed_min":172.0,"boarding_hours":1750,"lwbs_pct":4.24,"admit_rate_pct":23.8},{"month":"2025-10-01","presentations":5503,"door_to_triage_min":14.5,"door_to_bed_min":169.0,"boarding_hours":1422,"lwbs_pct":2.61,"admit_rate_pct":25.5},{"month":"2025-11-01","presentations":5402,"door_to_triage_min":12.1,"door_to_bed_min":201.0,"boarding_hours":1500,"lwbs_pct":3.76,"admit_rate_pct":22.6},{"month":"2025-12-01","presentations":5659,"door_to_triage_min":15.1,"door_to_bed_min":166.0,"boarding_hours":1650,"lwbs_pct":4.13,"admit_rate_pct":24.7},{"month":"2026-01-01","presentations":4814,"door_to_triage_min":12.2,"door_to_bed_min":172.0,"boarding_hours":1557,"lwbs_pct":3.6,"admit_rate_pct":22.6},{"month":"2026-02-01","presentations":5090,"door_to_triage_min":13.4,"door_to_bed_min":141.0,"boarding_hours":1532,"lwbs_pct":2.66,"admit_rate_pct":23.8},{"month":"2026-03-01","presentations":5416,"door_to_triage_min":14.0,"door_to_bed_min":182.0,"boarding_hours":1383,"lwbs_pct":2.59,"admit_rate_pct":24.9},{"month":"2026-04-01","presentations":5206,"door_to_triage_min":12.8,"door_to_bed_min":167.0,"boarding_hours":1425,"lwbs_pct":2.98,"admit_rate_pct":24.1},{"month":"2026-05-01","presentations":5447,"door_to_triage_min":12.8,"door_to_bed_min":158.0,"boarding_hours":1888,"lwbs_pct":3.68,"admit_rate_pct":25.3},{"month":"2026-06-01","presentations":6068,"door_to_triage_min":17.9,"door_to_bed_min":214.0,"boarding_hours":2065,"lwbs_pct":3.69,"admit_rate_pct":23.3}],"ed_triage":[["Red (immediate)",4.1],["Orange (very urgent)",17.8],["Yellow (urgent)",38.4],["Green (routine)",34.9],["Blue (dead/expectant)",0.6],["Not triaged / LWBS",4.2]],"theatre":[{"specialty":"General Surgery","scheduled_cases":612,"cancellations":69,"cancel_rate_pct":11.2,"utilisation_pct":74.1,"turnaround_min":41,"on_time_start_pct":62.4},{"specialty":"Orthopaedics","scheduled_cases":548,"cancellations":76,"cancel_rate_pct":13.8,"utilisation_pct":71.6,"turnaround_min":47,"on_time_start_pct":55.1},{"specialty":"Gynaecology","scheduled_cases":404,"cancellations":36,"cancel_rate_pct":8.9,"utilisation_pct":76.8,"turnaround_min":34,"on_time_start_pct":70.2},{"specialty":"Cardiothoracic","scheduled_cases":176,"cancellations":27,"cancel_rate_pct":15.4,"utilisation_pct":68.2,"turnaround_min":58,"on_time_start_pct":51.7},{"specialty":"ENT","scheduled_cases":298,"cancellations":22,"cancel_rate_pct":7.4,"utilisation_pct":79.3,"turnaround_min":29,"on_time_start_pct":73.8},{"specialty":"Ophthalmology","scheduled_cases":356,"cancellations":22,"cancel_rate_pct":6.1,"utilisation_pct":81.7,"turnaround_min":24,"on_time_start_pct":78.5},{"specialty":"Urology","scheduled_cases":312,"cancellations":30,"cancel_rate_pct":9.6,"utilisation_pct":75.4,"turnaround_min":33,"on_time_start_pct":66.9}],"cancel_reasons":[["No inpatient bed available",168],["Patient not medically optimised",121],["List overran / late start",96],["Equipment / instrument unavailable",54],["Patient did not attend (DNA)",47],["Clinical deterioration",33],["Consent / admin incomplete",28]],"quality_monthly":[{"month":"2025-01-01","hai_per_1000_pd":3.99,"falls_per_1000_pd":2.46,"pressure_injury_pct":1.43,"sepsis_bundle_pct":78.3,"med_error_per_1000":1.53,"hand_hygiene_pct":81.2,"crude_mortality_pct":1.87},{"month":"2025-02-01","hai_per_1000_pd":4.13,"falls_per_1000_pd":2.65,"pressure_injury_pct":2.53,"sepsis_bundle_pct":82.8,"med_error_per_1000":1.86,"hand_hygiene_pct":84.6,"crude_mortality_pct":1.91},{"month":"2025-03-01","hai_per_1000_pd":4.0,"falls_per_1000_pd":3.02,"pressure_injury_pct":2.55,"sepsis_bundle_pct":81.4,"med_error_per_1000":1.34,"hand_hygiene_pct":85.6,"crude_mortality_pct":1.85},{"month":"2025-04-01","hai_per_1000_pd":3.78,"falls_per_1000_pd":3.13,"pressure_injury_pct":1.78,"sepsis_bundle_pct":83.2,"med_error_per_1000":1.11,"hand_hygiene_pct":89.7,"crude_mortality_pct":1.96},{"month":"2025-05-01","hai_per_1000_pd":3.97,"falls_per_1000_pd":2.82,"pressure_injury_pct":2.56,"sepsis_bundle_pct":82.9,"med_error_per_1000":1.88,"hand_hygiene_pct":89.1,"crude_mortality_pct":1.98},{"month":"2025-06-01","hai_per_1000_pd":4.16,"falls_per_1000_pd":3.3,"pressure_injury_pct":1.88,"sepsis_bundle_pct":86.3,"med_error_per_1000":1.96,"hand_hygiene_pct":80.8,"crude_mortality_pct":1.97},{"month":"2025-07-01","hai_per_1000_pd":4.03,"falls_per_1000_pd":3.21,"pressure_injury_pct":1.81,"sepsis_bundle_pct":75.0,"med_error_per_1000":1.42,"hand_hygiene_pct":85.6,"crude_mortality_pct":2.02},{"month":"2025-08-01","hai_per_1000_pd":4.13,"falls_per_1000_pd":2.9,"pressure_injury_pct":1.97,"sepsis_bundle_pct":83.8,"med_error_per_1000":1.62,"hand_hygiene_pct":80.3,"crude_mortality_pct":1.88},{"month":"2025-09-01","hai_per_1000_pd":3.48,"falls_per_1000_pd":2.99,"pressure_injury_pct":1.58,"sepsis_bundle_pct":86.2,"med_error_per_1000":1.96,"hand_hygiene_pct":87.8,"crude_mortality_pct":1.89},{"month":"2025-10-01","hai_per_1000_pd":3.66,"falls_per_1000_pd":3.22,"pressure_injury_pct":2.24,"sepsis_bundle_pct":85.2,"med_error_per_1000":1.68,"hand_hygiene_pct":79.0,"crude_mortality_pct":1.96},{"month":"2025-11-01","hai_per_1000_pd":3.94,"falls_per_1000_pd":2.71,"pressure_injury_pct":2.28,"sepsis_bundle_pct":76.2,"med_error_per_1000":1.77,"hand_hygiene_pct":90.0,"crude_mortality_pct":1.89},{"month":"2025-12-01","hai_per_1000_pd":3.76,"falls_per_1000_pd":2.32,"pressure_injury_pct":1.66,"sepsis_bundle_pct":85.7,"med_error_per_1000":1.62,"hand_hygiene_pct":84.9,"crude_mortality_pct":1.78},{"month":"2026-01-01","hai_per_1000_pd":3.78,"falls_per_1000_pd":3.35,"pressure_injury_pct":1.86,"sepsis_bundle_pct":87.9,"med_error_per_1000":1.56,"hand_hygiene_pct":85.7,"crude_mortality_pct":1.72},{"month":"2026-02-01","hai_per_1000_pd":3.97,"falls_per_1000_pd":2.47,"pressure_injury_pct":2.01,"sepsis_bundle_pct":75.7,"med_error_per_1000":1.76,"hand_hygiene_pct":82.0,"crude_mortality_pct":1.99},{"month":"2026-03-01","hai_per_1000_pd":3.73,"falls_per_1000_pd":2.59,"pressure_injury_pct":1.45,"sepsis_bundle_pct":82.5,"med_error_per_1000":1.81,"hand_hygiene_pct":79.9,"crude_mortality_pct":2.02},{"month":"2026-04-01","hai_per_1000_pd":4.12,"falls_per_1000_pd":2.62,"pressure_injury_pct":2.05,"sepsis_bundle_pct":79.0,"med_error_per_1000":1.98,"hand_hygiene_pct":80.3,"crude_mortality_pct":1.86},{"month":"2026-05-01","hai_per_1000_pd":3.67,"falls_per_1000_pd":3.12,"pressure_injury_pct":1.41,"sepsis_bundle_pct":81.9,"med_error_per_1000":1.53,"hand_hygiene_pct":83.1,"crude_mortality_pct":2.01},{"month":"2026-06-01","hai_per_1000_pd":3.95,"falls_per_1000_pd":3.19,"pressure_injury_pct":2.48,"sepsis_bundle_pct":86.3,"med_error_per_1000":2.0,"hand_hygiene_pct":80.1,"crude_mortality_pct":1.86}],"payer_mix":[{"payer":"Discovery Health","admissions_share_pct":31.4,"revenue_zar":53961099.32,"denial_rate_pct":6.8,"days_in_ar":41},{"payer":"Bonitas","admissions_share_pct":16.2,"revenue_zar":27839802.84,"denial_rate_pct":8.1,"days_in_ar":46},{"payer":"Momentum Health","admissions_share_pct":11.8,"revenue_zar":20278374.91,"denial_rate_pct":7.4,"days_in_ar":44},{"payer":"GEMS","admissions_share_pct":10.4,"revenue_zar":17872466.02,"denial_rate_pct":9.6,"days_in_ar":58},{"payer":"Medshield","admissions_share_pct":7.1,"revenue_zar":12201395.07,"denial_rate_pct":8.8,"days_in_ar":49},{"payer":"Other schemes","admissions_share_pct":15.9,"revenue_zar":27324250.93,"denial_rate_pct":9.1,"days_in_ar":52},{"payer":"Self-pay / uninsured","admissions_share_pct":7.2,"revenue_zar":12373245.7,"denial_rate_pct":21.4,"days_in_ar":73}],"readmission_causes":[["Congestive heart failure",218],["COPD / respiratory",191],["Post-surgical complication",164],["Sepsis / infection",149],["Diabetes-related",112],["Pneumonia",98],["Medication-related event",76]],"forecast_admissions":[{"month":"2026-07-01","forecast":4806,"lo":4518,"hi":5142},{"month":"2026-08-01","forecast":4589,"lo":4314,"hi":4910},{"month":"2026-09-01","forecast":4245,"lo":3991,"hi":4543},{"month":"2026-10-01","forecast":4105,"lo":3858,"hi":4392},{"month":"2026-11-01","forecast":4045,"lo":3803,"hi":4329},{"month":"2026-12-01","forecast":4279,"lo":4022,"hi":4579}],"ed_dow":[["Mon",214],["Tue",198],["Wed",191],["Thu",196],["Fri",208],["Sat",236],["Sun",247]],"bed_projection":[{"month":"2026-07-01","projected_demand_beds":680,"staffed_beds":640,"shortfall":40},{"month":"2026-08-01","projected_demand_beds":667,"staffed_beds":640,"shortfall":27},{"month":"2026-09-01","projected_demand_beds":647,"staffed_beds":640,"shortfall":7},{"month":"2026-10-01","projected_demand_beds":640,"staffed_beds":640,"shortfall":0},{"month":"2026-11-01","projected_demand_beds":640,"staffed_beds":640,"shortfall":0},{"month":"2026-12-01","projected_demand_beds":644,"staffed_beds":640,"shortfall":4}],"risk_cohorts":[["Very High (>40%)",142,47.2],["High (25-40%)",318,31.6],["Medium (12-25%)",664,17.9],["Low (<12%)",2184,6.3]],"winter_surge":[{"month":"2026-07-01","baseline_occ_pct":90.2,"surge_occ_pct":102},{"month":"2026-08-01","baseline_occ_pct":89.2,"surge_occ_pct":97.8},{"month":"2026-09-01","baseline_occ_pct":87.5,"surge_occ_pct":89.7},{"month":"2026-10-01","baseline_occ_pct":86.8,"surge_occ_pct":86.8},{"month":"2026-11-01","baseline_occ_pct":86.5,"surge_occ_pct":86.5},{"month":"2026-12-01","baseline_occ_pct":87.4,"surge_occ_pct":88.8}],"workforce":[{"unit":"ICU","nurse_patient_ratio":1.9,"overtime_hours":2180,"agency_spend_zar":1420000,"vacancy_pct":14.2,"sick_leave_pct":6.1,"turnover_pct":12.4},{"unit":"General Wards","nurse_patient_ratio":6.4,"overtime_hours":5240,"agency_spend_zar":2060000,"vacancy_pct":11.8,"sick_leave_pct":7.3,"turnover_pct":15.1},{"unit":"Theatre","nurse_patient_ratio":1.5,"overtime_hours":1310,"agency_spend_zar":840000,"vacancy_pct":8.4,"sick_leave_pct":4.9,"turnover_pct":9.8},{"unit":"Emergency Dept","nurse_patient_ratio":3.1,"overtime_hours":1880,"agency_spend_zar":1120000,"vacancy_pct":12.6,"sick_leave_pct":8.1,"turnover_pct":17.9},{"unit":"Maternity","nurse_patient_ratio":4.2,"overtime_hours":1240,"agency_spend_zar":560000,"vacancy_pct":5.8,"sick_leave_pct":5.4,"turnover_pct":10.2}],"recommendations":[{"area":"Patient Flow","priority":"High","title":"Shift 40% of discharges to before 11:00","action":"Adopt criteria-led discharge + morning board rounds and a discharge lounge so beds free before the ED admission peak.","impact":"~34 bed-hours/day freed","value":"R14.2M/yr capacity value","effort":"Medium"},{"area":"Theatre","priority":"High","title":"Ring-fence 8% of beds for elective surgical admissions","action":"Protect surgical beds so 'no bed available' cancellations (168/yr) stop displacing scheduled lists.","impact":"+6.1pp theatre utilisation","value":"R9.6M/yr recovered","effort":"Medium"},{"area":"Readmissions","priority":"High","title":"Enrol 460 Very-High/High-risk patients in follow-up","action":"48-hour post-discharge call + 7-day clinic review for CHF/COPD cohorts flagged by the risk model.","impact":"-1.8pp 30-day readmissions","value":"R7.1M/yr avoided","effort":"Low"},{"area":"Workforce","priority":"Medium","title":"Rebalance nursing roster to winter demand curve","action":"Move flexible shifts into Jun-Aug and weekends to cut agency reliance in the ED and general wards.","impact":"-18% agency spend","value":"R6.4M/yr saved","effort":"Medium"},{"area":"ED Flow","priority":"Medium","title":"Stand up a Type-3 minors fast-track stream","action":"Divert Green/Yellow SATS presentations to a nurse-led fast track to cut boarding and LWBS.","impact":"-22% ED boarding hours","value":"R3.8M/yr + safety","effort":"Medium"},{"area":"Revenue Cycle","priority":"Medium","title":"Automate pre-auth & coding validation at admission","action":"Front-load medical-scheme authorisation and coding checks to cut denials and days-in-AR.","impact":"-2.6pp denial rate","value":"R11.9M/yr cash","effort":"High"}]};
+
+/* Chart.js global defaults */
+Chart.defaults.font.family="'DM Sans', system-ui, sans-serif";
+Chart.defaults.font.size=11;
+Chart.defaults.color="#718096";
+Chart.defaults.plugins.legend.labels.boxWidth=12;
+Chart.defaults.plugins.legend.labels.padding=12;
+
+const C={teal:'#2A9D8F',tealA:'rgba(42,157,143,.15)',orange:'#E8622A',orangeA:'rgba(232,98,42,.15)',
+  amber:'#F5A623',amberA:'rgba(245,166,35,.18)',coal:'#3D4756',coalA:'rgba(61,71,86,.1)',
+  red:'#e05252',redA:'rgba(224,82,82,.15)',green:'#52c77e',grid:'rgba(0,0,0,.05)',
+  palette:['#2A9D8F','#E8622A','#F5A623','#3D4756','#8B5CF6','#3B82F6','#e05252']};
+
+const F={
+  zar:v=>{v=parseFloat(v);if(v>=1e9)return'R'+(v/1e9).toFixed(2)+'B';if(v>=1e6)return'R'+(v/1e6).toFixed(1)+'M';if(v>=1e3)return'R'+Math.round(v/1e3)+'K';return'R'+Math.round(v).toLocaleString('en-ZA');},
+  num:v=>parseInt(v).toLocaleString('en-ZA'),
+  pct:v=>parseFloat(v).toFixed(1)+'%',
+  mon:s=>{const d=new Date(s);return d.toLocaleString('en-ZA',{month:'short',year:'2-digit'});}
+};
+const CHARTS={};
+function setV(id,v){const e=document.getElementById(id);if(e)e.textContent=v;}
+function trend(id,cur,prev,invert,unit){
+  const e=document.getElementById(id);if(!e)return;
+  const d=cur-prev;const up=d>=0;const good=invert?!up:up;
+  e.textContent=(up?'▲':'▼')+' '+Math.abs(d).toFixed(unit==='%'?1:0)+(unit||'')+' vs prev';
+  e.className='kpi-trend '+(good?'kpi-up':'kpi-warn');
+}
+function mk(id,type,labels,datasets,opts={}){
+  if(CHARTS[id])CHARTS[id].destroy();
+  const el=document.getElementById(id);if(!el)return;
+  const polar=['pie','doughnut'].includes(type);
+  CHARTS[id]=new Chart(el,{type,data:{labels,datasets},options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{position:polar?'right':'top',labels:{font:{size:10}}},tooltip:{titleFont:{size:10},bodyFont:{size:10}},...(opts.plugins||{})},
+    scales:polar?undefined:{x:{grid:{color:C.grid},ticks:{font:{size:9},maxRotation:45}},y:{grid:{color:C.grid},ticks:{font:{size:9}},...(opts.y||{})},...(opts.scales||{})},
+    ...(opts.extra||{})
+  }});
+}
+
+/* ---------- shared series ---------- */
+const M=DB.monthly, Q=DB.quality_monthly, ED=DB.ed_monthly;
+const MLAB=M.map(r=>F.mon(r.month));
+const last=M[M.length-1], prev=M[M.length-2];
+
+/* ============================================================ 1. DESCRIPTIVE */
+function buildDescriptive(){
+  setV('k-occ',F.pct(last.occupancy_pct));setV('k-occ-s','latest month · '+F.mon(last.month));
+  trend('k-occ-t',last.occupancy_pct,prev.occupancy_pct,true,'%');
+  setV('k-alos',last.alos_days.toFixed(1)+'d');trend('k-alos-t',last.alos_days,prev.alos_days,true,'d');
+  setV('k-adm',F.num(last.admissions));trend('k-adm-t',last.admissions,prev.admissions,false,'');
+  setV('k-ed',F.num(last.ed_presentations));
+  setV('k-rev',F.zar(last.revenue_zar));
+  setV('k-sat',F.pct(last.patient_sat_pct));trend('k-sat-t',last.patient_sat_pct,prev.patient_sat_pct,false,'%');
+
+  const alertOcc=last.occupancy_pct, alertBoard=last.ed_boarding_hours;
+  document.querySelector('#desc-alert .ab-txt').innerHTML=
+    '<strong>Operational summary — '+F.mon(last.month)+'</strong>The group ran at <b>'+F.pct(alertOcc)+'</b> occupancy on '+DB.meta.beds+' beds with an ALOS of <b>'+last.alos_days.toFixed(1)+' days</b>. '+
+    F.num(last.admissions)+' admissions and '+F.num(last.ed_presentations)+' ED presentations generated <b>'+F.zar(last.revenue_zar)+'</b>. Occupancy has climbed '+
+    (last.occupancy_pct-M[0].occupancy_pct).toFixed(1)+'pp over 18 months — the thread running through every other dashboard.';
+
+  mk('ch-desc-occ','line',MLAB,[
+    {label:'Occupancy %',data:M.map(r=>r.occupancy_pct),borderColor:C.teal,backgroundColor:C.tealA,fill:true,tension:.35,yAxisID:'y',pointRadius:0,borderWidth:2},
+    {label:'Admissions',data:M.map(r=>r.admissions),borderColor:C.orange,backgroundColor:'transparent',tension:.35,yAxisID:'y1',pointRadius:0,borderWidth:2}
+  ],{y:{position:'left',title:{display:true,text:'Occupancy %'},min:60},scales:{y1:{position:'right',grid:{drawOnChartArea:false},ticks:{font:{size:9}},title:{display:true,text:'Admissions'}}}});
+
+  const D=DB.departments;
+  mk('ch-desc-dept','bar',D.map(d=>d.department),[{label:'Occupancy %',data:D.map(d=>d.occupancy_pct),backgroundColor:D.map(d=>d.occupancy_pct>=90?C.red:d.occupancy_pct>=85?C.amber:C.teal)}],{plugins:{legend:{display:false}},y:{max:100}});
+
+  const P=DB.payer_mix;
+  mk('ch-desc-payer','doughnut',P.map(p=>p.payer),[{data:P.map(p=>p.admissions_share_pct),backgroundColor:C.palette,borderWidth:1,borderColor:'#fff'}]);
+
+  mk('ch-desc-revcost','bar',MLAB,[
+    {label:'Revenue',data:M.map(r=>r.revenue_zar),backgroundColor:C.teal},
+    {label:'Cost',data:M.map(r=>r.cost_zar),backgroundColor:C.coal}
+  ],{y:{ticks:{callback:v=>'R'+(v/1e6).toFixed(0)+'M'}}});
+
+  mk('ch-desc-alos','bar',D.map(d=>d.department),[{label:'ALOS (days)',data:D.map(d=>d.alos_days),backgroundColor:C.amber}],{plugins:{legend:{display:false}}});
+}
+
+/* ============================================================ 2. DIAGNOSTIC */
+function buildDiagnostic(){
+  setV('diag-board-latest',F.num(last.ed_boarding_hours));
+  setV('k-board',F.num(last.ed_boarding_hours));trend('k-board-t',last.ed_boarding_hours,prev.ed_boarding_hours,true,'');
+  setV('k-readm',F.pct(last.readmission_30d_pct));
+  const totCancel=DB.theatre.reduce((a,t)=>a+t.cancellations,0);
+  setV('k-cancel',F.num(totCancel));
+  setV('k-ot',F.num(last.nurse_overtime_hours));trend('k-ot-t',last.nurse_overtime_hours,prev.nurse_overtime_hours,true,'');
+
+  mk('ch-diag-board','line',MLAB,[
+    {label:'Occupancy %',data:M.map(r=>r.occupancy_pct),borderColor:C.teal,backgroundColor:C.tealA,fill:true,tension:.35,yAxisID:'y',pointRadius:0,borderWidth:2},
+    {label:'ED Boarding Hours',data:M.map(r=>r.ed_boarding_hours),borderColor:C.red,backgroundColor:'transparent',tension:.35,yAxisID:'y1',pointRadius:0,borderWidth:2}
+  ],{y:{position:'left',min:60,title:{display:true,text:'Occupancy %'}},scales:{y1:{position:'right',grid:{drawOnChartArea:false},title:{display:true,text:'Boarding hrs'}}}});
+
+  const R=DB.readmission_causes;
+  mk('ch-diag-readm','bar',R.map(r=>r[0]),[{label:'Readmissions',data:R.map(r=>r[1]),backgroundColor:C.orange}],{extra:{indexAxis:'y'},plugins:{legend:{display:false}}});
+
+  const CR=DB.cancel_reasons;
+  mk('ch-diag-cancel','bar',CR.map(r=>r[0]),[{label:'Cancellations',data:CR.map(r=>r[1]),backgroundColor:CR.map((r,i)=>i===0?C.red:C.coal)}],{extra:{indexAxis:'y'},plugins:{legend:{display:false}}});
+
+  mk('ch-diag-margin','line',MLAB,[
+    {label:'EBITDA Margin %',data:M.map(r=>r.ebitda_margin_pct),borderColor:C.teal,tension:.35,yAxisID:'y',pointRadius:0,borderWidth:2},
+    {label:'Overtime Hours',data:M.map(r=>r.nurse_overtime_hours),borderColor:C.orange,backgroundColor:C.orangeA,fill:true,tension:.35,yAxisID:'y1',pointRadius:0,borderWidth:2}
+  ],{y:{position:'left',title:{display:true,text:'Margin %'}},scales:{y1:{position:'right',grid:{drawOnChartArea:false},title:{display:true,text:'Overtime hrs'}}}});
+}
+
+/* ============================================================ 3. PREDICTIVE */
+function buildPredictive(){
+  const surge=DB.winter_surge, bed=DB.bed_projection, fc=DB.forecast_admissions;
+  const peak=Math.max(...surge.map(s=>s.surge_occ_pct));
+  const maxShort=Math.max(...bed.map(b=>b.shortfall));
+  const hrisk=DB.risk_cohorts.filter(c=>/High/.test(c[0])).reduce((a,c)=>a+c[1],0);
+  setV('pred-peak',F.pct(peak));setV('pred-short',maxShort);setV('pred-risk',F.num(hrisk));
+  setV('k-peak',F.pct(peak));setV('k-short',maxShort+' beds');setV('k-hrisk',F.num(hrisk));setV('k-fadm',F.num(fc[0].forecast));
+
+  // admissions actual + forecast with confidence band
+  const actLab=M.map(r=>F.mon(r.month)), fcLab=fc.map(r=>F.mon(r.month));
+  const allLab=actLab.concat(fcLab);
+  const actual=M.map(r=>r.admissions).concat(fc.map(()=>null));
+  const bridge=actual.slice();bridge[M.length-1]=M[M.length-1].admissions; // continuity
+  const fcast=M.map(()=>null).concat(fc.map(r=>r.forecast));fcast[M.length-1]=last.admissions;
+  const lo=M.map(()=>null).concat(fc.map(r=>r.lo));lo[M.length-1]=last.admissions;
+  const hi=M.map(()=>null).concat(fc.map(r=>r.hi));hi[M.length-1]=last.admissions;
+  mk('ch-pred-adm','line',allLab,[
+    {label:'Actual',data:actual,borderColor:C.teal,backgroundColor:'transparent',tension:.3,pointRadius:0,borderWidth:2},
+    {label:'Forecast',data:fcast,borderColor:C.orange,borderDash:[6,4],tension:.3,pointRadius:0,borderWidth:2},
+    {label:'Upper',data:hi,borderColor:'transparent',backgroundColor:C.amberA,fill:'+1',pointRadius:0},
+    {label:'Lower',data:lo,borderColor:'transparent',backgroundColor:C.amberA,fill:false,pointRadius:0}
+  ],{plugins:{legend:{labels:{filter:i=>['Actual','Forecast'].includes(i.text)}}},y:{min:3500}});
+
+  mk('ch-pred-bed','bar',bed.map(b=>F.mon(b.month)),[
+    {label:'Projected demand (beds)',data:bed.map(b=>b.projected_demand_beds),backgroundColor:bed.map(b=>b.shortfall>0?C.red:C.teal)},
+    {label:'Staffed beds',type:'line',data:bed.map(b=>b.staffed_beds),borderColor:C.coal,borderDash:[5,4],pointRadius:0,borderWidth:2}
+  ],{y:{min:500}});
+
+  const dow=DB.ed_dow;
+  mk('ch-pred-dow','bar',dow.map(d=>d[0]),[{label:'Avg presentations/day',data:dow.map(d=>d[1]),backgroundColor:dow.map(d=>['Sat','Sun'].includes(d[0])?C.orange:C.teal)}],{plugins:{legend:{display:false}}});
+
+  const rc=DB.risk_cohorts;
+  mk('ch-pred-risk','bar',rc.map(r=>r[0]),[{label:'Patients',data:rc.map(r=>r[1]),backgroundColor:[C.red,C.orange,C.amber,C.teal]}],{plugins:{legend:{display:false}}});
+
+  mk('ch-pred-surge','line',surge.map(s=>F.mon(s.month)),[
+    {label:'Baseline occupancy %',data:surge.map(s=>s.baseline_occ_pct),borderColor:C.teal,tension:.35,pointRadius:2,borderWidth:2},
+    {label:'Surge scenario %',data:surge.map(s=>s.surge_occ_pct),borderColor:C.red,backgroundColor:C.redA,fill:true,tension:.35,pointRadius:2,borderWidth:2}
+  ],{y:{max:105,title:{display:true,text:'Occupancy %'}}});
+}
+
+/* ============================================================ 4. PRESCRIPTIVE */
+function buildPrescriptive(){
+  const recs=DB.recommendations;
+  document.getElementById('rec-grid').innerHTML=recs.map(r=>`
+    <div class="rec-card ${r.priority==='High'?'p-high':''}">
+      <div class="rec-head"><span class="rec-area">${r.area}</span><span class="rec-prio ${r.priority==='High'?'pr-high':'pr-med'}">${r.priority} priority</span></div>
+      <div class="rec-title">${r.title}</div>
+      <div class="rec-action">${r.action}</div>
+      <div class="rec-impact"><div><span class="ri-lbl">Operational impact</span><span class="ri-val">${r.impact}</span></div><div><span class="ri-lbl">Annual value</span><span class="ri-val money">${r.value}</span></div></div>
+    </div>`).join('');
+
+  // impact chart — parse R value (supports M)
+  const parseV=s=>{const m=s.match(/R([\d.]+)M/);return m?parseFloat(m[1]):0;};
+  const labels=recs.map(r=>r.title.length>34?r.title.slice(0,32)+'…':r.title);
+  mk('ch-presc-impact','bar',labels,[{label:'Annual value (R millions)',data:recs.map(r=>parseV(r.value)),backgroundColor:C.teal}],{extra:{indexAxis:'y'},plugins:{legend:{display:false}},x:{ticks:{callback:v=>'R'+v+'M'}}});
+
+  calcScenario();
+}
+function calcScenario(){
+  const alosCut=parseFloat(document.getElementById('calc-alos').value);
+  const fill=parseFloat(document.getElementById('calc-fill').value)/100;
+  document.getElementById('calc-alos-lbl').textContent=alosCut.toFixed(1)+' days';
+  document.getElementById('calc-fill-lbl').textContent=Math.round(fill*100)+'%';
+  const annualAdm=M.reduce((a,r)=>a+r.admissions,0)/M.length*12;
+  const curALOS=last.alos_days;
+  const beddaysFreed=annualAdm*alosCut;                 // fewer bed-days used
+  const bedsReleased=beddaysFreed/365;
+  const extraAdm=Math.round((beddaysFreed*fill)/(curALOS-alosCut));
+  const revPerAdm=last.revenue_zar/last.admissions;
+  const revOpp=extraAdm*revPerAdm;
+  setV('calc-beddays',F.num(Math.round(beddaysFreed)));
+  setV('calc-beds',bedsReleased.toFixed(0));
+  setV('calc-adm',F.num(extraAdm));
+  setV('calc-rev',F.zar(revOpp));
+}
+
+/* ============================================================ 5. QUALITY */
+function buildQuality(){
+  const lq=Q[Q.length-1];
+  setV('k-hai',lq.hai_per_1000_pd.toFixed(1));
+  setV('k-falls',lq.falls_per_1000_pd.toFixed(1));
+  setV('k-sepsis',F.pct(lq.sepsis_bundle_pct));
+  setV('k-hh',F.pct(lq.hand_hygiene_pct));
+  setV('k-mort',F.pct(lq.crude_mortality_pct));
+  const QL=Q.map(r=>F.mon(r.month));
+  mk('ch-qual-trend','line',QL,[
+    {label:'HAI / 1,000 pd',data:Q.map(r=>r.hai_per_1000_pd),borderColor:C.red,backgroundColor:C.redA,fill:true,tension:.35,pointRadius:0,borderWidth:2},
+    {label:'Falls / 1,000 pd',data:Q.map(r=>r.falls_per_1000_pd),borderColor:C.amber,tension:.35,pointRadius:0,borderWidth:2}
+  ]);
+  mk('ch-qual-comp','line',QL,[
+    {label:'Sepsis bundle %',data:Q.map(r=>r.sepsis_bundle_pct),borderColor:C.teal,tension:.35,pointRadius:0,borderWidth:2},
+    {label:'Hand hygiene %',data:Q.map(r=>r.hand_hygiene_pct),borderColor:C.coal,tension:.35,pointRadius:0,borderWidth:2}
+  ],{y:{max:100,min:60}});
+  const D=DB.departments;
+  mk('ch-qual-readm','bar',D.map(d=>d.department),[{label:'30-day readmission %',data:D.map(d=>d.readmission_pct),backgroundColor:D.map(d=>d.readmission_pct>=12?C.red:d.readmission_pct>=8?C.amber:C.teal)}],{plugins:{legend:{display:false}},extra:{indexAxis:'y'}});
+}
+
+/* ============================================================ 6. REVENUE & WORKFORCE */
+function buildRevenue(){
+  const P=DB.payer_mix, W=DB.workforce;
+  setV('k-rev2',F.zar(last.revenue_zar));
+  const wDenial=P.reduce((a,p)=>a+p.denial_rate_pct*p.admissions_share_pct,0)/P.reduce((a,p)=>a+p.admissions_share_pct,0);
+  setV('k-denial',F.pct(wDenial));
+  const avgAR=Math.round(P.reduce((a,p)=>a+p.days_in_ar,0)/P.length);
+  setV('k-ar',avgAR+' days');
+  const agency=W.reduce((a,w)=>a+w.agency_spend_zar,0);
+  setV('k-agency',F.zar(agency));
+  const avgVac=(W.reduce((a,w)=>a+w.vacancy_pct,0)/W.length);
+  setV('k-vac',F.pct(avgVac));
+
+  mk('ch-rev-payer','bar',P.map(p=>p.payer),[{label:'Revenue',data:P.map(p=>p.revenue_zar),backgroundColor:C.teal}],{extra:{indexAxis:'y'},plugins:{legend:{display:false}},x:{ticks:{callback:v=>'R'+(v/1e6).toFixed(0)+'M'}}});
+  mk('ch-rev-denial','bar',P.map(p=>p.payer),[{label:'Denial rate %',data:P.map(p=>p.denial_rate_pct),backgroundColor:P.map(p=>p.denial_rate_pct>=12?C.red:C.amber)}],{extra:{indexAxis:'y'},plugins:{legend:{display:false}}});
+  mk('ch-rev-agency','bar',W.map(w=>w.unit),[
+    {label:'Agency spend',data:W.map(w=>w.agency_spend_zar),backgroundColor:C.orange,yAxisID:'y'},
+    {label:'Vacancy %',type:'line',data:W.map(w=>w.vacancy_pct),borderColor:C.coal,pointRadius:3,borderWidth:2,yAxisID:'y1'}
+  ],{y:{ticks:{callback:v=>'R'+(v/1e6).toFixed(1)+'M'}},scales:{y1:{position:'right',grid:{drawOnChartArea:false},title:{display:true,text:'Vacancy %'}}}});
+
+  document.querySelector('#tbl-payer tbody').innerHTML=P.map(p=>{
+    const dc=p.denial_rate_pct>=12?'chip-r':p.denial_rate_pct>=9?'chip-a':'chip-g';
+    return `<tr><td>${p.payer}</td><td class="num">${p.admissions_share_pct}%</td><td class="num">${F.zar(p.revenue_zar)}</td><td class="num"><span class="chip ${dc}">${p.denial_rate_pct}%</span></td><td class="num">${p.days_in_ar}</td></tr>`;
+  }).join('');
+}
+
+/* ---------- FAQ toggle ---------- */
+function tf(btn){const i=btn.parentElement,w=i.classList.contains('open');document.querySelectorAll('.fi').forEach(x=>x.classList.remove('open'));if(!w)i.classList.add('open');}
+
+/* ---------- portal build (runs only once the portal is visible, so
+              Chart.js can size the canvases) ---------- */
+let PORTAL_INIT=false;
+function initPortal(){
+  if(PORTAL_INIT)return; PORTAL_INIT=true;
+  document.getElementById('cur-date').textContent=new Date().toLocaleDateString('en-ZA',{day:'numeric',month:'long',year:'numeric'});
+  document.getElementById('calc-alos').addEventListener('input',calcScenario);
+  document.getElementById('calc-fill').addEventListener('input',calcScenario);
+  try{
+    buildDescriptive();buildDiagnostic();buildPredictive();buildPrescriptive();buildQuality();buildRevenue();
+  }catch(e){console.error('Portal build error:',e);}
+}
+
+/* ============================================================
+   SUPABASE AUTH GATE  (email + password)
+   Mirrors the Cho&Co client-portal pattern: a session grants access
+   when the signed-in user is an admin, or their client_profiles row's
+   portal_slug matches this portal. Configure users in Supabase.
+   ============================================================ */
+const SUPABASE_URL='https://ahdctxgdszwncyuvwbtp.supabase.co';
+const SUPABASE_ANON='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFoZGN0eGdkc3p3bmN5dXZ3YnRwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU2MjIyMjcsImV4cCI6MjA5MTE5ODIyN30.ZvnX31X7HYlCDsrif_Swrva9hyGiGbQqbgcfrr-GqYQ';
+const PORTAL_SLUG='hospital';
+const sb=supabase.createClient(SUPABASE_URL,SUPABASE_ANON);
+
+window.addEventListener('load',async()=>{
+  const {data:{session}}=await sb.auth.getSession();
+  if(!session)return;
+  const {data:{user},error}=await sb.auth.getUser();
+  if(error||!user){await sb.auth.signOut();return;}
+  await checkAndShowPortal(session);
+});
+
+sb.auth.onAuthStateChange(async(event,session)=>{
+  if(event==='SIGNED_IN'&&session)await checkAndShowPortal(session);
+  if(event==='SIGNED_OUT')showLogin();
+});
+
+async function checkAndShowPortal(session){
+  const {data:profile}=await sb.from('client_profiles')
+    .select('portal_slug,is_admin').eq('id',session.user.id).single();
+  const host=window.location.hostname.split('.')[0];
+  const ok=profile&&(profile.is_admin||profile.portal_slug===PORTAL_SLUG||profile.portal_slug===host);
+  if(!ok){
+    await sb.auth.signOut();
+    const e=document.getElementById('pw-error');
+    e.textContent='This account does not have access to the healthcare portal.';
+    e.classList.add('show');
+    return;
+  }
+  showPortal(session.user);
+}
+
+async function signInPassword(){
+  const email=document.getElementById('pw-email').value.trim();
+  const password=document.getElementById('pw-password').value;
+  const btn=document.getElementById('pw-btn');
+  const err=document.getElementById('pw-error');
+  err.classList.remove('show');
+  if(!email||!password){err.textContent='Please enter your email and password.';err.classList.add('show');return;}
+  btn.disabled=true;btn.textContent='Signing in…';
+  const {data,error}=await sb.auth.signInWithPassword({email,password});
+  if(error){
+    err.textContent='Incorrect email or password. Please try again.';
+    err.classList.add('show');btn.disabled=false;btn.textContent='Sign in';
+  }else{
+    await checkAndShowPortal(data.session);
+  }
+}
+
+function showPortal(user){
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('portal-shell').style.display='block';
+  document.getElementById('user-email').textContent=user.email;
+  initPortal();
+}
+function showLogin(){
+  document.getElementById('login-screen').style.display='block';
+  document.getElementById('portal-shell').style.display='none';
+  const btn=document.getElementById('pw-btn');btn.disabled=false;btn.textContent='Sign in';
+  document.getElementById('pw-email').value='';document.getElementById('pw-password').value='';
+}
+async function signOut(){await sb.auth.signOut();}
+</script>
+</body>
+</html>
