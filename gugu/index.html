@@ -90,7 +90,7 @@ html, body {
 /* ─── ASSEMBLY: letter + envelope stacked vertically ─── */
 .mail-assembly {
   position: relative;
-  width: clamp(280px, 85vw, 380px);
+  width: clamp(240px, 70vw, 340px);  /* was clamp(280px, 85vw, 380px) */
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
   animation: envelopeEntry 0.8s ease-out both;
@@ -124,9 +124,9 @@ html, body {
 }
 
 .opened .letter {
-  max-height: 600px; /* generous max — auto-sizes to content within this */
+  max-height: 600px;
   opacity: 1;
-  padding: 28px 22px 20px;
+  padding: 20px 18px 16px;  /* was 28px 22px 20px */
   position: sticky;
   top: 12px;
 }
@@ -135,16 +135,16 @@ html, body {
   font-family: 'Dancing Script', cursive;
   font-weight: 700;
   color: var(--deep-rose);
-  font-size: clamp(1.3rem, 5vw, 1.8rem);
-  margin-bottom: 14px;
+  font-size: clamp(1.1rem, 4.5vw, 1.6rem);  /* was clamp(1.3rem, 5vw, 1.8rem) */
+  margin-bottom: 10px;  /* was 14px */
   line-height: 1.25;
 }
 .letter p {
   color: var(--ink);
-  font-size: clamp(0.82rem, 3vw, 1rem);
-  line-height: 1.7;
+  font-size: clamp(0.75rem, 2.6vw, 0.92rem);  /* was clamp(0.82rem, 3vw, 1rem) */
+  line-height: 1.6;  /* was 1.7 */
   font-style: italic;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
 }
 .letter .signature {
   margin-top: 10px;
@@ -159,7 +159,7 @@ html, body {
 .envelope {
   position: relative;
   width: 100%;
-  aspect-ratio: 1.5 / 1;
+  aspect-ratio: 1.7 / 1;  /* was 1.5 / 1 — wider = shorter */
   perspective: 800px;
 }
 
