@@ -465,8 +465,20 @@ html, body {
     }, 600);
   }
 
-  assembly.addEventListener('click', openEnvelope);
-  resetBtn.addEventListener('click', resetExperience);
+    let resetCooldown = false;
+
+  assembly.addEventListener('click', function() {
+    if (resetCooldown) return;
+    openEnvelope();
+  });
+
+  resetBtn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    e.preventDefault();
+    resetExperience();
+    resetCooldown = true;
+    setTimeout(() => { resetCooldown = false; }, 800);
+  });
 })();
 </script>
 </body>
